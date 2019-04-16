@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superandroid.pro/"/>
-  <updated>2019-04-15T07:02:46.191Z</updated>
+  <updated>2019-04-15T06:04:16.993Z</updated>
   <id>https://superandroid.pro/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>博客日志</title>
-    <link href="https://superandroid.pro/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
-    <id>https://superandroid.pro/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/</id>
+    <title>博客索引（Android 9.0）</title>
+    <link href="https://superandroid.pro/2020/01/01/00.thinking-in-android-01.bo-ke-suo-yin/"/>
+    <id>https://superandroid.pro/2020/01/01/00.thinking-in-android-01.bo-ke-suo-yin/</id>
     <published>2020-01-01T01:08:00.000Z</published>
-    <updated>2019-04-15T07:02:46.191Z</updated>
+    <updated>2019-04-15T06:04:16.993Z</updated>
     
     <summary type="html">
     
@@ -29,13 +29,7 @@
       
         
         
-          &lt;style&gt;
-table th:first-of-type {
-    width: 200px;
-}
-&lt;/style&gt;
-
-&lt;h4 id=&quot;Thinking-in-Android-–-“新增”&quot;&gt;&lt;a href=&quot;#Thinking-in-Android-–-“新增”&quot;
+          &lt;h4 id=&quot;Thinking-in-Android-–-“启动阶段”&quot;&gt;&lt;a href=&quot;#Thinking-in-Android-–-“启动阶段”&quot; class=&quot;headerlink&quot; title=&quot;Thinking in Android –
         
       
     
@@ -44,13 +38,13 @@ table th:first-of-type {
       <category term="Android" scheme="https://superandroid.pro/categories/Android/"/>
     
     
-      <category term="博客优化" scheme="https://superandroid.pro/tags/%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/"/>
+      <category term="框架服务" scheme="https://superandroid.pro/tags/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
     
-      <category term="修订记录" scheme="https://superandroid.pro/tags/%E4%BF%AE%E8%AE%A2%E8%AE%B0%E5%BD%95/"/>
+      <category term="通信机制" scheme="https://superandroid.pro/tags/%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"/>
     
-      <category term="方向规划" scheme="https://superandroid.pro/tags/%E6%96%B9%E5%90%91%E8%A7%84%E5%88%92/"/>
+      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
-      <category term="日志" scheme="https://superandroid.pro/tags/%E6%97%A5%E5%BF%97/"/>
+      <category term="算法" scheme="https://superandroid.pro/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
@@ -87,11 +81,11 @@ table th:first-of-type {
   </entry>
   
   <entry>
-    <title>博客索引（Android 9.0）</title>
-    <link href="https://superandroid.pro/2020/01/01/00.thinking-in-android-01.bo-ke-suo-yin/"/>
-    <id>https://superandroid.pro/2020/01/01/00.thinking-in-android-01.bo-ke-suo-yin/</id>
+    <title>博客日志</title>
+    <link href="https://superandroid.pro/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
+    <id>https://superandroid.pro/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/</id>
     <published>2020-01-01T01:08:00.000Z</published>
-    <updated>2019-04-15T06:04:16.993Z</updated>
+    <updated>2019-04-15T07:02:46.191Z</updated>
     
     <summary type="html">
     
@@ -99,7 +93,13 @@ table th:first-of-type {
       
         
         
-          &lt;h4 id=&quot;Thinking-in-Android-–-“启动阶段”&quot;&gt;&lt;a href=&quot;#Thinking-in-Android-–-“启动阶段”&quot; class=&quot;headerlink&quot; title=&quot;Thinking in Android –
+          &lt;style&gt;
+table th:first-of-type {
+    width: 200px;
+}
+&lt;/style&gt;
+
+&lt;h4 id=&quot;Thinking-in-Android-–-“新增”&quot;&gt;&lt;a href=&quot;#Thinking-in-Android-–-“新增”&quot;
         
       
     
@@ -108,13 +108,13 @@ table th:first-of-type {
       <category term="Android" scheme="https://superandroid.pro/categories/Android/"/>
     
     
-      <category term="框架服务" scheme="https://superandroid.pro/tags/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
+      <category term="博客优化" scheme="https://superandroid.pro/tags/%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96/"/>
     
-      <category term="通信机制" scheme="https://superandroid.pro/tags/%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"/>
+      <category term="修订记录" scheme="https://superandroid.pro/tags/%E4%BF%AE%E8%AE%A2%E8%AE%B0%E5%BD%95/"/>
     
-      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="方向规划" scheme="https://superandroid.pro/tags/%E6%96%B9%E5%90%91%E8%A7%84%E5%88%92/"/>
     
-      <category term="算法" scheme="https://superandroid.pro/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="日志" scheme="https://superandroid.pro/tags/%E6%97%A5%E5%BF%97/"/>
     
   </entry>
   
