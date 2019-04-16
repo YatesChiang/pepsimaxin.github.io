@@ -1,0 +1,1762 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程, Hexo">
+    <meta name="description" content="PackageManagerService 系列文章如下（基于 Android 9.0 源码）
+
+
+
+&amp;nbsp;
+系统核心服务之 PackageManagerService 钻研（1）- 启动流程
+
+
+
+
+
+系统核心服务之 Package">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程 | Hexo</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <!--<div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Hexo</span>
+                </a>
+            </div>-->
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>目录</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/四大组件/" class="waves-effect waves-light">
+            
+            <i class="fa fa-cube"></i>
+            
+            <span>组件</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/启动阶段/" class="waves-effect waves-light">
+            
+            <i class="fa fa-spinner"></i>
+            
+            <span>开机</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/框架服务/" class="waves-effect waves-light">
+            
+            <i class="fa fa-superpowers"></i>
+            
+            <span>框架</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/通信机制/" class="waves-effect waves-light">
+            
+            <i class="fa fa-link"></i>
+            
+            <span>通信</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/性能优化/" class="waves-effect waves-light">
+            
+            <i class="fa fa-yelp"></i>
+            
+            <span>优化</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/设计模式/" class="waves-effect waves-light">
+            
+            <i class="fa fa-envira"></i>
+            
+            <span>模式</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/算法专栏/" class="waves-effect waves-light">
+            
+            <i class="fa fa-modx"></i>
+            
+            <span>算法</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/技术储备/" class="waves-effect waves-light">
+            
+            <i class="fa fa-linode"></i>
+            
+            <span>拓展</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>作者</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/技术细节/" class="waves-effect waves-light">
+            
+            <i class="fa fa-file-text"></i>
+            
+            <span>FAQ</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Hexo</div>
+        <div class="logo-desc">
+            
+            Victory belongs to the most persevering.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                目录
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/四大组件/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-cube"></i>
+                
+                组件
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/启动阶段/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-spinner"></i>
+                
+                开机
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/框架服务/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-superpowers"></i>
+                
+                框架
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/通信机制/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                通信
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/性能优化/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-yelp"></i>
+                
+                优化
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/设计模式/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-envira"></i>
+                
+                模式
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/算法专栏/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-modx"></i>
+                
+                算法
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/技术储备/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-linode"></i>
+                
+                拓展
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                作者
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/技术细节/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-file-text"></i>
+                
+                FAQ
+            </a>
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('http://poobjb5p7.bkt.clouddn.com/PMS%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/PackageManagerService/" target="_blank">
+                                <span class="chip bg-color">PackageManagerService</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/框架服务/" class="post-category" target="_blank">
+                                框架服务
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-12-01
+                </div>
+
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><strong><center><font color="#3A5FCD" size="4">PackageManagerService 系列文章如下（基于 Android 9.0 源码）</font><center></center></center></strong><br></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&nbsp;</th>
+<th style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（1）- 启动流程</font></a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（2）- 构造函数</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（3）- PackageManager</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><font color="#EE2C2C" size="3">PackageManagerService</font></strong></td>
+<td style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（4）- PackageInstaller</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（5）- APK 安装流程（1）</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（6）- APK 安装流程（2）</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left"><a href><font color="#B452CD">系统核心服务之 PackageManagerService 钻研（7）- PackageParser</font></a></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong><font color="#3A5FCD" size="4">修订日志</font></strong><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">1、重新梳理 Android 9.0 源码中 PMS 的启动流程；</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">2、重新梳理涉及 Settings 的代码逻辑；</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">3、重新梳理 XML 文件扫描的代码逻辑；</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">4、博文格式，文章排版等优化；</font></p>
+<hr>
+<h1 id="一、开篇"><a href="#一、开篇" class="headerlink" title="一、开篇"></a>一、开篇</h1><h2 id="1-1-核心源码"><a href="#1-1-核心源码" class="headerlink" title="1.1 核心源码"></a>1.1 核心源码</h2><table>
+<thead>
+<tr>
+<th>关键类</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><font color="#D15FEE">Process.java</font></td>
+<td>frameworks/base/core/java/android/os/Process.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">Settings.java</font></td>
+<td>frameworks/base/services/core/java/com/android/server/pm/Settings.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">SettingBase.java</font></td>
+<td>frameworks/base/services/core/java/com/android/server/pm/SettingBase.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">SystemConfig.java</font></td>
+<td>frameworks/base/core/java/com/android/server/SystemConfig.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">SystemServer.java</font></td>
+<td>frameworks/base/services/java/com/android/server/SystemServer.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">SharedUserSetting.java</font></td>
+<td>frameworks/base/services/core/java/com/android/server/pm/SharedUserSetting.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">PackageManagerService.java</font></td>
+<td>frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p><strong><font color="#63B8FF">PackageManagerService（PMS）</font></strong>是 SystemServer 启动后的第一个核心服务，也是 Android 系统中最常用的服务之一。它负责系统中 Package 的管理，应用程序的安装、卸载、信息查询等。如果你是面向 Android 系统开发的工程师，基础概念我也不需要再多赘述，我们的重点是阅读分析源码，钻研原理的奥秘。</p>
+<h2 id="1-3-家族谱"><a href="#1-3-家族谱" class="headerlink" title="1.3 家族谱"></a>1.3 家族谱</h2><p>首先，我们看一下 PackageManagerService 及客户端的家族谱，如下图所示（这边暂且只需要有个印象，整个系列分析完再回来看这个家族谱，你会清晰很多！）</p>
+<center><img src="https://upload-images.jianshu.io/upload_images/3517194-ece68587e315bc1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="微信截图_20180910113833.png"></center>
+
+<p><strong><font color="#436EEE" size="3">简单说明：</font></strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 IPackageManager 接口类中定义了服务端和客户端通信的业务函数，还定义了内部类 Stub，该类从 Binder 派生并实现了 IPackageManager 接口。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 PackageManagerService 继承自 IPackageManager.Stub类，由于 Stub 类从 Binder 派生，因此 PackageManagerService 将作为服务端参与 Binder 通信。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 Stub 类中定义了一个内部类 Proxy，该类有一个 IBinder类型（实际类型为 BinderProxy）的成员变量 mRemote，mRemote 用于和服务端 PackageManagerService通信。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 IPackageManager 接口类中定义了许多业务函数，但是处于安全等方面的考虑，Android 对外（即SDK）提供的只是一个子集，该子类被封装在抽象类 PackageManager中。客户端一般通过 Context 的 getPackageManager 函数返回一个类型为 PackageManager的对象，该对象的实际类型是 PackageManager 的子类 ApplicationPackageManager。这种基于接口编程的方式，虽然极大降低了模块之间的耦合性，却给代码分析带来了不小的麻烦。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 ApplicationPackageManager 类继承自 PackageManager类。它并没有直接参与 Binder 通信，而是通过 mPM 成员变量指向一个 IPackageManager.Stub.Proxy 类型的对象。</p>
+<blockquote>
+<p><strong><font color="#FF0000">【提示】：</font></strong>在你自己的分析过程中，可能会发现源码中找不到 IPackageManager.java 这个文件。其实该文件是在编译过程中产生的，最终的文件位于 Android 源码 /out（out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/core/java/android/content/pm）目录下面。</p>
+</blockquote>
+<p><strong><font color="#0000FF">IPackageManager.java：</font></strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IPackageManager</span> <span class="token keyword">extends</span> <span class="token class-name">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>IInterface</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/** Local-side IPC implementation stub class. */</span>
+    <span class="token comment" spellcheck="true">// 定义内部类 Stub，派生自 Binder，实现 IPackageManager 接口</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Stub</span> <span class="token keyword">extends</span> <span class="token class-name">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Binder</span>
+                                      <span class="token keyword">implements</span> <span class="token class-name">android<span class="token punctuation">.</span>content<span class="token punctuation">.</span>pm<span class="token punctuation">.</span>IPackageManager</span> <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String DESCRIPTOR <span class="token operator">=</span> 
+                                      <span class="token string">"android.content.pm.IPackageManager"</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/** Construct the stub at attach it to the interface. */</span>
+        <span class="token keyword">public</span> <span class="token function">Stub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">attachInterface</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> DESCRIPTOR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token comment" spellcheck="true">// 定义 Stub 的内部类 Proxy，实现 IPackageManager 接口</span>
+        <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Proxy</span> <span class="token keyword">implements</span> <span class="token class-name">android<span class="token punctuation">.</span>content<span class="token punctuation">.</span>pm<span class="token punctuation">.</span>IPackageManager</span> <span class="token punctuation">{</span>
+            <span class="token keyword">private</span> android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>IBinder mRemote<span class="token punctuation">;</span>
+            <span class="token function">Proxy</span><span class="token punctuation">(</span>android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>IBinder remote<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                mRemote <span class="token operator">=</span> remote<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong><font color="#436EEE">看源码，梳理流程，就像是走进迷宫，很容易迷失！</font></strong>所以在开始分析之前，我给读者一些建议：<strong><font color="#FF0000">紧抓主干，熟悉流程，再去啃细枝末节！</font></strong></p>
+<hr>
+<h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p>先来说说 PackageManagerService 是怎么启动的：<strong><font color="#63B8FF">PackageManagerService</font></strong> 作为系统的核心服务，由 <strong><font color="#63B8FF">SystemServer</font></strong> 创建，SystemServer 调用了 PackageManagerService 的 <code>main()</code> 创建 PackageManagerService 实例（关于 SystemServer 的分析可以阅读<a href="https://superandroid.pro/2018/10/18/A_02.%20Android%20%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20Android%20%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5%20%E4%B9%8B%20systemServer/">《深入钻研 Android 启动阶段 之 SystemServer》</a>）。</p>
+<h2 id="2-1-main"><a href="#2-1-main" class="headerlink" title="2.1 main"></a>2.1 main</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/java/com/android/server/SystemServer.java</span>
+
+<span class="token comment" spellcheck="true">/**
+  * The main entry point from zygote.
+  */</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">new</span> <span class="token class-name">SystemServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Start services.</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token function">startBootstrapServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">startOtherServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="2-2-startBootstrapServices"><a href="#2-2-startBootstrapServices" class="headerlink" title="2.2 startBootstrapServices"></a>2.2 startBootstrapServices</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/java/com/android/server/SystemServer.java</span>
+
+<span class="token keyword">private</span> PackageManagerService mPackageManagerService<span class="token punctuation">;</span>
+<span class="token keyword">private</span> Context mSystemContext<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">boolean</span> mOnlyCore<span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">startBootstrapServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token comment" spellcheck="true">// 启动 installer 服务</span>
+    Installer installer <span class="token operator">=</span> mSystemServiceManager<span class="token punctuation">.</span><span class="token function">startService</span><span class="token punctuation">(</span>Installer<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 处于加密状态则仅仅解析核心应用</span>
+    String cryptState <span class="token operator">=</span> SystemProperties<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"vold.decrypt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ENCRYPTING_STATE<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>cryptState<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Detected encryption in progress - only parsing core apps"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mOnlyCore <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>ENCRYPTED_STATE<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>cryptState<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Device encrypted - only parsing core apps"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mOnlyCore <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 调用 PMS 的 main 函数，主要是创建 PMS 服务，并注册到 ServiceManager（服务管家）</span>
+    mPackageManagerService <span class="token operator">=</span> PackageManagerService<span class="token punctuation">.</span><span class="token function">main</span><span class="token punctuation">(</span>mSystemContext<span class="token punctuation">,</span> installer<span class="token punctuation">,</span>
+                mFactoryTestMode <span class="token operator">!=</span> FactoryTest<span class="token punctuation">.</span>FACTORY_TEST_OFF<span class="token punctuation">,</span> mOnlyCore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 判断本次是否为初次启动，当 Zygote 或 SystemServer 退出时，init 会再次启动它们</span>
+    <span class="token comment" spellcheck="true">// 所以这里的 FirstBoot 是指开机后的第一次启动</span>
+    mFirstBoot <span class="token operator">=</span> mPackageManagerService<span class="token punctuation">.</span><span class="token function">isFirstBoot</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 获取 PackageManager</span>
+    mPackageManager <span class="token operator">=</span> mSystemContext<span class="token punctuation">.</span><span class="token function">getPackageManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="2-3-startOtherServices"><a href="#2-3-startOtherServices" class="headerlink" title="2.3 startOtherServices"></a>2.3 startOtherServices</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/java/com/android/server/SystemServer.java</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">startOtherServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token function">traceBeginAndSlog</span><span class="token punctuation">(</span><span class="token string">"MakePackageManagerServiceReady"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mPackageManagerService<span class="token punctuation">.</span><span class="token function">systemReady</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">traceEnd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<hr>
+<h1 id="三、PackageManagerService"><a href="#三、PackageManagerService" class="headerlink" title="三、PackageManagerService"></a>三、PackageManagerService</h1><p>通过源码，我们知道了 SystemServer 调用 PackageManagerService 的 <code>main()</code> 创建了 PackageManagerService 实例。那么接下来的重点就是关注 PackageManagerService 的 <code>main()</code>！</p>
+<h2 id="3-1-main"><a href="#3-1-main" class="headerlink" title="3.1 main"></a>3.1 main</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/core/java/com/android/server/pm/</span>
+            PackageManagerService<span class="token punctuation">.</span>java
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> PackageManagerService <span class="token function">main</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>
+                                         <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Self-check for initial settings: 此处主要检查系统属性</span>
+    PackageManagerServiceCompilerMapping<span class="token punctuation">.</span><span class="token function">checkProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 此处创建构造函数，其中，factoryTest：决定是否测试版本，onlyCore：决定是否只解析系统目录</span>
+    PackageManagerService m <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageManagerService</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> installer<span class="token punctuation">,</span> 
+                                                        factoryTest<span class="token punctuation">,</span> onlyCore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    m<span class="token punctuation">.</span><span class="token function">enableSystemUserPackages</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 利用 Binder 通信，将自己注册到 ServiceManager 进程中（这是 Binder 服务的常规注册流程）</span>
+    ServiceManager<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span><span class="token string">"package"</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> PackageManagerNative pmn <span class="token operator">=</span> m<span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token class-name">PackageManagerNative</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    ServiceManager<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span><span class="token string">"package_native"</span><span class="token punctuation">,</span> pmn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> m<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>该方法主要<code>创建 PMS 对象</code>，并将其注册到 <code>ServiceManager</code> 中，内部是一个 <code>HashMap</code> 的集合，存储了很多相关的 Binder 服务，缓存起来，我们在使用的时候，会通过 <code>getService(key)</code> 的方式去 <code>Map</code> 中获取。</p>
+<blockquote>
+<p><strong><font color="#436EEE">main 函数看似几行代码很简单，但执行时间却很长。主要原因是 PMS 在其“构造函数”中做了很多“重体力活”，这也是 Android 启动速度慢的主要原因之一。</font></strong></p>
+</blockquote>
+<p><strong><font color="#FF0000">具体分析前，我们先简单了解一下 PMS 构造函数的主要功能：</font></strong></p>
+<p>扫描 Android 系统中几个目标文件夹中的 APK，从而建立合适的数据结构来管理各种信息，如：Package 信息、四大组件信息、权限信息等。</p>
+<p>抽象地来看，PMS 像一个加工厂，它解析实际的物理文件（APK文件）以生成符合自己要求的产品。（例如：PMS 将解析 APK 包中的 <code>AndroidManifest.xml</code>，并根据其中声明的 <code>Activity 标签</code>来创建与此对应的对象并加以保管。）</p>
+<p>从源码角度来看，PMS 的工作流程相对简单。但深入研究后，发现其很复杂！</p>
+<blockquote>
+<p><strong><font color="#A020F0">复杂的是其中用于保存各种信息的<code>数据结构</code>和<code>它们之间的关系</code>，以及影响最终结果的<code>策略控制</code></font></strong>。</p>
+</blockquote>
+<p>如果你自行研究过 PMS，你会发现代码中存在大量不同的数据结构以及它们之间的关系会让人大为头疼。所以，在这篇文章中我们除了分析 PMS 的工作流程以外，会重点关注重要的数据结构以及它们的作用。</p>
+<p><strong><font color="#FF0000">接下来开始重点分析 PMS 的构造函数</font></strong>，如果放在一篇文章中去分析是完全不可能梳理清楚的！</p>
+<p>我们分两部分研究，如下：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">🍁 &nbsp;构造函数（1） - 前期准备工作</font></strong>&nbsp;<strong><font color="#FF0000">（本篇文章要讨论的内容）</font></strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">🍁 &nbsp;构造函数（2） - 扫描 Package 和 扫尾工作</font></strong> <a href="https://superandroid.pro/2018/11/05/B_02.%20Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%882%EF%BC%89%E4%B9%8B%20%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">《Framework 核心服务之 PMS 钻研（2）- 构造函数》</a></p>
+<hr>
+<p>正式开始分析 PMS 的构造函数：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 此处创建构造函数，其中，factoryTest：决定是否测试版本，onlyCore：决定是否只解析系统目录</span>
+PackageManagerService m <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageManagerService</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> installer<span class="token punctuation">,</span> 
+                                                    factoryTest<span class="token punctuation">,</span> onlyCore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="3-2-Settings"><a href="#3-2-Settings" class="headerlink" title="3.2 Settings"></a>3.2 Settings</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// public static final int SDK_INT = SystemProperties.getInt("ro.build.version.sdk", 0);</span>
+<span class="token keyword">final</span> <span class="token keyword">int</span> mSdkVersion <span class="token operator">=</span> Build<span class="token punctuation">.</span>VERSION<span class="token punctuation">.</span>SDK_INT<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>
+            <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/*
+     * mSdkVersion是 PMS 的成员变量，定义的时候进行赋值，其值取自系统属性 ro.build.version.sdk
+     * 如果没有定义，则 APK 就无法知道自己运行在 Android 哪个版本上
+     */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mSdkVersion <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"**** ro.build.version.sdk not set!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    mContext <span class="token operator">=</span> context<span class="token punctuation">;</span>
+
+    mFactoryTest <span class="token operator">=</span> factoryTest<span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 运行在非工厂模式下</span>
+    mOnlyCore <span class="token operator">=</span> onlyCore<span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">// 标记是否只加载核心服务</span>
+    mMetrics <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DisplayMetrics</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 存储与显示屏相关的一些属性，例如屏幕的宽/高尺寸，分辨率等信息</span>
+    mInstaller <span class="token operator">=</span> installer<span class="token punctuation">;</span>          <span class="token comment" spellcheck="true">// 创建 Installer 对象，该对象和 Native 进程 installd 交互</span>
+
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mInstallLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Expose private service for system components to use.</span>
+        LocalServices<span class="token punctuation">.</span><span class="token function">addService</span><span class="token punctuation">(</span>PackageManagerInternal<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> 
+                                 <span class="token keyword">new</span> <span class="token class-name">PackageManagerInternalImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sUserManager <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UserManagerService</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">UserDataPreparer</span><span class="token punctuation">(</span>mInstaller<span class="token punctuation">,</span> mInstallLock<span class="token punctuation">,</span> mContext<span class="token punctuation">,</span> mOnlyCore<span class="token punctuation">)</span><span class="token punctuation">,</span> 
+                mPackages<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mPermissionManager <span class="token operator">=</span> PermissionManagerService<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span>
+                <span class="token keyword">new</span> <span class="token class-name">DefaultPermissionGrantedCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token annotation punctuation">@Override</span>
+                    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onDefaultRuntimePermissionsGranted</span><span class="token punctuation">(</span><span class="token keyword">int</span> userId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token keyword">synchronized</span><span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                            mSettings<span class="token punctuation">.</span><span class="token function">onDefaultRuntimePermissionsGrantedLPr</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token punctuation">}</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span> mPackages <span class="token comment" spellcheck="true">/*externalLock*/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mDefaultPermissionPolicy <span class="token operator">=</span> mPermissionManager<span class="token punctuation">.</span><span class="token function">getDefaultPermissionGrantPolicy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// Settings 是一个非常重要的类，该类用于存储系统运行过程中的一些设置，我们后面会重点分析这个类！</span>
+        mSettings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Settings</span><span class="token punctuation">(</span>mPermissionManager<span class="token punctuation">.</span><span class="token function">getPermissionSettings</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> mPackages<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 添加system、phone、log、nfc、bluetooth、shell这六种 shareUserId 到 mSettings</span>
+    <span class="token comment" spellcheck="true">// addSharedUserLPw 函数做了什么？这是我们接下来要分析的重点！</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.system"</span><span class="token punctuation">,</span> Process<span class="token punctuation">.</span>SYSTEM_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.phone"</span><span class="token punctuation">,</span> RADIO_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.log"</span><span class="token punctuation">,</span> LOG_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.nfc"</span><span class="token punctuation">,</span> NFC_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.bluetooth"</span><span class="token punctuation">,</span> BLUETOOTH_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.shell"</span><span class="token punctuation">,</span> SHELL_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.se"</span><span class="token punctuation">,</span> SE_UID<span class="token punctuation">,</span>
+                ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>刚进入构造函数，我们就遇到了第一个较为复杂的数据结构 <code>Settings</code> ，以及它的 <code>addSharedUserLPw</code> 函数。</p>
+<h4 id="3-2-1-构造函数"><a href="#3-2-1-构造函数" class="headerlink" title="3.2.1 构造函数"></a>3.2.1 构造函数</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">Settings</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token function">Settings</span><span class="token punctuation">(</span>PermissionSettings permissions<span class="token punctuation">,</span> Object lock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">getDataDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> permissions<span class="token punctuation">,</span> lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">Settings</span><span class="token punctuation">(</span>File dataDir<span class="token punctuation">,</span> PermissionSettings permission<span class="token punctuation">,</span> Object lock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mLock <span class="token operator">=</span> lock<span class="token punctuation">;</span>
+        mPermissions <span class="token operator">=</span> permission<span class="token punctuation">;</span>
+        mRuntimePermissionsPersistence <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RuntimePermissionPersistence</span><span class="token punctuation">(</span>mLock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 创建指向 /data/system/ 目录的 File</span>
+        mSystemDir <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>dataDir<span class="token punctuation">,</span> <span class="token string">"system"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 创建目录</span>
+        mSystemDir<span class="token punctuation">.</span><span class="token function">mkdirs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        FileUtils<span class="token punctuation">.</span><span class="token function">setPermissions</span><span class="token punctuation">(</span>mSystemDir<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                  FileUtils<span class="token punctuation">.</span>S_IRWXU<span class="token operator">|</span>FileUtils<span class="token punctuation">.</span>S_IRWXG
+                  <span class="token operator">|</span>FileUtils<span class="token punctuation">.</span>S_IROTH<span class="token operator">|</span>FileUtils<span class="token punctuation">.</span>S_IXOTH<span class="token punctuation">,</span>
+                  <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 用于描述系统所安装的 Package 信息</span>
+        mSettingsFilename <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mSystemDir<span class="token punctuation">,</span> <span class="token string">"packages.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// packages.xml的备份信息</span>
+        mBackupSettingsFilename <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mSystemDir<span class="token punctuation">,</span> <span class="token string">"packages-backup.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 保存系统中存在的所有非系统自带的 APK 信息，即 UID 大于 10000 的 apk</span>
+        mPackageListFilename <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mSystemDir<span class="token punctuation">,</span> <span class="token string">"packages.list"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FileUtils<span class="token punctuation">.</span><span class="token function">setPermissions</span><span class="token punctuation">(</span>mPackageListFilename<span class="token punctuation">,</span> <span class="token number">0640</span><span class="token punctuation">,</span> SYSTEM_UID<span class="token punctuation">,</span> PACKAGE_INFO_GID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// sdcardfs 相关的文件</span>
+        <span class="token keyword">final</span> File kernelDir <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"/config/sdcardfs"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mKernelMappingFilename <span class="token operator">=</span> kernelDir<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">?</span> kernelDir <span class="token operator">:</span> null<span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 记录系统中被强制停止运行的 App 信息，如有 App 被强制停止运行，会将一些信息记录到该文件中</span>
+        mStoppedPackagesFilename <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mSystemDir<span class="token punctuation">,</span> <span class="token string">"packages-stopped.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// packages-stopped.xml 的备份信息</span>
+        mBackupStoppedPackagesFilename <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mSystemDir<span class="token punctuation">,</span> <span class="token string">"packages-stopped-backup.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong><font color="#FF0000">Settings 的构造函数的主要工作：建立与某些系统配置文件、目录之间的关联</font></strong>。首先，它会创建指向 <code>/data/system/</code> 目录的 <code>File</code> 实例，这个目录下会保存很多系统文件。其次，就是创建 <code>/data/system/</code> 目录下的某些 <code>.xml 文件</code> 或其他文件的 <code>File</code> 实例。</p>
+<p>上面源码中涉及到 5 个文件：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ packages.xml：</font> PMS 扫描完目标文件夹后，会创建packages.xml。当系统进行程序安装、卸载和更新等操作时，均会更新该文件;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ packages-backup.xml：</font>packages.xml 文件的备份;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ packages.list：</font>用于描述系统中存在的所有非系统自带的 APK 信息。当这些 APK 有变化时，PKMS就会更新该文件;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ packages-stopped.xml：</font>记录被用户强行停止的应用的 Package 信息（例如，从设置进入某个应用，然后点击强行停止，那么应用的Package信息就会被记录）;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ packages-stopped-back.xml：</font>packages-stopped.xml 文件的备份。</p>
+<blockquote>
+<p>我们注意到，上面的介绍中涉及到了两个 <code>back-up</code> 文件，它们是做什么的呢？其实 Android 系统在修改 <code>packages.xml</code>、<code>packages-stopped.xml</code> 之前，会先对它们进行<code>备份</code>。当对它们的修改操作正常完成，则会删掉备份的文件。如果在修改过程中系统出现问题重启了，会再次去读取这两个文件；如果此时发现它们的备份文件还存在，则说明上一次对两份文件的修改操作发生了异常，这两份文件的内容可能已经不准确了，这时系统会去使用之前备份的文件的内容。</p>
+</blockquote>
+<p>创建完相关系统文件 File 实例后，Settings 的构造工作也就结束了。</p>
+<p>之前我们提出了一个问题：<strong><font color="#63B8FF">addSharedUserLPw 函数做了什么？</font></strong>从上面截取一段代码回顾一下：</p>
+<pre class=" language-java"><code class="language-java">mSettings<span class="token punctuation">.</span><span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span><span class="token string">"android.uid.system"</span><span class="token punctuation">,</span> Process<span class="token punctuation">.</span>SYSTEM_UID<span class="token punctuation">,</span>
+            ApplicationInfo<span class="token punctuation">.</span>FLAG_SYSTEM<span class="token punctuation">,</span> ApplicationInfo<span class="token punctuation">.</span>PRIVATE_FLAG_PRIVILEGED<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>addSharedUserLPw 传递了 4 个参数：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ &nbsp;android.uid.system</font>：字符串，name 和 uid 一一对应</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>public static final int SYSTEM_UID = 1000;</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ &nbsp;Process.SYSTEM_UID</font>：值为 1000，name 和 uid 一一对应</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>public static final int FLAG_SYSTEM = 1&lt;&lt;0;</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ &nbsp;ApplicationInfo.FLAG_SYSTEM</font>：标志</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>public static final int PRIVATE_FLAG_PRIVILEGED = 1&lt;&lt;3;</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✨ &nbsp;ApplicationInfo.PRIVATE_FLAG_PRIVILEGED</font>：特权Apk</p>
+<p>对 addSharedUserLPw 函数分析之前，我们有必要了解 <code>SYSTEM_UID</code> 的相关知识。</p>
+<hr>
+<h3 id="3-2-2-UID-GID"><a href="#3-2-2-UID-GID" class="headerlink" title="3.2.2 UID/GID"></a>3.2.2 UID/GID</h3><p><strong><font color="#FF0000">UID 为 <code>用户 ID</code> 的缩写，GID 为 <code>用户组 ID</code> 的缩写</font></strong>。一般来说，每一个进程都会有一个对应的 UID（即标示该进程属于哪个用户，不同用户拥有不同权限）。一个进程也可分属不用的用户组（每个用户都有对应的权限）。<strong><font color="#FF0000">UID/GID 和进程的权限有关</font></strong>。</p>
+<p>在 Android 平台中，系统定义的 UID/GID 在 <strong><font color="#8470FF">Process.java</font></strong> 文件中，如下所示（列举部分）：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/core/java/android/os/Process.java</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SYSTEM_UID <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 系统进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> PHONE_UID <span class="token operator">=</span> <span class="token number">1001</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// Phone 进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHELL_UID <span class="token operator">=</span> <span class="token number">2000</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// shell 进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> LOG_UID <span class="token operator">=</span> <span class="token number">1007</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// LOG 进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> WIFI_UID <span class="token operator">=</span> <span class="token number">1010</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// WIFI 进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MEDIA_UID <span class="token operator">=</span> <span class="token number">1013</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// mediaserver 进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> NFC_UID <span class="token operator">=</span> <span class="token number">1027</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// NFC 进程的 UID/GID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> FIRST_APPLICATION_UID <span class="token operator">=</span> <span class="token number">10000</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 第一个应用 Package 的起始 UID</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> LAST_APPLICATION_UID <span class="token operator">=</span> <span class="token number">19999</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 系统所支持的最大的应用 Package 的 UID</span>
+</code></pre>
+<h3 id="3-2-3-addSharedUserLPw"><a href="#3-2-3-addSharedUserLPw" class="headerlink" title="3.2.3 addSharedUserLPw"></a>3.2.3 addSharedUserLPw</h3><p>现在我们开始分析 addSharedUserLPw 函数：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/core/java/com/android/server/pm/Settings.java</span>
+
+SharedUserSetting <span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> <span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> pkgFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> pkgPrivateFlags<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 根据 key 从 map 中获取值</span>
+    SharedUserSetting s <span class="token operator">=</span> mSharedUsers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 如果值不为 null 并且保存的 uid 和传递过来的一致，就直接返回结果</span>
+    <span class="token comment" spellcheck="true">// uid 不一致则返回 null</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>s <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>s<span class="token punctuation">.</span>userId <span class="token operator">==</span> uid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        PackageManagerService<span class="token punctuation">.</span><span class="token function">reportSettingsProblem</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>ERROR<span class="token punctuation">,</span>
+                    <span class="token string">"Adding duplicate shared user, keeping first: "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 若 s 为 null，则根据传递过来的参数新创建对象</span>
+    s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SharedUserSetting</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> pkgFlags<span class="token punctuation">,</span> pkgPrivateFlags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    s<span class="token punctuation">.</span>userId <span class="token operator">=</span> uid<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 在系统中保存值为 uid 的 用户 id，成功返回 true</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">addUserIdLPw</span><span class="token punctuation">(</span>uid<span class="token punctuation">,</span> s<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mSharedUsers<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> s<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 将 name 与 s 键值对添加到 mSharedUsers 中保存</span>
+        <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>从源码中我们发现，Settings 中有一个 <code>mSharedUsers</code> 成员，该成员存储的是 <code>【“字符串” 与 “SharedUserSetting” 键值对】</code>，也就是说可以通过 <code>字符串</code> 为 <code>key</code> 得到对应的 <code>SharedUserSetting</code> 对象。</p>
+<p>那么 SharedUserSetting 是什么？创建它的目的是什么？接下来我们继续分析！</p>
+<h4 id="3-2-3-1-SharedUserSetting"><a href="#3-2-3-1-SharedUserSetting" class="headerlink" title="3.2.3.1 SharedUserSetting"></a>3.2.3.1 SharedUserSetting</h4><p>为了解释 SharedUserSetting，我们拿 <strong><font color="#1874CD">SystemUI</font></strong> 作为例子来讨论这个问题。</p>
+<p>我们看下 SystemUI 的 <code>AndroidManifest.xml</code>（这个文件你肯定不陌生）：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>manifest</span> <span class="token attr-name"><span class="token namespace">xmlns:</span>android</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://schemas.android.com/apk/res/android<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">xmlns:</span>androidprv</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://schemas.android.com/apk/prv/res/android<span class="token punctuation">"</span></span>
+        <span class="token attr-name">package</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>com.android.systemui<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>sharedUserId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.uid.system<span class="token punctuation">"</span></span>
+        <span class="token attr-name">coreApp</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+</code></pre>
+<p>在 <code>AndroidManifest.xml</code> 中，声明了一个名为 <code>android:sharedUserId</code> 的属性：<code>android.uid.systemui</code>。</p>
+<p><strong><font color="#FF0000">有必要聊聊这个 “sharedUserId” 的作用！</font></strong></p>
+<p>1、两个或多个声明了同一种 <code>sharedUserId</code> 的 <code>APK</code> 可共享彼此的数据，并且可运行在同一进程中。</p>
+<p>2、通过声明特定的 <code>sharedUserId</code>，该 <code>APK</code> 所在 <code>进程</code> 将被赋予指定的 <code>UID</code>（比如本例中的 SystemUI 声明了 system 的 uid，运行 SystemUI 的进程就可享受 system 用户所对应的权限）。</p>
+<blockquote>
+<p>除了在 <code>AndroidManifest.xml</code> 中声明 <code>sharedUserId</code> 外，APK 在编译时还必须使用对应的证书进行签名。例如本例的 <code>SystemUI</code>，在其 <code>Android.mk</code> 中需要额外申明 <code>LOCAL_CERTIFICATE := platform</code>，如此才可以获得指定的 <code>UID</code>（当然这个不是我们分析的重点，在项目开发的过程中，我们会了解到这一点）。</p>
+</blockquote>
+<p>通过以上分析，我们知道了如何组织一种数据结构来包括上面的内容。</p>
+<p><strong><font color="#FF0000">有 3 个关键点需要注意：</font></strong></p>
+<blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🍁 &nbsp;XML 中 sharedUserId 属性指定了一个字符串，它是 UID 的字符串描述，故对应数据结构中也应该有这样一个字符串，这样就把代码和 XML 中的属性联系起来了。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🍁 &nbsp;在 LINUX 系统中，真正的 uid 是一个整数，所以该数据结构中必然有一个整型变量。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🍁 &nbsp;多个 Package 可声明同一个 sharedUserId，因此该数据结构必然会保存那些声明了相同 sharedUserId 的 Package 的某些信息。</p>
+</blockquote>
+<p>对 <strong><font color="#8470FF">SharedUserSetting</font></strong> 我们做个总结：</p>
+<p>1、<code>Settings</code> 类定义了一个 <code>mSharedUsers</code> 成员，它是一个 <code>ArrayMap</code>，以 <code>字符串</code>（如：android.uid.system）为 <code>key</code>，对应的 <code>Value</code> 是一个 <code>SharedUserSetting</code> 对象。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">final</span> ArrayMap<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> SharedUserSetting<span class="token operator">></span> mSharedUsers <span class="token operator">=</span> 
+                                          <span class="token keyword">new</span> <span class="token class-name">ArrayMap</span><span class="token operator">&lt;</span>String<span class="token punctuation">,</span> SharedUserSetting<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>2、<code>SharedUserSetting</code> 定义了一个成员变量 <code>packages</code>，类型为 <code>ArraySet</code>，用于保存声明了相同 <code>sharedUserId</code> 的 <code>Package</code> 的权限设置信息（这一点我们之前提到过）。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">SharedUserSetting</span> <span class="token keyword">extends</span> <span class="token class-name">SettingBase</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> String name<span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> userId<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// flags that are associated with this uid, regardless of any package flags</span>
+    <span class="token keyword">int</span> uidFlags<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> uidPrivateFlags<span class="token punctuation">;</span>
+
+    <span class="token keyword">final</span> ArraySet<span class="token operator">&lt;</span>PackageSetting<span class="token operator">></span> packages <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArraySet</span><span class="token operator">&lt;</span>PackageSetting<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>3、每个 <code>Package</code> 有自己的权限设置。权限的概念由 <code>PackageSeting</code> 类表达。该类继承自 <code>PackageSettingBase</code> 类，<code>PackageSettingBase</code> 又继承自 <code>SettingBase</code>。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">PackageSetting</span> <span class="token keyword">extends</span> <span class="token class-name">PackageSettingBase</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">PackageSettingBase</span> <span class="token keyword">extends</span> <span class="token class-name">SettingBase</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+<p><code>SettingBase</code> 对象持有 <code>PermissionsState</code> 对象，用于表示可用的权限。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">SettingBase</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">final</span> PermissionsState mPermissionsState<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>4、<code>Settings</code> 中还有两个成员，一个是 <code>mUserIds</code>，另一个是 <code>mOtherUserIds</code>，这两位成员的类型分别是 <code>ArrayList</code> 和 <code>SparseArray</code>。其目的是以 <code>UID</code> 为索引，得到对应的 <code>SharedUserSeting</code> 对象。在一般情况下，以 <code>索引</code> 获取<code>数组元素</code>的速度，比以 <code>Key</code> 获取 <code>ArrayMap</code> 中 <code>元素</code> 的速度要快很多。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> ArrayList<span class="token operator">&lt;</span>Object<span class="token operator">></span> mUserIds <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>Object<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">final</span> SparseArray<span class="token operator">&lt;</span>Object<span class="token operator">></span> mOtherUserIds <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SparseArray</span><span class="token operator">&lt;</span>Object<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="3-2-3-2-addUserIdLPw"><a href="#3-2-3-2-addUserIdLPw" class="headerlink" title="3.2.3.2 addUserIdLPw"></a>3.2.3.2 addUserIdLPw</h4><p>我们回忆一下 addSharedUserLPw 方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/core/java/com/android/server/pm/Settings.java</span>
+
+SharedUserSetting <span class="token function">addSharedUserLPw</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> <span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> pkgFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> pkgPrivateFlags<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    SharedUserSetting s <span class="token operator">=</span> mSharedUsers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SharedUserSetting</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> pkgFlags<span class="token punctuation">,</span> pkgPrivateFlags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    s<span class="token punctuation">.</span>userId <span class="token operator">=</span> uid<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">addUserIdLPw</span><span class="token punctuation">(</span>uid<span class="token punctuation">,</span> s<span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mSharedUsers<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> s<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>源码中还有一个 <code>addUserIdLPw</code> 方法，它的功能就是将 <code>SharedUserSettings</code> 对象保存到对应的数组中，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/core/java/com/android/server/pm/Settings.java</span>
+
+<span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">addUserIdLPw</span><span class="token punctuation">(</span><span class="token keyword">int</span> uid<span class="token punctuation">,</span> Object obj<span class="token punctuation">,</span> Object name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 系统所支持的最大的应用 Package 的 UID，不能超出限制 19999</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>uid <span class="token operator">></span> Process<span class="token punctuation">.</span>LAST_APPLICATION_UID<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 第一个应用 Package（非系统安装应用）的起始 UID</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>uid <span class="token operator">>=</span> Process<span class="token punctuation">.</span>FIRST_APPLICATION_UID<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 获取数组的长度</span>
+        <span class="token keyword">int</span> N <span class="token operator">=</span> mUserIds<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                   
+        <span class="token comment" spellcheck="true">// 计算索引，其值是 uid 和 FIRST_APPLICATION_UID 的差</span>
+        <span class="token keyword">final</span> <span class="token keyword">int</span> index <span class="token operator">=</span> uid <span class="token operator">-</span> Process<span class="token punctuation">.</span>FIRST_APPLICATION_UID<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>index <span class="token operator">>=</span> N<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            mUserIds<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            N<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 如果数组的目标索引值位置有不为 null 的值，说明已经添加过</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mUserIds<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            PackageManagerService<span class="token punctuation">.</span><span class="token function">reportSettingsProblem</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>ERROR<span class="token punctuation">,</span>
+                    <span class="token string">"Adding duplicate user id: "</span> <span class="token operator">+</span> uid
+                    <span class="token operator">+</span> <span class="token string">" name="</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 应用 Package 的 uid 由 mUserIds 保存</span>
+        mUserIds<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>                 
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mOtherUserIds<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            PackageManagerService<span class="token punctuation">.</span><span class="token function">reportSettingsProblem</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>ERROR<span class="token punctuation">,</span>
+                    <span class="token string">"Adding duplicate shared id: "</span> <span class="token operator">+</span> uid
+                            <span class="token operator">+</span> <span class="token string">" name="</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 系统 Package 的 uid 由 mOtherUserIds 保存</span>
+        mOtherUserIds<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>uid<span class="token punctuation">,</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong><font color="#FF0000">至此对 Settings 的分析我们暂时告一段落。</font></strong></p>
+<h3 id="3-2-4-总结"><a href="#3-2-4-总结" class="headerlink" title="3.2.4 总结"></a>3.2.4 总结</h3><p>我们来看一个 SharedUserSettings 的类图：(类名改变，后期重新补图)<br><br></p>
+<p><center><img src="https://upload-images.jianshu.io/upload_images/3517194-6aeecba875f5450b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20160929092228475.jpg"></center><br></p>
+<p>如上图所示，<code>Settings</code> 对象中持有多个 <code>SharedUserSetting</code> 对象，每个 <code>SharedUserSetting</code> 对象又会持有多个 <code>PackageSetting</code> 对象。</p>
+<p>从继承关系来看，<code>SharedUserSetting</code> 和 <code>PackageSetting</code> 对象，最终都将继承 <code>SettingBase</code> 对象。</p>
+<p>从图上可以看出，<code>SettingBase</code> 对象持有 <code>PermissionsState</code> 对象，用于表示可用的权限。</p>
+<p>因此，<code>SharedUserSetting</code> 对象和 <code>PackageSetting</code> 对象中都将包含有 <code>PermissionsState</code>。</p>
+<p>从而我们可以据此推测出，<code>SharedUserSetting</code> 中持有的是一组 <code>Package</code> 共有的权限；<code>PackageSetting</code> 中持有的是单个 <code>Package</code> 独有的权限。</p>
+<hr>
+<h2 id="3-3-XML-文件扫描"><a href="#3-3-XML-文件扫描" class="headerlink" title="3.3 XML 文件扫描"></a>3.3 XML 文件扫描</h2><p>分析完 PMS 构造函数前期工作的第一阶段后，接下来就要继续回到构造函数中分析剩下的代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码：frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java</span>
+
+<span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>
+              <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token comment" spellcheck="true">// 第一阶段</span>
+
+    <span class="token comment" spellcheck="true">// 该值和调试有关，一般不设置该属性</span>
+    String separateProcesses <span class="token operator">=</span> SystemProperties<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"debug.separate_processes"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>separateProcesses <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> separateProcesses<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>separateProcesses<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            mDefParseFlags <span class="token operator">=</span> PackageParser<span class="token punctuation">.</span>PARSE_IGNORE_PROCESSES<span class="token punctuation">;</span>
+            mSeparateProcesses <span class="token operator">=</span> null<span class="token punctuation">;</span>
+            Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Running with debug.separate_processes: * (ALL)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            mDefParseFlags <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            mSeparateProcesses <span class="token operator">=</span> separateProcesses<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">","</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Running with debug.separate_processes: "</span> <span class="token operator">+</span> separateProcesses<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        mDefParseFlags <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        mSeparateProcesses <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 对应用进行 dexopt 优化的辅助类</span>
+    mPackageDexOptimizer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageDexOptimizer</span><span class="token punctuation">(</span>installer<span class="token punctuation">,</span> mInstallLock<span class="token punctuation">,</span> context<span class="token punctuation">,</span>
+                                                   <span class="token string">"*dexopt*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    DexManager<span class="token punctuation">.</span>Listener dexManagerListener <span class="token operator">=</span> DexLogger<span class="token punctuation">.</span><span class="token function">getListener</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> installer<span class="token punctuation">,</span>
+                                                                   mInstallLock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mDexManager <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DexManager</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> mPackageDexOptimizer<span class="token punctuation">,</span> installer<span class="token punctuation">,</span> mInstallLock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mArtManagerService <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArtManagerService</span><span class="token punctuation">(</span>mContext<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">,</span> installer<span class="token punctuation">,</span> mInstallLock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mMoveCallbacks <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MoveCallbacks</span><span class="token punctuation">(</span>FgThread<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    mOnPermissionChangeListeners <span class="token operator">=</span> <span class="token keyword">new</span> 
+                                   <span class="token class-name">OnPermissionChangeListeners</span><span class="token punctuation">(</span>FgThread<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 获取当前设备的显示屏信息</span>
+    <span class="token function">getDefaultDisplayMetrics</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> mMetrics<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 通过 SystemConfig 读取系统的 feature、permession 等配置，</span>
+    <span class="token comment" spellcheck="true">// 并初始化 mGlobalGids/mAvailableFeatures 成员</span>
+    SystemConfig systemConfig <span class="token operator">=</span> SystemConfig<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 重点讨论</span>
+    mAvailableFeatures <span class="token operator">=</span> systemConfig<span class="token punctuation">.</span><span class="token function">getAvailableFeatures</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mProtectedPackages <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProtectedPackages</span><span class="token punctuation">(</span>mContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> 
+ <span class="token punctuation">}</span>
+</code></pre>
+<p>以上代码除了创建了几个对象以外，还有一个重要的需要关注的类：<strong><font color="#FF0000">SystemConfig</font></strong>，这就是我们接下来分析的重点！！！</p>
+<h3 id="3-3-1-SystemConfig"><a href="#3-3-1-SystemConfig" class="headerlink" title="3.3.1 SystemConfig"></a>3.3.1 SystemConfig</h3><p>我们先来分析 <strong><font color="#1874CD">SystemConfig systemConfig = SystemConfig.getInstance() </font></strong> 函数！</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/core/java/com/android/server/SystemConfig.java</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Loads global system configuration info.
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SystemConfig</span> <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> SystemConfig sInstance<span class="token punctuation">;</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> SystemConfig <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>       <span class="token comment" spellcheck="true">// 单例模式</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>SystemConfig<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>sInstance <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                sInstance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SystemConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span> sInstance<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>查看它的构造函数：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/core/java/com/android/server/SystemConfig.java</span>
+
+<span class="token comment" spellcheck="true">/**
+ * 通过 readPermissions() 读取并解析 /system/etc/　等目录下的 sysconfig.xml、permission.xml 文件
+ */</span>
+<span class="token function">SystemConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Read configuration from system</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getRootDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"sysconfig"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ALLOW_ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Read configuration from the old permissions dir</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getRootDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"permissions"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> ALLOW_ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Vendors are only allowed to customze libs, features and privapp permissions</span>
+    <span class="token keyword">int</span> vendorPermissionFlag <span class="token operator">=</span> ALLOW_LIBS <span class="token operator">|</span> ALLOW_FEATURES <span class="token operator">|</span> ALLOW_PRIVAPP_PERMISSIONS<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>Build<span class="token punctuation">.</span>VERSION<span class="token punctuation">.</span>FIRST_SDK_INT <span class="token operator">&lt;=</span> Build<span class="token punctuation">.</span>VERSION_CODES<span class="token punctuation">.</span>O_MR1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// For backward compatibility</span>
+        vendorPermissionFlag <span class="token operator">|=</span> <span class="token punctuation">(</span>ALLOW_PERMISSIONS <span class="token operator">|</span> ALLOW_APP_CONFIGS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getVendorDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"sysconfig"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vendorPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getVendorDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"permissions"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vendorPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Allow ODM to customize system configs as much as Vendor, because /odm is another</span>
+    <span class="token comment" spellcheck="true">// vendor partition other than /vendor.</span>
+    <span class="token keyword">int</span> odmPermissionFlag <span class="token operator">=</span> vendorPermissionFlag<span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getOdmDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"sysconfig"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> odmPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getOdmDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"permissions"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> odmPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Allow OEM to customize features and OEM permissions</span>
+    <span class="token keyword">int</span> oemPermissionFlag <span class="token operator">=</span> ALLOW_FEATURES <span class="token operator">|</span> ALLOW_OEM_PERMISSIONS<span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getOemDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"sysconfig"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> oemPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getOemDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"permissions"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> oemPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Allow Product to customize system configs around libs, features, permissions and apps</span>
+    <span class="token keyword">int</span> productPermissionFlag <span class="token operator">=</span> ALLOW_LIBS <span class="token operator">|</span> ALLOW_FEATURES <span class="token operator">|</span> ALLOW_PERMISSIONS <span class="token operator">|</span>
+            ALLOW_APP_CONFIGS <span class="token operator">|</span> ALLOW_PRIVAPP_PERMISSIONS<span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getProductDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"sysconfig"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> productPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">readPermissions</span><span class="token punctuation">(</span>Environment<span class="token punctuation">.</span><span class="token function">buildPath</span><span class="token punctuation">(</span>
+            Environment<span class="token punctuation">.</span><span class="token function">getProductDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"etc"</span><span class="token punctuation">,</span> <span class="token string">"permissions"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> productPermissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>我们发现 <code>SystemConfig</code> 的构造函数所做的工作就是：<code>readPermissions()</code>，即从文件中<code>读取权限</code>！</p>
+<h3 id="3-3-2-readPermissions"><a href="#3-3-2-readPermissions" class="headerlink" title="3.3.2 readPermissions"></a>3.3.2 readPermissions</h3><p>接下来我们看看 readPermissions 的源码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/core/java/com/android/server/SystemConfig.java</span>
+
+<span class="token keyword">void</span> <span class="token function">readPermissions</span><span class="token punctuation">(</span>File libraryDir<span class="token punctuation">,</span> <span class="token keyword">int</span> permissionFlag<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token comment" spellcheck="true">// Iterate over the files in the directory and scan .xml files</span>
+    File platformFile <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>File f <span class="token operator">:</span> libraryDir<span class="token punctuation">.</span><span class="token function">listFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// We'll read platform.xml last</span>
+        <span class="token comment" spellcheck="true">// 处理该目录下的非 platform.xml 文件</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>f<span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">endsWith</span><span class="token punctuation">(</span><span class="token string">"etc/permissions/platform.xml"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            platformFile <span class="token operator">=</span> f<span class="token punctuation">;</span>
+            <span class="token keyword">continue</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token comment" spellcheck="true">// 调用 readPermissionsFromXml 解析此 XML 文件</span>
+        <span class="token function">readPermissionsFromXml</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> permissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// Read platform permissions last so it will take precedence</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>platformFile <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 不知道你有没有发现，platform.xml文件的解析优先级最高！</span>
+        <span class="token function">readPermissionsFromXml</span><span class="token punctuation">(</span>platformFile<span class="token punctuation">,</span> permissionFlag<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>从源码中，我们发现 <code>readPermissions</code> 函数不就是调用 <code>readPermissionFromXml</code> 函数解析 <code>&quot;/xxx/etc/permissions/&quot;</code> 目录下的文件吗？</p>
+<p>这些文件似乎都是 XML 文件。你也许有个疑问？该目录下都有哪些 XML 文件？这些 XML 文件中有些什么内容呢？<strong><font color="#63B8FF">以我手中的 pixel 为例</font></strong>：</p>
+<pre><code>sailfish:/system/etc/permissions $ ls -al
+ls -al
+total 168
+drwxr-xr-x  2 root root  4096 2009-01-01 16:00 .
+drwxr-xr-x 14 root root  4096 2009-01-01 16:00 ..
+-rw-r--r--  1 root root  1050 2009-01-01 16:00 android.software.live_wallpaper.xml
+-rw-r--r--  1 root root   748 2009-01-01 16:00 android.software.webview.xml
+-rw-r--r--  1 root root  1778 2009-01-01 16:00 com.android.ims.rcsmanager.xml
+-rw-r--r--  1 root root   828 2009-01-01 16:00 com.android.location.provider.xml
+-rw-r--r--  1 root root   828 2009-01-01 16:00 com.android.media.remotedisplay.xml
+-rw-r--r--  1 root root   820 2009-01-01 16:00 com.android.mediadrm.signer.xml
+-rw-r--r--  1 root root   158 2009-01-01 16:00 com.android.omadm.service.xml
+-rw-r--r--  1 root root   435 2009-01-01 16:00 com.android.sdm.plugins.connmo.xml
+-rw-r--r--  1 root root   701 2009-01-01 16:00 com.android.sdm.plugins.sprintdm.xml
+-rw-r--r--  1 root root   234 2009-01-01 16:00 com.android.vzwomatrigger.xml
+-rw-r--r--  1 root root  1079 2009-01-01 16:00 com.customermobile.preload.vzw.xml
+-rw-r--r--  1 root root   850 2009-01-01 16:00 com.google.android.camera.experimental2016.xml
+-rw-r--r--  1 root root   563 2009-01-01 16:00 com.google.android.dialer.support.xml
+-rw-r--r--  1 root root   816 2009-01-01 16:00 com.google.android.maps.xml
+-rw-r--r--  1 root root   835 2009-01-01 16:00 com.google.android.media.effects.xml
+-rw-r--r--  1 root root   811 2009-01-01 16:00 com.google.vr.platform.xml
+-rw-r--r--  1 root root   160 2009-01-01 16:00 com.verizon.apn.xml
+-rw-r--r--  1 root root   158 2009-01-01 16:00 com.verizon.embms.xml
+-rw-r--r--  1 root root   288 2009-01-01 16:00 com.verizon.llkagent.xml
+-rw-r--r--  1 root root   174 2009-01-01 16:00 com.verizon.provider.xml
+-rw-r--r--  1 root root   220 2009-01-01 16:00 com.verizon.services.xml
+-rw-r--r--  1 root root   239 2009-01-01 16:00 features-verizon.xml
+-rw-r--r--  1 root root   811 2009-01-01 16:00 obdm_permissions.xml
+-rw-r--r--  1 root root  8916 2009-01-01 16:00 platform.xml
+-rw-r--r--  1 root root 23092 2009-01-01 16:00 privapp-permissions-google.xml
+-rw-r--r--  1 root root  1346 2009-01-01 16:00 privapp-permissions-marlin.xml
+-rw-r--r--  1 root root 20848 2009-01-01 16:00 privapp-permissions-platform.xml
+-rw-r--r--  1 root root  1587 2009-01-01 16:00 vzw_mvs_permissions.xml
+sailfish:/system/etc/permissions $
+</code></pre><p>既然我们上面一直在说 platform.xml 这个文件，那就看下 <strong><font color="#FF0000">platform.xml</font></strong> 有什么：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>permissions</span><span class="token punctuation">></span></span>
+
+    <span class="token comment" spellcheck="true">&lt;!-- 建立权限名与 gid 的映射关系。如下面声明的 BLUETOOTH_ADMIN 权限，
+         它对应的用户组是 net_bt_admin。注意，该文件中的 permission 标签只对
+         那些需要通过读写设备（蓝牙/cameta）/创建 socket 等进程划分了 gid。
+         因为这些权限涉及和 Linux 内核交互，所以需要在底层权限（由不用的用户组界定）
+         和 Android 层权限（由不同的字符串界定）之间建立映射关系。 --></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.BLUETOOTH_ADMIN<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">gid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>net_bt_admin<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>permission</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.BLUETOOTH<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">gid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>net_bt<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>permission</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.BLUETOOTH_STACK<span class="token punctuation">"</span></span> <span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">gid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>bluetooth<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">gid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>wakelock<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>group</span> <span class="token attr-name">gid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>uhid<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>permission</span><span class="token punctuation">></span></span>
+
+    ... ...
+
+    <span class="token comment" spellcheck="true">&lt;!-- 赋予对应 uid 相应的权限。如果下面一行表示 uid 为 audioserver，那么就
+         赋予它 WAKE_LOCK 的权限，其实就是把它加到对应的用户组中 --></span>
+
+    ... ...
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>assign-permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.MODIFY_AUDIO_SETTINGS<span class="token punctuation">"</span></span> <span class="token attr-name">uid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>audioserver<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>assign-permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.ACCESS_SURFACE_FLINGER<span class="token punctuation">"</span></span> <span class="token attr-name">uid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>audioserver<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>assign-permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.WAKE_LOCK<span class="token punctuation">"</span></span> <span class="token attr-name">uid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>audioserver<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>assign-permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.UPDATE_DEVICE_STATS<span class="token punctuation">"</span></span> <span class="token attr-name">uid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>audioserver<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>assign-permission</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.permission.UPDATE_APP_OPS_STATS<span class="token punctuation">"</span></span> <span class="token attr-name">uid</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>audioserver<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+
+    ... ...
+
+    <span class="token comment" spellcheck="true">&lt;!-- This is a list of all the libraries available for application
+         code to link against. --></span>
+
+    <span class="token comment" spellcheck="true">&lt;!-- 系统提供的 Java 库，应用程序运行时必须要链接这些库，该工作由系统自动完成 --></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>library</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.test.mock<span class="token punctuation">"</span></span>
+            <span class="token attr-name">file</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/system/framework/android.test.mock.jar<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>library</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.test.runner<span class="token punctuation">"</span></span>
+            <span class="token attr-name">file</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/system/framework/android.test.runner.jar<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>library</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>javax.obex<span class="token punctuation">"</span></span>
+            <span class="token attr-name">file</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/system/framework/javax.obex.jar<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>library</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>org.apache.http.legacy<span class="token punctuation">"</span></span>
+            <span class="token attr-name">file</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/system/framework/org.apache.http.legacy.jar<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+
+    ... ...
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>permissions</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>platform.xml 文件中主要使用了如下 <strong><font color="#FF0000">4 个标签</font></strong>：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;<strong><font color="#87CEFA">permission</font></strong> 和 <strong><font color="#87CEFA">group</font></strong> 用于建立 Linux 层 gid 和 Andrid 层 permission 之间的映射关系。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;<strong><font color="#87CEFA">assign-permission</font></strong> 用于向指定的 uid 赋予相应的权限。这个权限由 Android 定义，用于字符串表示。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;<strong><font color="#87CEFA">library</font></strong> 用于指定系统库。当应用程序运行时，系统会自动为这些进程加载这些库。</p>
+<p>不知道你是否已经产生了疑问？设备上的 /system/etc/permission 目录中的文件是从哪里来的？我直接告诉你答案：在编译阶段由不用硬件平台根据自己的配置信息复制相关文件到目标目录中的来的。（这个具体我们不讨论，有兴趣的读者可以自行查阅） </p>
+<h3 id="3-3-3-readPermissionFromXML"><a href="#3-3-3-readPermissionFromXML" class="headerlink" title="3.3.3 readPermissionFromXML"></a>3.3.3 readPermissionFromXML</h3><p>前面我们说过：<code>readPermissions</code> 函数其实就是调用 <code>readPermissionFromXml</code> 函数解析 <code>&quot;/xxx/etc/permissions/&quot;</code> 目录下的文件！</p>
+<p>readPermissionFromXml 又有什么作用？其实它的作用就是将 XML 文件中的标签以及它们之间的关系转换成代码中的相应数据结构，直接看源码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/core/java/com/android/server/SystemConfig.java</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">readPermissionsFromXml</span><span class="token punctuation">(</span>File permFile<span class="token punctuation">,</span> <span class="token keyword">int</span> permissionFlag<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    FileReader permReader <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token keyword">final</span> <span class="token keyword">boolean</span> lowRam <span class="token operator">=</span> ActivityManager<span class="token punctuation">.</span><span class="token function">isLowRamDeviceStatic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        XmlPullParser parser <span class="token operator">=</span> Xml<span class="token punctuation">.</span><span class="token function">newPullParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        parser<span class="token punctuation">.</span><span class="token function">setInput</span><span class="token punctuation">(</span>permReader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+            String name <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析 group 标签</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"group"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> allowAll<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                String gidStr <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"gid"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>gidStr <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">int</span> gid <span class="token operator">=</span> android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Process<span class="token punctuation">.</span><span class="token function">getGidForName</span><span class="token punctuation">(</span>gidStr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token comment" spellcheck="true">// 转换 XML 中的 gid 字符串为整型，并保存到 mGlobalGids中</span>
+                    mGlobalGids <span class="token operator">=</span> <span class="token function">appendInt</span><span class="token punctuation">(</span>mGlobalGids<span class="token punctuation">,</span> gid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"&lt;group> without gid in "</span> <span class="token operator">+</span> permFile <span class="token operator">+</span> <span class="token string">" at "</span>
+                            <span class="token operator">+</span> parser<span class="token punctuation">.</span><span class="token function">getPositionDescription</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+
+                XmlUtils<span class="token punctuation">.</span><span class="token function">skipCurrentTag</span><span class="token punctuation">(</span>parser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">continue</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析 permission标签</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"permission"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> allowPermissions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                String perm <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>perm <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                    XmlUtils<span class="token punctuation">.</span><span class="token function">skipCurrentTag</span><span class="token punctuation">(</span>parser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                perm <span class="token operator">=</span> perm<span class="token punctuation">.</span><span class="token function">intern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">// 调用 readPermission 处理</span>
+                <span class="token function">readPermission</span><span class="token punctuation">(</span>parser<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析 assign-permission 标签</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"assign-permission"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> allowPermissions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                String perm <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+                String uidStr <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"uid"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+                <span class="token comment" spellcheck="true">// 如果是 assign-permission，则取出 uid 字符串，然后获得 Linux 平台上的整型 uid 值</span>
+                <span class="token keyword">int</span> uid <span class="token operator">=</span> Process<span class="token punctuation">.</span><span class="token function">getUidForName</span><span class="token punctuation">(</span>uidStr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                perm <span class="token operator">=</span> perm<span class="token punctuation">.</span><span class="token function">intern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment" spellcheck="true">// 和 assign 相关的信息保存在 mSystemPermissions 中</span>
+                ArraySet<span class="token operator">&lt;</span>String<span class="token operator">></span> perms <span class="token operator">=</span> mSystemPermissions<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>perms <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    perms <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArraySet</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    mSystemPermissions<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>uid<span class="token punctuation">,</span> perms<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                perms<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>perm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                XmlUtils<span class="token punctuation">.</span><span class="token function">skipCurrentTag</span><span class="token punctuation">(</span>parser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析 library 标签</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"library"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> allowLibs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                String lname <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                String lfile <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"file"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>lname <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>lfile <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                    <span class="token comment" spellcheck="true">// 将 XML 中的 name 和 library 属性值存储到 mSharedLibraries 中</span>
+                    mSharedLibraries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>lname<span class="token punctuation">,</span> lfile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                XmlUtils<span class="token punctuation">.</span><span class="token function">skipCurrentTag</span><span class="token punctuation">(</span>parser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">continue</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析 feature标签</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"feature"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> allowFeatures<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                String fname <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">getAttributeValue</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">int</span> fversion <span class="token operator">=</span> XmlUtils<span class="token punctuation">.</span><span class="token function">readIntAttribute</span><span class="token punctuation">(</span>parser<span class="token punctuation">,</span> <span class="token string">"version"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">boolean</span> allowed<span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"unavailable-feature"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> allowFeatures<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token comment" spellcheck="true">// 解析其它标签</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong><font color="#FF0000">readPermission 函数果然是将 XML 中的标签转换成对应的数据结构！！！</font></strong></p>
+<hr>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;01. <a href="https://www.2cto.com/kf/201609/551752.html" target="_blank" rel="noopener">Android7.0 PackageManagerService (2) PKMS构造函数的主要工作</a><br>&nbsp;02. <a href="https://www.jianshu.com/p/8e2831428110" target="_blank" rel="noopener">APK安装流程详解7——PackageManagerService的启动流程(上)</a></p>
+<hr>
+<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/01/01/00.%20Thinking%20in%20Android%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2018/11/05/B_02.%20Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%882%EF%BC%89%E4%B9%8B%20%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">Framework 核心服务之 PMS 钻研（2）- 构造函数</a></p>
+
+            </div>
+            <hr>
+
+            
+
+            <!--<link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>-->
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="https://superandroid.pro" class="b-link-green">Hexo</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/12/01/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/" class="b-link-green">Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+    <div class="livere-card card" data-aos="fade-up">
+    <!-- 来必力City版安装代码 -->
+    <div id="lv-container" class="card-content" data-id="city" data-uid="MTAyMC8zNzY5OS8xNDIzMA">
+        <script type="text/javascript">
+            (function (d, s) {
+                let j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') {
+                    return;
+                }
+
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript。</noscript>
+    </div>
+    <!-- City版安装代码已完成 -->
+</div>
+    
+
+    
+
+    <!--
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/12/05/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/">
+                    <div class="card-image">
+                        
+                        <img src="http://poobjb5p7.bkt.clouddn.com/PMS%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="Framework 核心服务之 PMS 钻研 ( 2 ) - 构造函数">
+                        
+                        <span class="card-title">Framework 核心服务之 PMS 钻研 ( 2 ) - 构造函数</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">PackageManagerService 系列文章如下（基于 Android 9.0 源码）
+
+
+
+&nbsp;
+系统核心服务之 PackageManagerService 钻研（1）- 启动流程
+
+
+
+
+
+系统核心服务之 Package</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-05
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/框架服务/" class="post-category" target="_blank">
+                                    框架服务
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/PackageManagerService/" target="_blank">
+                        <span class="chip bg-color">PackageManagerService</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/12/01/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/">
+                    <div class="card-image">
+                        
+                        <img src="http://poobjb5p7.bkt.clouddn.com/PMS%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程">
+                        
+                        <span class="card-title">Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">PackageManagerService 系列文章如下（基于 Android 9.0 源码）
+
+
+
+&nbsp;
+系统核心服务之 PackageManagerService 钻研（1）- 启动流程
+
+
+
+
+
+系统核心服务之 Package</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/框架服务/" class="post-category" target="_blank">
+                                    框架服务
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/PackageManagerService/" target="_blank">
+                        <span class="chip bg-color">PackageManagerService</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>-->
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Hexo<br />'
+            + '作者: Marco<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+		    &copy; 2018 - 2019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In-depth analysis of Android system source code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;By Marco<br>
+            
+			
+                
+                <span id="busuanzi_container_site_pv">
+                    Total visits to this site: <span id="busuanzi_value_site_pv"></span> ,&nbsp;
+                </span>
+				<span id="busuanzi_container_site_uv">
+                    Total visitor: <span id="busuanzi_value_site_uv"></span> .
+                </span>
+			
+		</div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/pepsimaxin/pepsimaxin.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:pepsimaxin@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=516749232" class="tooltipped" data-tooltip="QQ联系我: 516749232" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
