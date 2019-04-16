@@ -5,7 +5,8 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程, Hexo">
-    <meta name="description" content="PackageManagerService 系列文章如下（基于 Android 9.0 源码）
+    <meta name="description" content="
+PackageManagerService 系列文章如下（基于 Android 9.0 源码）
 
 
 
@@ -16,7 +17,7 @@
 
 
 
-系统核心服务之 Package">
+系统核心服务之 Packag">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -491,7 +492,8 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong><center><font color="#3A5FCD" size="4">PackageManagerService 系列文章如下（基于 Android 9.0 源码）</font><center></center></center></strong><br></p>
+                <p><br></p>
+<p><strong><center><font color="#3A5FCD" size="4">PackageManagerService 系列文章如下（基于 Android 9.0 源码）</font><center></center></center></strong><br></p>
 <table>
 <thead>
 <tr>
@@ -528,64 +530,66 @@
 </table>
 <p><br></p>
 <p><strong><font color="#3A5FCD" size="4">修订日志</font></strong><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">1、重新梳理 Android 9.0 源码中 PMS 的启动流程；</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">2、重新梳理涉及 Settings 的代码逻辑；</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">3、重新梳理 XML 文件扫描的代码逻辑；</font><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#8E388E">4、博文格式，文章排版等优化；</font></p>
+<p><br></p>
 <hr>
 <h1 id="一、开篇"><a href="#一、开篇" class="headerlink" title="一、开篇"></a>一、开篇</h1><h2 id="1-1-核心源码"><a href="#1-1-核心源码" class="headerlink" title="1.1 核心源码"></a>1.1 核心源码</h2><table>
 <thead>
 <tr>
-<th>关键类</th>
-<th>路径</th>
+<th>Files</th>
+<th>sources（/frameworks/base/） </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><font color="#D15FEE">Process.java</font></td>
-<td>frameworks/base/core/java/android/os/Process.java</td>
+<td>core/java/android/os/Process.java</td>
 </tr>
 <tr>
 <td><font color="#D15FEE">Settings.java</font></td>
-<td>frameworks/base/services/core/java/com/android/server/pm/Settings.java</td>
+<td>services/core/java/com/android/server/pm/Settings.java</td>
 </tr>
 <tr>
 <td><font color="#D15FEE">SettingBase.java</font></td>
-<td>frameworks/base/services/core/java/com/android/server/pm/SettingBase.java</td>
+<td>services/core/java/com/android/server/pm/SettingBase.java</td>
 </tr>
 <tr>
 <td><font color="#D15FEE">SystemConfig.java</font></td>
-<td>frameworks/base/core/java/com/android/server/SystemConfig.java</td>
+<td>core/java/com/android/server/SystemConfig.java</td>
 </tr>
 <tr>
 <td><font color="#D15FEE">SystemServer.java</font></td>
-<td>frameworks/base/services/java/com/android/server/SystemServer.java</td>
+<td>services/java/com/android/server/SystemServer.java</td>
 </tr>
 <tr>
 <td><font color="#D15FEE">SharedUserSetting.java</font></td>
-<td>frameworks/base/services/core/java/com/android/server/pm/SharedUserSetting.java</td>
+<td>services/core/java/com/android/server/pm/SharedUserSetting.java</td>
 </tr>
 <tr>
 <td><font color="#D15FEE">PackageManagerService.java</font></td>
-<td>frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java</td>
+<td>services/core/java/com/android/server/pm/PackageManagerService.java</td>
 </tr>
 </tbody>
 </table>
-<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p><strong><font color="#63B8FF">PackageManagerService（PMS）</font></strong>是 SystemServer 启动后的第一个核心服务，也是 Android 系统中最常用的服务之一。它负责系统中 Package 的管理，应用程序的安装、卸载、信息查询等。如果你是面向 Android 系统开发的工程师，基础概念我也不需要再多赘述，我们的重点是阅读分析源码，钻研原理的奥秘。</p>
-<h2 id="1-3-家族谱"><a href="#1-3-家族谱" class="headerlink" title="1.3 家族谱"></a>1.3 家族谱</h2><p>首先，我们看一下 PackageManagerService 及客户端的家族谱，如下图所示（这边暂且只需要有个印象，整个系列分析完再回来看这个家族谱，你会清晰很多！）</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-ece68587e315bc1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="微信截图_20180910113833.png"></center>
+<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p><strong><font color="#63B8FF">PackageManagerService（PMS）</font></strong>是 SystemServer 启动后的第一个核心服务，也是 Android 系统中最常用的服务之一。它负责系统中 Package 的管理，应用程序的安装、卸载、信息查询等。</p>
+<p>如果你是 Android 系统开发工程师，基础概念我们不多赘述，文章的重点是阅读源码，钻研原理！</p>
+<h2 id="1-3-家族谱"><a href="#1-3-家族谱" class="headerlink" title="1.3 家族谱"></a>1.3 家族谱</h2><p>首先，我们看一下 PackageManagerService 及客户端的家族谱，如下图所示（这边暂且只需有个印象，整个系列研究完后再回来看这个家族谱，你会清晰很多！）</p>
+<center><img src="https://upload-images.jianshu.io/upload_images/3517194-ece68587e315bc1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="PackageManagerService 及客户端的家族谱.png"></center>
 
 <p><strong><font color="#436EEE" size="3">简单说明：</font></strong></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 IPackageManager 接口类中定义了服务端和客户端通信的业务函数，还定义了内部类 Stub，该类从 Binder 派生并实现了 IPackageManager 接口。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 PackageManagerService 继承自 IPackageManager.Stub类，由于 Stub 类从 Binder 派生，因此 PackageManagerService 将作为服务端参与 Binder 通信。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 Stub 类中定义了一个内部类 Proxy，该类有一个 IBinder类型（实际类型为 BinderProxy）的成员变量 mRemote，mRemote 用于和服务端 PackageManagerService通信。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 IPackageManager 接口类中定义了许多业务函数，但是处于安全等方面的考虑，Android 对外（即SDK）提供的只是一个子集，该子类被封装在抽象类 PackageManager中。客户端一般通过 Context 的 getPackageManager 函数返回一个类型为 PackageManager的对象，该对象的实际类型是 PackageManager 的子类 ApplicationPackageManager。这种基于接口编程的方式，虽然极大降低了模块之间的耦合性，却给代码分析带来了不小的麻烦。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 ApplicationPackageManager 类继承自 PackageManager类。它并没有直接参与 Binder 通信，而是通过 mPM 成员变量指向一个 IPackageManager.Stub.Proxy 类型的对象。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☪ &nbsp;IPackageManager 接口类中定义了服务端和客户端通信的业务函数，还定义了内部类 Stub，该类从 Binder 派生并实现了 IPackageManager 接口。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☪ &nbsp;PackageManagerService 继承自 IPackageManager.Stub类，由于 Stub 类从 Binder 派生，因此 PackageManagerService 将作为服务端参与 Binder 通信。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☪ &nbsp;Stub 类中定义了一个内部类 Proxy，该类有一个 IBinder类型（实际类型为 BinderProxy）的成员变量 mRemote，mRemote 用于和服务端 PackageManagerService通信。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☪ &nbsp;IPackageManager 接口类中定义了许多业务函数，但是处于安全等方面的考虑，Android 对外（即SDK）提供的只是一个子集，该子类被封装在抽象类 PackageManager中。客户端一般通过 Context 的 getPackageManager 函数返回一个类型为 PackageManager的对象，该对象的实际类型是 PackageManager 的子类 ApplicationPackageManager。这种基于接口编程的方式，虽然极大降低了模块之间的耦合性，却给代码分析带来了不小的麻烦。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;☪ &nbsp;ApplicationPackageManager 类继承自 PackageManager类。它并没有直接参与 Binder 通信，而是通过 mPM 成员变量指向一个 IPackageManager.Stub.Proxy 类型的对象。</p>
 <blockquote>
-<p><strong><font color="#FF0000">【提示】：</font></strong>在你自己的分析过程中，可能会发现源码中找不到 IPackageManager.java 这个文件。其实该文件是在编译过程中产生的，最终的文件位于 Android 源码 /out（out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/core/java/android/content/pm）目录下面。</p>
+<p><strong><font color="#FF0000">【提示】：</font></strong>在你自己的分析过程中，可能会发现源码中找不到 IPackageManager.java 这个文件。其实该文件是在编译过程中产生的，最终的文件位于 Android 源码 /out 目录下面。</p>
 </blockquote>
 <p><strong><font color="#0000FF">IPackageManager.java：</font></strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IPackageManager</span> <span class="token keyword">extends</span> <span class="token class-name">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>IInterface</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">/** Local-side IPC implementation stub class. */</span>
     <span class="token comment" spellcheck="true">// 定义内部类 Stub，派生自 Binder，实现 IPackageManager 接口</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Stub</span> <span class="token keyword">extends</span> <span class="token class-name">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Binder</span>
-                                      <span class="token keyword">implements</span> <span class="token class-name">android<span class="token punctuation">.</span>content<span class="token punctuation">.</span>pm<span class="token punctuation">.</span>IPackageManager</span> <span class="token punctuation">{</span>
+                                 <span class="token keyword">implements</span> <span class="token class-name">android<span class="token punctuation">.</span>content<span class="token punctuation">.</span>pm<span class="token punctuation">.</span>IPackageManager</span> <span class="token punctuation">{</span>
         <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String DESCRIPTOR <span class="token operator">=</span> 
                                       <span class="token string">"android.content.pm.IPackageManager"</span><span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">/** Construct the stub at attach it to the interface. */</span>
@@ -605,24 +609,36 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><strong><font color="#436EEE">看源码，梳理流程，就像是走进迷宫，很容易迷失！</font></strong>所以在开始分析之前，我给读者一些建议：<strong><font color="#FF0000">紧抓主干，熟悉流程，再去啃细枝末节！</font></strong></p>
+<p><strong><font color="#436EEE">看源码，梳理流程，就像是走进迷宫，很容易迷失！</font></strong></p>
+<p>所以在开始分析之前，我给大家一些建议：<strong><font color="#FF0000">紧抓主干，熟悉流程，再去啃细枝末节！</font></strong></p>
+<p><br></p>
 <hr>
-<h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p>先来说说 PackageManagerService 是怎么启动的：<strong><font color="#63B8FF">PackageManagerService</font></strong> 作为系统的核心服务，由 <strong><font color="#63B8FF">SystemServer</font></strong> 创建，SystemServer 调用了 PackageManagerService 的 <code>main()</code> 创建 PackageManagerService 实例（关于 SystemServer 的分析可以阅读<a href="https://superandroid.pro/2018/10/18/A_02.%20Android%20%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20Android%20%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5%20%E4%B9%8B%20systemServer/">《深入钻研 Android 启动阶段 之 SystemServer》</a>）。</p>
+<h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p><strong><font color="#63B8FF">PackageManagerService</font></strong> 作为系统的核心服务，由 <strong><font color="#63B8FF">SystemServer</font></strong> 创建，SystemServer 调用了 PackageManagerService 的 <code>main()</code> 创建 <code>PackageManagerService</code> 实例。</p>
 <h2 id="2-1-main"><a href="#2-1-main" class="headerlink" title="2.1 main"></a>2.1 main</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/java/com/android/server/SystemServer.java</span>
 
-<span class="token comment" spellcheck="true">/**
-  * The main entry point from zygote.
-  */</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">new</span> <span class="token class-name">SystemServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// Start services.</span>
-    <span class="token keyword">try</span> <span class="token punctuation">{</span>
-        <span class="token function">startBootstrapServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">startOtherServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">SystemServer</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String TAG <span class="token operator">=</span> <span class="token string">"SystemServer"</span><span class="token punctuation">;</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token comment" spellcheck="true">/**
+      * The main entry point from zygote.
+      */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">new</span> <span class="token class-name">SystemServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token comment" spellcheck="true">// Start services.</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token function">startBootstrapServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 创建 PackageManagerService 实例</span>
+            <span class="token function">startCoreServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">startOtherServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            SystemServerInitThreadPool<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> ex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <h2 id="2-2-startBootstrapServices"><a href="#2-2-startBootstrapServices" class="headerlink" title="2.2 startBootstrapServices"></a>2.2 startBootstrapServices</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码路径：frameworks/base/services/java/com/android/server/SystemServer.java</span>
@@ -1438,7 +1454,8 @@ sailfish:/system/etc/permissions $
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">PackageManagerService 系列文章如下（基于 Android 9.0 源码）
+                    <div class="summary block-with-text">
+PackageManagerService 系列文章如下（基于 Android 9.0 源码）
 
 
 
@@ -1449,7 +1466,7 @@ sailfish:/system/etc/permissions $
 
 
 
-系统核心服务之 Package</div>
+系统核心服务之 Packag</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-05
@@ -1493,7 +1510,8 @@ sailfish:/system/etc/permissions $
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">PackageManagerService 系列文章如下（基于 Android 9.0 源码）
+                    <div class="summary block-with-text">
+PackageManagerService 系列文章如下（基于 Android 9.0 源码）
 
 
 
@@ -1504,7 +1522,7 @@ sailfish:/system/etc/permissions $
 
 
 
-系统核心服务之 Package</div>
+系统核心服务之 Packag</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-12-01
