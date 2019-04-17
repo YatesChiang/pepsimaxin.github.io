@@ -120,8 +120,8 @@ table th:first-of-type {
   
   <entry>
     <title>Android 开发常见问题总结（基础篇）</title>
-    <link href="https://superandroid.pro/2019/04/15/jing-yan-zong-jie-android-kai-fa-chang-jian-wen-ti-ji-chu-pian/"/>
-    <id>https://superandroid.pro/2019/04/15/jing-yan-zong-jie-android-kai-fa-chang-jian-wen-ti-ji-chu-pian/</id>
+    <link href="https://superandroid.pro/2019/04/15/10.jing-yan-zong-jie-xi-lie-android-kai-fa-chang-jian-wen-ti-ji-chu-pian/"/>
+    <id>https://superandroid.pro/2019/04/15/10.jing-yan-zong-jie-xi-lie-android-kai-fa-chang-jian-wen-ti-ji-chu-pian/</id>
     <published>2019-04-15T01:08:00.000Z</published>
     <updated>2019-04-16T05:40:52.967Z</updated>
     
@@ -149,9 +149,44 @@ table th:first-of-type {
   </entry>
   
   <entry>
+    <title>深入解读 GMS 认证</title>
+    <link href="https://superandroid.pro/2019/04/01/09.gu-ge-ren-zheng-xi-lie-shen-ru-jie-du-gms-ren-zheng/"/>
+    <id>https://superandroid.pro/2019/04/01/09.gu-ge-ren-zheng-xi-lie-shen-ru-jie-du-gms-ren-zheng/</id>
+    <published>2019-04-01T01:08:00.000Z</published>
+    <updated>2019-04-17T07:52:04.316Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&lt;font color=&quot;#AAAAAA&quot;&gt;本文主要分析 GMS
+        
+      
+    
+    </summary>
+    
+      <category term="GMS 认证" scheme="https://superandroid.pro/categories/GMS-%E8%AE%A4%E8%AF%81/"/>
+    
+    
+      <category term="CTS" scheme="https://superandroid.pro/tags/CTS/"/>
+    
+      <category term="GTS" scheme="https://superandroid.pro/tags/GTS/"/>
+    
+      <category term="VTS" scheme="https://superandroid.pro/tags/VTS/"/>
+    
+      <category term="STS" scheme="https://superandroid.pro/tags/STS/"/>
+    
+      <category term="GMS" scheme="https://superandroid.pro/tags/GMS/"/>
+    
+  </entry>
+  
+  <entry>
     <title>谈谈算法中的 “时间复杂度”</title>
-    <link href="https://superandroid.pro/2019/03/01/suan-fa-zhuan-lan-tan-tan-shi-jian-fu-za-du/"/>
-    <id>https://superandroid.pro/2019/03/01/suan-fa-zhuan-lan-tan-tan-shi-jian-fu-za-du/</id>
+    <link href="https://superandroid.pro/2019/03/01/11.suan-fa-zhuan-lan-xi-lie-tan-tan-shi-jian-fu-za-du/"/>
+    <id>https://superandroid.pro/2019/03/01/11.suan-fa-zhuan-lan-xi-lie-tan-tan-shi-jian-fu-za-du/</id>
     <published>2019-03-01T01:08:00.000Z</published>
     <updated>2019-04-15T05:58:38.035Z</updated>
     
@@ -179,11 +214,11 @@ table th:first-of-type {
   </entry>
   
   <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 7 ) - PackageParser</title>
-    <link href="https://superandroid.pro/2018/12/31/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-7-zhi-packageparser/"/>
-    <id>https://superandroid.pro/2018/12/31/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-7-zhi-packageparser/</id>
-    <published>2018-12-31T01:08:00.000Z</published>
-    <updated>2019-04-16T06:57:27.797Z</updated>
+    <title>Framework 核心服务之 PMS 钻研（8）- APK 安装（下）</title>
+    <link href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-8-zhi-apk-an-zhuang-xia/"/>
+    <id>https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-8-zhi-apk-an-zhuang-xia/</id>
+    <published>2019-02-06T01:08:00.000Z</published>
+    <updated>2019-04-17T07:23:03.741Z</updated>
     
     <summary type="html">
     
@@ -203,14 +238,16 @@ table th:first-of-type {
     
       <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
     
+      <category term="APK 安装" scheme="https://superandroid.pro/tags/APK-%E5%AE%89%E8%A3%85/"/>
+    
   </entry>
   
   <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 6 ) - APK 安装（二）</title>
-    <link href="https://superandroid.pro/2018/12/26/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-6-zhi-apk-an-zhuang-pms/"/>
-    <id>https://superandroid.pro/2018/12/26/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-6-zhi-apk-an-zhuang-pms/</id>
-    <published>2018-12-26T01:08:00.000Z</published>
-    <updated>2019-04-16T06:56:48.441Z</updated>
+    <title>Framework 核心服务之 PMS 钻研（7）- APK 安装（中）</title>
+    <link href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-7-zhi-apk-an-zhuang-zhong/"/>
+    <id>https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-7-zhi-apk-an-zhuang-zhong/</id>
+    <published>2019-02-01T01:08:00.000Z</published>
+    <updated>2019-04-17T07:25:03.366Z</updated>
     
     <summary type="html">
     
@@ -230,14 +267,16 @@ table th:first-of-type {
     
       <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
     
+      <category term="APK 安装" scheme="https://superandroid.pro/tags/APK-%E5%AE%89%E8%A3%85/"/>
+    
   </entry>
   
   <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 5 ) - APK 安装（一）</title>
-    <link href="https://superandroid.pro/2018/12/22/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-5-zhi-apk-an-zhuang-pi/"/>
-    <id>https://superandroid.pro/2018/12/22/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-5-zhi-apk-an-zhuang-pi/</id>
-    <published>2018-12-22T01:08:00.000Z</published>
-    <updated>2019-04-16T06:57:01.174Z</updated>
+    <title>Framework 核心服务之 PMS 钻研（6）- APK 安装（上）</title>
+    <link href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-6-zhi-apk-an-zhuang-shang/"/>
+    <id>https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-6-zhi-apk-an-zhuang-shang/</id>
+    <published>2019-01-26T01:08:00.000Z</published>
+    <updated>2019-04-17T07:22:48.389Z</updated>
     
     <summary type="html">
     
@@ -255,43 +294,18 @@ table th:first-of-type {
       <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
     
     
-      <category term="PackageInstaller" scheme="https://superandroid.pro/tags/PackageInstaller/"/>
+      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
+    
+      <category term="APK 安装" scheme="https://superandroid.pro/tags/APK-%E5%AE%89%E8%A3%85/"/>
     
   </entry>
   
   <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 4 )- PackageInstaller</title>
-    <link href="https://superandroid.pro/2018/12/18/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-4-zhi-packageinstaller/"/>
-    <id>https://superandroid.pro/2018/12/18/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-4-zhi-packageinstaller/</id>
-    <published>2018-12-18T01:08:00.000Z</published>
-    <updated>2019-04-16T06:57:08.245Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;center&gt;&lt;font color=&quot;#3A5FCD&quot; size=&quot;4&quot;&gt;PackageManagerService 系列文章如下（基于 Android 9.0
-        
-      
-    
-    </summary>
-    
-      <category term="框架服务&quot;&quot;" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
-    
-    
-      <category term="PackageInstaller" scheme="https://superandroid.pro/tags/PackageInstaller/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 3 ) - PackageManager</title>
-    <link href="https://superandroid.pro/2018/12/12/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-3-zhi-packagemanager/"/>
-    <id>https://superandroid.pro/2018/12/12/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-3-zhi-packagemanager/</id>
-    <published>2018-12-12T01:08:00.000Z</published>
-    <updated>2019-04-16T06:57:14.797Z</updated>
+    <title>Framework 核心服务之 PMS 钻研（5）- PackageParser</title>
+    <link href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-5-zhi-packageparser/"/>
+    <id>https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-5-zhi-packageparser/</id>
+    <published>2019-01-22T01:08:00.000Z</published>
+    <updated>2019-04-17T07:49:11.114Z</updated>
     
     <summary type="html">
     
@@ -308,17 +322,106 @@ table th:first-of-type {
     
       <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
     
+    
+      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
+    
+      <category term="PackageParser" scheme="https://superandroid.pro/tags/PackageParser/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Framework 核心服务之 PMS 钻研（4）- PackageInstaller</title>
+    <link href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-4-zhi-packageinstaller/"/>
+    <id>https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-4-zhi-packageinstaller/</id>
+    <published>2019-01-16T01:08:00.000Z</published>
+    <updated>2019-04-17T07:22:33.166Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;&lt;font color=&quot;#3A5FCD&quot; size=&quot;4&quot;&gt;PackageManagerService 系列文章如下（基于 Android 9.0
+        
+      
+    
+    </summary>
+    
+      <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
+    
+    
+      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
+    
+      <category term="PackageInstaller" scheme="https://superandroid.pro/tags/PackageInstaller/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Framework 核心服务之 PMS 钻研（3）-PackageManager</title>
+    <link href="https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-3-zhi-packagemanager/"/>
+    <id>https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-3-zhi-packagemanager/</id>
+    <published>2019-01-12T01:08:00.000Z</published>
+    <updated>2019-04-17T07:22:27.906Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;&lt;font color=&quot;#3A5FCD&quot; size=&quot;4&quot;&gt;PackageManagerService 系列文章如下（基于 Android 9.0
+        
+      
+    
+    </summary>
+    
+      <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
+    
+    
+      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
     
       <category term="PackageManager" scheme="https://superandroid.pro/tags/PackageManager/"/>
     
   </entry>
   
   <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 2 ) - 构造函数</title>
-    <link href="https://superandroid.pro/2018/12/05/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/"/>
-    <id>https://superandroid.pro/2018/12/05/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/</id>
-    <published>2018-12-05T01:08:00.000Z</published>
-    <updated>2019-04-16T06:57:20.525Z</updated>
+    <title>Framework 核心服务之 PMS 钻研（2）- 构造函数</title>
+    <link href="https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/"/>
+    <id>https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/</id>
+    <published>2019-01-05T01:08:00.000Z</published>
+    <updated>2019-04-17T07:22:21.984Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;&lt;font color=&quot;#3A5FCD&quot; size=&quot;4&quot;&gt;PackageManagerService 系列文章如下（基于 Android 9.0
+        
+      
+    
+    </summary>
+    
+      <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
+    
+    
+      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
+    
+      <category term="PMS 构造函数" scheme="https://superandroid.pro/tags/PMS-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Framework 核心服务之 PMS 钻研（1）- 启动流程</title>
+    <link href="https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/"/>
+    <id>https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/</id>
+    <published>2019-01-01T01:08:00.000Z</published>
+    <updated>2019-04-17T07:19:07.905Z</updated>
     
     <summary type="html">
     
@@ -341,11 +444,11 @@ table th:first-of-type {
   </entry>
   
   <entry>
-    <title>Framework 核心服务之 PMS 钻研 ( 1 ) - 启动流程</title>
-    <link href="https://superandroid.pro/2018/12/01/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/"/>
-    <id>https://superandroid.pro/2018/12/01/android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/</id>
-    <published>2018-12-01T01:08:00.000Z</published>
-    <updated>2019-04-16T07:20:20.771Z</updated>
+    <title>深入钻研 Android 启动阶段 之 Launcher 启动和加载</title>
+    <link href="https://superandroid.pro/2018/12/26/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-launcher/"/>
+    <id>https://superandroid.pro/2018/12/26/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-launcher/</id>
+    <published>2018-12-26T01:08:00.000Z</published>
+    <updated>2019-04-17T07:26:08.497Z</updated>
     
     <summary type="html">
     
@@ -354,16 +457,161 @@ table th:first-of-type {
         
         
           &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;center&gt;&lt;font color=&quot;#3A5FCD&quot; size=&quot;4&quot;&gt;PackageManagerService 系列文章如下（基于 Android 9.0
+&lt;center&gt;🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀
         
       
     
     </summary>
     
-      <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
+      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
     
     
-      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
+      <category term="Launcher" scheme="https://superandroid.pro/tags/Launcher/"/>
+    
+      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入钻研 Android 启动阶段 之 systemserver</title>
+    <link href="https://superandroid.pro/2018/12/18/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-systemserver/"/>
+    <id>https://superandroid.pro/2018/12/18/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-systemserver/</id>
+    <published>2018-12-18T01:08:00.000Z</published>
+    <updated>2019-04-17T07:26:03.822Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;center&gt;🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀
+        
+      
+    
+    </summary>
+    
+      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
+    
+    
+      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
+    
+      <category term="SystemServer" scheme="https://superandroid.pro/tags/SystemServer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入钻研 Android 启动阶段 之 zygote</title>
+    <link href="https://superandroid.pro/2018/12/10/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-zygote/"/>
+    <id>https://superandroid.pro/2018/12/10/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-zygote/</id>
+    <published>2018-12-10T01:08:00.000Z</published>
+    <updated>2019-04-17T07:26:17.169Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;center&gt;🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀
+        
+      
+    
+    </summary>
+    
+      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
+    
+    
+      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
+    
+      <category term="zygote" scheme="https://superandroid.pro/tags/zygote/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入钻研 Android 启动阶段 之 init</title>
+    <link href="https://superandroid.pro/2018/12/01/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-init/"/>
+    <id>https://superandroid.pro/2018/12/01/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-init/</id>
+    <published>2018-12-01T01:08:00.000Z</published>
+    <updated>2019-04-17T07:26:11.712Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;center&gt;🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀
+        
+      
+    
+    </summary>
+    
+      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
+    
+    
+      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
+    
+      <category term="init" scheme="https://superandroid.pro/tags/init/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入钻研 Android 核心技术 之 Binder（基础篇）</title>
+    <link href="https://superandroid.pro/2018/11/20/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhu-zhi-binder-ji-chu-pian/"/>
+    <id>https://superandroid.pro/2018/11/20/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhu-zhi-binder-ji-chu-pian/</id>
+    <published>2018-11-20T01:08:00.000Z</published>
+    <updated>2019-04-17T07:53:42.780Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;一、Binder-概述&quot;&gt;&lt;a href=&quot;#一、Binder-概述&quot; class=&quot;headerlink&quot; title=&quot;一、Binder 概述&quot;&gt;&lt;/a&gt;一、Binder 概述&lt;/h1&gt;&lt;p&gt;Binder 是一种进程间通信机制，基于开源的
+        
+      
+    
+    </summary>
+    
+      <category term="核心技术" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Binder" scheme="https://superandroid.pro/tags/Binder/"/>
+    
+      <category term="核心技术" scheme="https://superandroid.pro/tags/%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入钻研 Android 核心技术 之 JNI</title>
+    <link href="https://superandroid.pro/2018/11/10/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhu-zhi-jni/"/>
+    <id>https://superandroid.pro/2018/11/10/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhu-zhi-jni/</id>
+    <published>2018-11-10T01:08:00.000Z</published>
+    <updated>2019-04-17T07:53:17.109Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-开篇&quot;&gt;&lt;a href=&quot;#1-开篇&quot; class=&quot;headerlink&quot; title=&quot;1. 开篇&quot;&gt;&lt;/a&gt;1. 开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-核心源码&quot;&gt;&lt;a href=&quot;#1-1-核心源码&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="核心技术" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="核心技术" scheme="https://superandroid.pro/tags/%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/"/>
+    
+      <category term="JNI" scheme="https://superandroid.pro/tags/JNI/"/>
     
   </entry>
   
