@@ -35,37 +35,6 @@
     
     
     <entry>
-      <title>博客日志</title>
-      <link href="/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
-      <url>/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/</url>
-      
-        <content type="html"><![CDATA[<style>table th:first-of-type {    width: 200px;}</style><h4 id="Thinking-in-Android-–-“新增”"><a href="#Thinking-in-Android-–-“新增”" class="headerlink" title="Thinking in Android – “新增”"></a><center>Thinking in Android – “新增”</center></h4><p><br></p><table><thead><tr><th style="text-align:center">日期</th><th style="text-align:center">修订博文</th><th style="text-align:center">当前版本</th></tr></thead><tbody><tr><td style="text-align:center">2010.04.15</td><td style="text-align:center"><font color="#87CEEB" size="3"> 《Android 开发常见问题总结（基础篇）》” </font></td><td style="text-align:center"><font color="#87CEEB" size="3">v_1.0</font></td></tr><tr><td style="text-align:center">2010.03.01</td><td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈算法中的 “时间复杂度》” </font></td><td style="text-align:center"><font color="#87CEEB" size="3">v_1.0</font></td></tr></tbody></table><p><br></p><h4 id="Thinking-in-Android-–-“修订”"><a href="#Thinking-in-Android-–-“修订”" class="headerlink" title="Thinking in Android – “修订”"></a><center>Thinking in Android – “修订”</center></h4><p><br></p><table><thead><tr><th style="text-align:center">日期</th><th style="text-align:center">修订博文</th><th style="text-align:center">修订次数</th></tr></thead><tbody><tr><td style="text-align:center">2019.02.02</td><td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈算法中的 “时间复杂度》” </font></td><td style="text-align:center">1</td></tr></tbody></table><p><br></p><h4 id="Thinking-in-Android-–-“优化”"><a href="#Thinking-in-Android-–-“优化”" class="headerlink" title="Thinking in Android – “优化”"></a><center>Thinking in Android – “优化”</center></h4><p><br></p><table><thead><tr><th style="text-align:center">日期</th><th style="text-align:center">修改记录 </th></tr></thead><tbody><tr><td style="text-align:center">2019.04.14</td><td style="text-align:center"><font color="#87CEEB" size="3">重构博客布局及文章</font></td></tr><tr><td style="text-align:center">2019.01.24</td><td style="text-align:center"><font color="#87CEEB" size="3">优化布局，导航栏新增项</font></td></tr><tr><td style="text-align:center">2019.01.07</td><td style="text-align:center"><font color="#87CEEB" size="3">Blog计划更新，部分细节优化</font></td></tr><tr><td style="text-align:center">2019.01.02</td><td style="text-align:center"><font color="#87CEEB" size="3">局部修改UI细节</font></td></tr><tr><td style="text-align:center">2018.12.29</td><td style="text-align:center"><font color="#87CEEB" size="3">新增 Links 页，局部修改UI细节</font></td></tr><tr><td style="text-align:center">2018.12.13</td><td style="text-align:center"><font color="#87CEEB" size="3">关于作者页面 – 主题优化</font></td></tr><tr><td style="text-align:center">2018.12.11</td><td style="text-align:center"><font color="#87CEEB" size="3">优化 Blog – 标签页</font></td></tr><tr><td style="text-align:center"></td><td style="text-align:center"><font color="#87CEEB" size="3">优化 Blog – 目录页</font></td></tr><tr><td style="text-align:center"></td><td style="text-align:center"><font color="#87CEEB" size="3">新增 Blog –   时间源追溯</font></td></tr><tr><td style="text-align:center">2018.12.03</td><td style="text-align:center"><font color="#87CEEB" size="3">Blog 主题改版 – 卡片式风格</font></td></tr><tr><td style="text-align:center">2018.07.01</td><td style="text-align:center"><font color="#87CEEB" size="3">《Thinking in Android》博客启程</font></td></tr></tbody></table><p><br></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Android </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 博客优化 </tag>
-            
-            <tag> 修订记录 </tag>
-            
-            <tag> 方向规划 </tag>
-            
-            <tag> 日志 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>资源收藏</title>
       <link href="/2020/01/01/00.thinking-in-android-02.zi-yuan-shou-cang/"/>
       <url>/2020/01/01/00.thinking-in-android-02.zi-yuan-shou-cang/</url>
@@ -89,6 +58,37 @@
             <tag> 干货资源 </tag>
             
             <tag> 工具 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>博客日志</title>
+      <link href="/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
+      <url>/2020/01/01/00.thinking-in-android-03.xiu-gai-ri-zhi/</url>
+      
+        <content type="html"><![CDATA[<style>table th:first-of-type {    width: 200px;}</style><h4 id="Thinking-in-Android-–-“新增”"><a href="#Thinking-in-Android-–-“新增”" class="headerlink" title="Thinking in Android – “新增”"></a><center>Thinking in Android – “新增”</center></h4><p><br></p><table><thead><tr><th style="text-align:center">日期</th><th style="text-align:center">修订博文</th><th style="text-align:center">当前版本</th></tr></thead><tbody><tr><td style="text-align:center">2010.04.15</td><td style="text-align:center"><font color="#87CEEB" size="3"> 《Android 开发常见问题总结（基础篇）》” </font></td><td style="text-align:center"><font color="#87CEEB" size="3">v_1.0</font></td></tr><tr><td style="text-align:center">2010.03.01</td><td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈算法中的 “时间复杂度》” </font></td><td style="text-align:center"><font color="#87CEEB" size="3">v_1.0</font></td></tr></tbody></table><p><br></p><h4 id="Thinking-in-Android-–-“修订”"><a href="#Thinking-in-Android-–-“修订”" class="headerlink" title="Thinking in Android – “修订”"></a><center>Thinking in Android – “修订”</center></h4><p><br></p><table><thead><tr><th style="text-align:center">日期</th><th style="text-align:center">修订博文</th><th style="text-align:center">修订次数</th></tr></thead><tbody><tr><td style="text-align:center">2019.02.02</td><td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈算法中的 “时间复杂度》” </font></td><td style="text-align:center">1</td></tr></tbody></table><p><br></p><h4 id="Thinking-in-Android-–-“优化”"><a href="#Thinking-in-Android-–-“优化”" class="headerlink" title="Thinking in Android – “优化”"></a><center>Thinking in Android – “优化”</center></h4><p><br></p><table><thead><tr><th style="text-align:center">日期</th><th style="text-align:center">修改记录 </th></tr></thead><tbody><tr><td style="text-align:center">2019.04.14</td><td style="text-align:center"><font color="#87CEEB" size="3">重构博客布局及文章</font></td></tr><tr><td style="text-align:center">2019.01.24</td><td style="text-align:center"><font color="#87CEEB" size="3">优化布局，导航栏新增项</font></td></tr><tr><td style="text-align:center">2019.01.07</td><td style="text-align:center"><font color="#87CEEB" size="3">Blog计划更新，部分细节优化</font></td></tr><tr><td style="text-align:center">2019.01.02</td><td style="text-align:center"><font color="#87CEEB" size="3">局部修改UI细节</font></td></tr><tr><td style="text-align:center">2018.12.29</td><td style="text-align:center"><font color="#87CEEB" size="3">新增 Links 页，局部修改UI细节</font></td></tr><tr><td style="text-align:center">2018.12.13</td><td style="text-align:center"><font color="#87CEEB" size="3">关于作者页面 – 主题优化</font></td></tr><tr><td style="text-align:center">2018.12.11</td><td style="text-align:center"><font color="#87CEEB" size="3">优化 Blog – 标签页</font></td></tr><tr><td style="text-align:center"></td><td style="text-align:center"><font color="#87CEEB" size="3">优化 Blog – 目录页</font></td></tr><tr><td style="text-align:center"></td><td style="text-align:center"><font color="#87CEEB" size="3">新增 Blog –   时间源追溯</font></td></tr><tr><td style="text-align:center">2018.12.03</td><td style="text-align:center"><font color="#87CEEB" size="3">Blog 主题改版 – 卡片式风格</font></td></tr><tr><td style="text-align:center">2018.07.01</td><td style="text-align:center"><font color="#87CEEB" size="3">《Thinking in Android》博客启程</font></td></tr></tbody></table><p><br></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Android </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 博客优化 </tag>
+            
+            <tag> 修订记录 </tag>
+            
+            <tag> 方向规划 </tag>
+            
+            <tag> 日志 </tag>
             
         </tags>
       
