@@ -85,7 +85,7 @@
     <link href="https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
     <id>https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/</id>
     <published>2019-12-29T01:08:00.000Z</published>
-    <updated>2019-04-17T09:21:32.285Z</updated>
+    <updated>2019-04-17T10:13:56.085Z</updated>
     
     <summary type="html">
     
@@ -93,13 +93,7 @@
       
         
         
-          &lt;style&gt;
-table th:first-of-type {
-    width: 200px;
-}
-&lt;/style&gt;
-
-&lt;h4 id=&quot;Thinking-in-Android-–-“新增”&quot;&gt;&lt;a href=&quot;#Thinking-in-Android-–-“新增”&quot;
+          &lt;h4 id=&quot;Thinking-in-Android-–-“新增”&quot;&gt;&lt;a href=&quot;#Thinking-in-Android-–-“新增”&quot; class=&quot;headerlink&quot; title=&quot;Thinking in Android –
         
       
     
@@ -149,11 +143,11 @@ table th:first-of-type {
   </entry>
   
   <entry>
-    <title>深入解读 GMS 认证</title>
+    <title>深入解读 GMS 认证（修订中...）</title>
     <link href="https://superandroid.pro/2019/04/01/09.gu-ge-ren-zheng-xi-lie-shen-ru-jie-du-gms-ren-zheng/"/>
     <id>https://superandroid.pro/2019/04/01/09.gu-ge-ren-zheng-xi-lie-shen-ru-jie-du-gms-ren-zheng/</id>
     <published>2019-04-01T01:08:00.000Z</published>
-    <updated>2019-04-17T07:52:04.316Z</updated>
+    <updated>2019-04-17T10:20:11.255Z</updated>
     
     <summary type="html">
     
@@ -161,8 +155,7 @@ table th:first-of-type {
       
         
         
-          &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;&lt;font color=&quot;#AAAAAA&quot;&gt;本文主要分析 GMS
+          &lt;h1 id=&quot;Android-兼容性&quot;&gt;&lt;a href=&quot;#Android-兼容性&quot; class=&quot;headerlink&quot; title=&quot;Android 兼容性&quot;&gt;&lt;/a&gt;&lt;center&gt;&lt;font color=&quot;#9932CC&quot;&gt;Android
         
       
     

@@ -4,8 +4,8 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="分类: Android, Hexo">
-    <meta name="description" content="分类: Android | Hexo">
+    <meta name="keywords" content="分类: 常用组件, Hexo">
+    <meta name="description" content="分类: 常用组件 | Hexo">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>分类: Android | Hexo</title>
+    <title>分类: 常用组件 | Hexo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -361,7 +361,7 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
                 
                 <a href="/categories/Android/" title="Android: 3">
                     <span class="chip center-align waves-effect waves-light
-                             chip-active " style="background-color: #F9EBEA;">Android
+                             chip-default " style="background-color: #F9EBEA;">Android
                         <span class="tag-length">3</span>
                     </span>
                 </a>
@@ -377,7 +377,7 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
                 
                 <a href="/categories/常用组件/" title="常用组件: 5">
                     <span class="chip center-align waves-effect waves-light
-                             chip-default " style="background-color: #D5F5E3;">常用组件
+                             chip-active " style="background-color: #D5F5E3;">常用组件
                         <span class="tag-length">5</span>
                     </span>
                 </a>
@@ -459,30 +459,34 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
             
             <div class="article tag-post col s12 m6 l4 overflow-policy" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/">
+                    <a href="/2018/07/28/08.chang-yong-zu-jian-xi-lie-tan-tao-dong-tai-guang-bo-he-jing-tai-guang-bo-de-yong-fa-he-qu-bie/">
                         <div class="card-image tag-image">
                             
-                            <img src="http://poobjb5p7.bkt.clouddn.com/android.gif" class="responsive-img" alt="博客索引（Android 9.0）">
+                            <img src="http://poobjb5p7.bkt.clouddn.com/%E7%BB%84%E4%BB%B6%E7%B3%BB%E5%88%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="探讨 “动态广播” 和 “静态广播” 的用法和区别">
                             
-                            <span class="card-title">博客索引（Android 9.0）</span>
+                            <span class="card-title">探讨 “动态广播” 和 “静态广播” 的用法和区别</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                整合当前所写博文，技术分类，建立索引，渐进学习，跟踪总结，弥补知识盲区，拓展技术纬度，资源定期更新！
+                                
+作为四大组件之一的 Broadcast，实现方法很简单，主要分为：动态广播和静态广播！我们通过 Code Demo 来看看两者的用法和区别！
+
+
+动态注册Code新建一个 BroadcastTest 项目，修改 MainActivity 
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-12-31
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-28
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fa fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/Android/" class="post-category" target="_blank">
-                                    Android
+                                <a href="/categories/常用组件/" class="post-category" target="_blank">
+                                    常用组件
                                 </a>
                                 
                                 
@@ -493,20 +497,8 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/框架服务/" target="_blank">
-                            <span class="chip bg-color">框架服务</span>
-                        </a>
-                        
-                        <a href="/tags/通信机制/" target="_blank">
-                            <span class="chip bg-color">通信机制</span>
-                        </a>
-                        
-                        <a href="/tags/性能优化/" target="_blank">
-                            <span class="chip bg-color">性能优化</span>
-                        </a>
-                        
-                        <a href="/tags/算法/" target="_blank">
-                            <span class="chip bg-color">算法</span>
+                        <a href="/tags/Broadcast/" target="_blank">
+                            <span class="chip bg-color">Broadcast</span>
                         </a>
                         
                     </div>
@@ -516,30 +508,44 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
             
             <div class="article tag-post col s12 m6 l4 overflow-policy" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/12/30/00.thinking-in-android-02.zi-yuan-shou-cang/">
+                    <a href="/2018/07/25/08.chang-yong-zu-jian-xi-lie-tan-tao-service-de-shi-yong-fang-fa/">
                         <div class="card-image tag-image">
                             
-                            <img src="http://poobjb5p7.bkt.clouddn.com/%E8%B5%84%E6%BA%90%E6%94%B6%E8%97%8F%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="资源收藏">
+                            <img src="http://poobjb5p7.bkt.clouddn.com/%E7%BB%84%E4%BB%B6%E7%B3%BB%E5%88%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="探讨 Service 的使用方法">
                             
-                            <span class="card-title">资源收藏</span>
+                            <span class="card-title">探讨 Service 的使用方法</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                收集 Google 官方资料、开发工具，寻找优秀开发博主，搜罗高质量干货博文、技术周报，资源定期更新！
+                                
+作为四大组件之一的 Service，随处可见，我们这边重点看两个小技巧：Forground Service 和 IntentService！
+
+
+开篇核心源码
+
+
+关键类
+路径
+
+
+
+
+Service.java
+frameworks/ba
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-12-30
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-25
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fa fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/Android/" class="post-category" target="_blank">
-                                    Android
+                                <a href="/categories/常用组件/" class="post-category" target="_blank">
+                                    常用组件
                                 </a>
                                 
                                 
@@ -550,20 +556,8 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/官方资料/" target="_blank">
-                            <span class="chip bg-color">官方资料</span>
-                        </a>
-                        
-                        <a href="/tags/优秀博主/" target="_blank">
-                            <span class="chip bg-color">优秀博主</span>
-                        </a>
-                        
-                        <a href="/tags/干货资源/" target="_blank">
-                            <span class="chip bg-color">干货资源</span>
-                        </a>
-                        
-                        <a href="/tags/工具/" target="_blank">
-                            <span class="chip bg-color">工具</span>
+                        <a href="/tags/Service/" target="_blank">
+                            <span class="chip bg-color">Service</span>
                         </a>
                         
                     </div>
@@ -573,30 +567,34 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
             
             <div class="article tag-post col s12 m6 l4 overflow-policy" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/">
+                    <a href="/2018/07/22/08.chang-yong-zu-jian-xi-lie-tan-tao-fragment-de-sheng-ming-zhou-qi/">
                         <div class="card-image tag-image">
                             
-                            <img src="http://poobjb5p7.bkt.clouddn.com/%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%BF%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="博客日志">
+                            <img src="http://poobjb5p7.bkt.clouddn.com/%E7%BB%84%E4%BB%B6%E7%B3%BB%E5%88%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="探讨 Fragment 的生命周期">
                             
-                            <span class="card-title">博客日志</span>
+                            <span class="card-title">探讨 Fragment 的生命周期</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                主要用于记录 Blog 日志，包括：博客优化记录、博文修订记录，后期预研技术方向及其他规划等！
+                                
+在应用的开发过程中，Fragement 的使用是很普遍的，比如在 Settings 中，就随处可见它的身影！我们一起来看看它的生命周期！
+
+
+1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-12-29
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-22
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fa fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/Android/" class="post-category" target="_blank">
-                                    Android
+                                <a href="/categories/常用组件/" class="post-category" target="_blank">
+                                    常用组件
                                 </a>
                                 
                                 
@@ -607,20 +605,110 @@ $('.bg-cover').css('background-image', 'url(/medias/banner/' + 'background.jpg)'
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/博客优化/" target="_blank">
-                            <span class="chip bg-color">博客优化</span>
+                        <a href="/tags/Fragment/" target="_blank">
+                            <span class="chip bg-color">Fragment</span>
                         </a>
                         
-                        <a href="/tags/修订记录/" target="_blank">
-                            <span class="chip bg-color">修订记录</span>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4 overflow-policy" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2018/07/20/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-sheng-ming-zhou-qi/">
+                        <div class="card-image tag-image">
+                            
+                            <img src="http://poobjb5p7.bkt.clouddn.com/%E7%BB%84%E4%BB%B6%E7%B3%BB%E5%88%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="探讨 Activity 的生命周期">
+                            
+                            <span class="card-title">探讨 Activity 的生命周期</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+作为四大组件之一的 Activity，重要性就不言而喻了，它的生命周期更是在开发过程中需要熟记于心！我们通过 Code Demo 温故一下！
+
+
+1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：
+
+运行状态
+
+当一个活动位于返
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-20
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fa fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/常用组件/" class="post-category" target="_blank">
+                                    常用组件
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Activity/" target="_blank">
+                            <span class="chip bg-color">Activity</span>
                         </a>
                         
-                        <a href="/tags/方向规划/" target="_blank">
-                            <span class="chip bg-color">方向规划</span>
-                        </a>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4 overflow-policy" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2018/07/18/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-mo-shi/">
+                        <div class="card-image tag-image">
+                            
+                            <img src="http://poobjb5p7.bkt.clouddn.com/%E7%BB%84%E4%BB%B6%E7%B3%BB%E5%88%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="探讨 Activity 的启动模式">
+                            
+                            <span class="card-title">探讨 Activity 的启动模式</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+Activity的启动模式一共有四种，分别是 standard、singleTop、singleTask、singleInstance！
+
+
+LaunchMode可以在 AndroidManifest.xml 中通过给  标签指定 and
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-18
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fa fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/常用组件/" class="post-category" target="_blank">
+                                    常用组件
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
                         
-                        <a href="/tags/日志/" target="_blank">
-                            <span class="chip bg-color">日志</span>
+                        <a href="/tags/Activity/" target="_blank">
+                            <span class="chip bg-color">Activity</span>
                         </a>
                         
                     </div>
