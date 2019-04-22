@@ -105,7 +105,7 @@
     </li>
     
     <li class="hide-on-med-and-down">
-        <a href="/categories/通信机制/" class="waves-effect waves-light">
+        <a href="/categories/核心机制/" class="waves-effect waves-light">
             
             <i class="fa fa-link"></i>
             
@@ -247,7 +247,7 @@
         </li>
         
         <li>
-            <a href="/categories/通信机制/" class="waves-effect waves-light">
+            <a href="/categories/核心机制/" class="waves-effect waves-light">
                 
                 <i class="fa fa-fw fa-link"></i>
                 
@@ -356,6 +356,10 @@
                                 <span class="chip bg-color">Handler</span>
                             </a>
                         
+                            <a href="/tags/UI-更新/" target="_blank">
+                                <span class="chip bg-color">UI 更新</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -364,8 +368,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/核心技术/" class="post-category" target="_blank">
-                                核心技术
+                            <a href="/categories/核心机制/" class="post-category" target="_blank">
+                                核心机制
                             </a>
                         
                     </div>
@@ -628,7 +632,7 @@
 <ol>
 <li><p>重写 Handler 的 handleMessage 方法，根据 Message 的 what 值进行不同的处理操作； </p>
 </li>
-<li><p>设置 Message 的 what 值：Message.what 是我们自定义的一个 Message 的识别码，以便于在 Handler 的 handleMessage 方法中根据 wha t识别出不同的 Message ，以便我们做出不同的处理操作；</p>
+<li><p>设置 Message 的 what 值：Message.what 是我们自定义的一个 Message 的识别码，以便于在 Handler 的 handleMessage 方法中根据 what     识别出不同的 Message ，以便我们做出不同的处理操作；</p>
 </li>
 <li><p>设置 Message 的所携带的数据，简单数据可以通过两个 int 类型的 field ：arg1 和 arg2 来赋值，并可以在 handleMessage 中读取；</p>
 </li>
@@ -641,7 +645,7 @@
 <li><p>由上我们可以看出，执行 handleMessage 的线程与创建 Handler 的线程是同一线程，在本示例中都是主线程。执行 handleMessage 的线程与执行 uiHandler.sendMessage(msg) 的线程没有关系。</p>
 </li>
 </ol>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>相关推荐：<a href="https://superandroid.pro/2019/01/01/00.%20Thinking%20in%20Android%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2018/09/13/03.%20Android%20%E6%9C%BA%E5%88%B6%E7%AF%87%20--%2003.%20%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90%20Handler%20%E6%9C%BA%E5%88%B6%EF%BC%88%E5%8E%9F%E7%90%86%E7%AF%87%EF%BC%89/">深入研究 Android 机制 之 Handler（原理篇）</a></p>
+<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>相关推荐：<a href="https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/">博客索引（Android 9.0）</a></p>
 
             </div>
             <hr>
@@ -721,11 +725,7 @@
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-Handler 机制无处不在！掌握的关键点就在于熟悉 Looper、Message、Handler、MessageQueue 之间的联系！
-
-
-1. 开篇1.1 核心源码
+                    <div class="summary block-with-text">1. 开篇1.1 核心源码
 
 
 关键类
@@ -735,7 +735,11 @@ Handler 机制无处不在！掌握的关键点就在于熟悉 Looper、Message�
 
 
 Looper.java
-framewor</div>
+frameworks/base/core/java/android/os/Looper.java
+
+
+Message.java
+frameworks/base/c</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-09-13
@@ -744,8 +748,8 @@ framewor</div>
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/核心技术/" class="post-category" target="_blank">
-                                    核心技术
+                            <a href="/categories/核心机制/" class="post-category" target="_blank">
+                                    核心机制
                                 </a>
                             
                             
