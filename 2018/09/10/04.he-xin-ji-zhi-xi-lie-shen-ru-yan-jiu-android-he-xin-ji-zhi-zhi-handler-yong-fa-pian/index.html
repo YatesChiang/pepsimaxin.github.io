@@ -5,11 +5,8 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="深入钻研 Android 核心机制 之 Handler（用法篇）, Hexo">
-    <meta name="description" content="
-讲解 Handler 原理前，让我们通过 Demo 先了解 Handler 如何使用，重点方法：post() 、sendMessage()！
-
-
-开篇引出问题在 Android 开发中，我们经常会遇到这样一种情况：在 UI 界面上进行某项">
+    <meta name="description" content="开篇引出问题在 Android 开发中，我们经常会遇到这样一种情况：在 UI 界面上进行某项操作后要执行一段很耗时的代码，比如我们在界面上点击了一个 “下载” 按钮，那么我们需要执行网络请求，这是一个耗时操作。
+为了保证不影响 UI 线程，">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -472,23 +469,28 @@
                 </div>
 
                 
-				
-				
-                    <div id="busuanzi_container_page_pv" class="info-break-policy">
-                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
-                        <span id="busuanzi_value_page_pv"></span>
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        2.5k
                     </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        11 分
+                    </div>
+                    
+                
+				
 				
             </div>
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">讲解 Handler 原理前，让我们通过 Demo 先了解 Handler 如何使用，重点方法：post() 、sendMessage()！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h1><h2 id="引出问题"><a href="#引出问题" class="headerlink" title="引出问题"></a>引出问题</h2><p>在 Android 开发中，我们经常会遇到这样一种情况：在 UI 界面上进行某项操作后要执行一段很耗时的代码，比如我们在界面上点击了一个 “下载” 按钮，那么我们需要执行网络请求，这是一个耗时操作。</p>
+                <h1 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h1><h2 id="引出问题"><a href="#引出问题" class="headerlink" title="引出问题"></a>引出问题</h2><p>在 Android 开发中，我们经常会遇到这样一种情况：在 UI 界面上进行某项操作后要执行一段很耗时的代码，比如我们在界面上点击了一个 “下载” 按钮，那么我们需要执行网络请求，这是一个耗时操作。</p>
 <p>为了保证不影响 UI 线程，所以我们会创建一个新的线程去执行我们的耗时的代码。当我们的耗时操作完成时，我们需要更新 UI 界面以告知用户操作完成了。</p>
 <h2 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h2><p>比如，我们看以下代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>marco<span class="token punctuation">.</span>handlerdemo<span class="token punctuation">;</span>
@@ -1045,16 +1047,8 @@ framewor</div>
 		    &copy; 2018 - 2019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In-depth analysis of Android system source code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;By Marco<br>
             
 			
-                
-                <span id="busuanzi_container_site_pv">
-                    Total visits to this site: <span id="busuanzi_value_site_pv"></span> ,&nbsp;
-                </span>
-				<span id="busuanzi_container_site_uv">
-                    Total visitor: <span id="busuanzi_value_site_uv"></span> .
-                </span>
-			
 		</div>
-        <div class="col s12 m4 l4 social-link social-statis">
+        <div class="col s12 m4 l4 social-link ">
     <a href="https://github.com/pepsimaxin/pepsimaxin.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fa fa-github"></i>
     </a>
@@ -1119,8 +1113,6 @@ $(function () {
 
 
 
-
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
 
 
 </body>
