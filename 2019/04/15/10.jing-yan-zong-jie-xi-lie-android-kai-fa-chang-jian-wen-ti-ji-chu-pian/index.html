@@ -342,10 +342,99 @@ Device 切">
 
 
 
-<main class="container content">
+<main class="post-container content">
 
     
-    <!-- 文章内容详情 -->
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -385,22 +474,22 @@ Device 切">
 
             <div class="post-info">
                 <div class="post-date info-break-policy">
-                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>&nbsp;发布日期 :&nbsp;
                     2019-04-15
                 </div>
 
                 
                     
                     <div class="info-break-policy">
-                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        1.1k
+                        <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
+                        1.3k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
-                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        4 分
+                        <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
+                        5 分钟
                     </div>
                     
                 
@@ -408,6 +497,7 @@ Device 切">
 				
             </div>
         </div>
+		<br>
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
@@ -509,10 +599,10 @@ Device 切">
 <p>2、然后在点击处理事件中，找到目标 Activity 点，添加如下代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onItemClick</span><span class="token punctuation">(</span>AdapterView<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> parent<span class="token punctuation">,</span> View view<span class="token punctuation">,</span> <span class="token keyword">int</span> position<span class="token punctuation">,</span> <span class="token keyword">long</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">long</span> interval <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> mStartTime<span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 两次点击时间间隔</span>
+    <span class="token keyword">long</span> interval <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> mStartTime<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 两次点击时间间隔</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>interval <span class="token operator">>=</span> <span class="token number">500</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         mStartTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">showConfirmDialog</span><span class="token punctuation">(</span>infoItem<span class="token punctuation">,</span> isChecked<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">// target Activity</span>
+        <span class="token function">showConfirmDialog</span><span class="token punctuation">(</span>infoItem<span class="token punctuation">,</span> isChecked<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// target Activity</span>
     <span class="token punctuation">}</span>
 </code></pre>
 <p>就这么简单，不需要按照网上众说纷纭，无需设置 SingerTop、SingerTask ，更没必要单独设置个 onclickListen 监听，试试看，效果很好！</p>
@@ -547,31 +637,76 @@ Device 切">
 <h3 id="5-Android-P-蓝牙开关状态栏无图标显示"><a href="#5-Android-P-蓝牙开关状态栏无图标显示" class="headerlink" title="5. Android P 蓝牙开关状态栏无图标显示"></a><center>5. Android P 蓝牙开关状态栏无图标显示</center></h3><p><br></p>
 <p>这是个原生设计，为了节约状态栏图标空间（刘海屏导致状态栏空间进一步缩小），只在蓝牙连接设备后才显示相应图标。</p>
 <p>如果你的项目需求是需要显示蓝牙图标，按照如下方式改动：</p>
-<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarPolicy.java</span>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/.../PhoneStatusBarPolicy.java</span>
 
 <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">updateBluetooth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">int</span> iconId <span class="token operator">=</span> R<span class="token punctuation">.</span>drawable<span class="token punctuation">.</span>stat_sys_data_bluetooth<span class="token punctuation">;</span>
-    String contentDescription <span class="token operator">=</span> mContext<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>accessibility_quick_settings_bluetooth_on<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    String contentDescription <span class="token operator">=</span> mContext<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>
+                                string<span class="token punctuation">.</span>accessibility_quick_settings_bluetooth_on<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">boolean</span> bluetoothVisible <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>mBluetooth <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
         <span class="token comment" spellcheck="true">// added by marco, begin</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mBluetooth<span class="token punctuation">.</span><span class="token function">isBluetoothEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             iconId <span class="token operator">=</span> R<span class="token punctuation">.</span>drawable<span class="token punctuation">.</span>stat_sys_data_bluetooth<span class="token punctuation">;</span>
-            contentDescription <span class="token operator">=</span> mContext<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>accessibility_quick_settings_bluetooth_on<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            contentDescription <span class="token operator">=</span> mContext<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>
+                                 string<span class="token punctuation">.</span>accessibility_quick_settings_bluetooth_on<span class="token punctuation">)</span><span class="token punctuation">;</span>
             bluetoothVisible <span class="token operator">=</span> mBluetooth<span class="token punctuation">.</span><span class="token function">isBluetoothEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
         <span class="token comment" spellcheck="true">// added by marco, end</span>
 
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mBluetooth<span class="token punctuation">.</span><span class="token function">isBluetoothConnected</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             iconId <span class="token operator">=</span> R<span class="token punctuation">.</span>drawable<span class="token punctuation">.</span>stat_sys_data_bluetooth_connected<span class="token punctuation">;</span>
-            contentDescription <span class="token operator">=</span> mContext<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>accessibility_bluetooth_connected<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            contentDescription <span class="token operator">=</span> mContext<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>
+                                 string<span class="token punctuation">.</span>accessibility_bluetooth_connected<span class="token punctuation">)</span><span class="token punctuation">;</span>
             bluetoothVisible <span class="token operator">=</span> mBluetooth<span class="token punctuation">.</span><span class="token function">isBluetoothEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 
     mIconController<span class="token punctuation">.</span><span class="token function">setIcon</span><span class="token punctuation">(</span>mSlotBluetooth<span class="token punctuation">,</span> iconId<span class="token punctuation">,</span> contentDescription<span class="token punctuation">)</span><span class="token punctuation">;</span>
     mIconController<span class="token punctuation">.</span><span class="token function">setIconVisibility</span><span class="token punctuation">(</span>mSlotBluetooth<span class="token punctuation">,</span> bluetoothVisible<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><br></p>
+<h3 id="6-Menu-键导致屏幕亮屏"><a href="#6-Menu-键导致屏幕亮屏" class="headerlink" title="6. Menu 键导致屏幕亮屏"></a><center>6. Menu 键导致屏幕亮屏</center></h3><p><br></p>
+<p>项目中遇到的一个问题，测试反馈 power 键灭屏之后，快速点击 Menu 键，屏幕会被重新激活亮起。其实从源码的流程来看，事件处理机制没有问题，但测试个人觉得是个问题，本着测试自己觉得是问题你开发就必须改的“精神”，那就看看怎么改吧。</p>
+<p>这边，我直接给你解决方案：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PhoneWindowManager</span> <span class="token keyword">implements</span> <span class="token class-name">WindowManagerPolicy</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">isWakeKeyWhenScreenOff</span><span class="token punctuation">(</span><span class="token keyword">int</span> keyCode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>keyCode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// ignore volume keys unless docked</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_VOLUME_UP<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_VOLUME_DOWN<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_VOLUME_MUTE<span class="token operator">:</span>
+                <span class="token keyword">return</span> mDockMode <span class="token operator">!=</span> Intent<span class="token punctuation">.</span>EXTRA_DOCK_STATE_UNDOCKED<span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">// ignore media and camera keys</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MUTE<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_HEADSETHOOK<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_PLAY<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_PAUSE<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_PLAY_PAUSE<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_STOP<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_NEXT<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_PREVIOUS<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_REWIND<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_RECORD<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_FAST_FORWARD<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MEDIA_AUDIO_TRACK<span class="token operator">:</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_CAMERA<span class="token operator">:</span>
+
+            <span class="token comment" spellcheck="true">// added by marco, begin</span>
+            <span class="token comment" spellcheck="true">// ignore menu key</span>
+            <span class="token keyword">case</span> KeyEvent<span class="token punctuation">.</span>KEYCODE_MENU<span class="token operator">:</span>   <span class="token comment" spellcheck="true">// 屏幕 Menu 键激活屏幕亮度</span>
+            <span class="token comment" spellcheck="true">// added by marco, end</span>
+                <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p><br></p>
@@ -817,6 +952,99 @@ v</div>
     });
 </script>
 
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
     
 
 </main>
