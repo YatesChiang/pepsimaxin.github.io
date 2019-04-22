@@ -5,11 +5,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="深入钻研 Android 核心原理 之 进程被杀, Hexo">
-    <meta name="description" content="
-通过 killProcess、killProcessQuiet、killProcessGroup 三个杀进程的方法分析进程被杀的实现原理！
-
-
-一、开篇1.1 核心源码
+    <meta name="description" content="一、开篇1.1 核心源码
 
 
 关键类
@@ -19,7 +15,11 @@
 
 
 Process.java
-framewor">
+frameworks/base/core/java/android/os/Process.java
+
+
+android_util_Process.cpp
+fram">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -466,8 +466,8 @@ framewor">
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/核心技术/" class="post-category" target="_blank">
-                                核心技术
+                            <a href="/categories/核心机制/" class="post-category" target="_blank">
+                                核心机制
                             </a>
                         
                     </div>
@@ -503,11 +503,7 @@ framewor">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">通过 killProcess、killProcessQuiet、killProcessGroup 三个杀进程的方法分析进程被杀的实现原理！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="一、开篇"><a href="#一、开篇" class="headerlink" title="一、开篇"></a>一、开篇</h1><h2 id="1-1-核心源码"><a href="#1-1-核心源码" class="headerlink" title="1.1 核心源码"></a>1.1 核心源码</h2><table>
+                <h1 id="一、开篇"><a href="#一、开篇" class="headerlink" title="一、开篇"></a>一、开篇</h1><h2 id="1-1-核心源码"><a href="#1-1-核心源码" class="headerlink" title="1.1 核心源码"></a>1.1 核心源码</h2><table>
 <thead>
 <tr>
 <th>关键类</th>
