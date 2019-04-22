@@ -5,11 +5,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="深入钻研 Android 核心机制 之 事件分发, Hexo">
-    <meta name="description" content="
-本篇文章带你全面剖析 Android 中的事件分发机制，包括三部分：Activity、ViewGroup、View 对点击事件的分发机制！
-
-
-1. 核心源码
+    <meta name="description" content="1. 核心源码
 
 
 关键类
@@ -19,7 +15,11 @@
 
 
 Activity.java
-frameworks/b">
+frameworks/base/core/java/android/view/View.java
+
+
+Window.java
+frameworks/base/core/j">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -485,14 +485,14 @@ frameworks/b">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        6.5k
+                        6.4k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        29 分
+                        28 分
                     </div>
                     
                 
@@ -503,11 +503,7 @@ frameworks/b">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">本篇文章带你全面剖析 Android 中的事件分发机制，包括三部分：Activity、ViewGroup、View 对点击事件的分发机制！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="1-核心源码"><a href="#1-核心源码" class="headerlink" title="1. 核心源码"></a>1. 核心源码</h1><table>
+                <h1 id="1-核心源码"><a href="#1-核心源码" class="headerlink" title="1. 核心源码"></a>1. 核心源码</h1><table>
 <thead>
 <tr>
 <th>关键类</th>
@@ -538,7 +534,8 @@ frameworks/b">
 </tbody>
 </table>
 <p><br></p>
-<h1 id="2-基础认知"><a href="#2-基础认知" class="headerlink" title="2. 基础认知"></a>2. 基础认知</h1><p>Android <strong> “View”</strong>  虽然不是四大组件，但其并不比四大组件的地位低。而 View 的核心知识点<strong><font color="#FF0000"> “事件分发机制” </font></strong>则是不少刚入门童鞋的拦路虎（<strong>1、项目中处处遇到事件分发机制；2、面试管最喜欢提及的问题</strong>）。在实际项目的开发过程中，ScrollView 嵌套 RecyclerView（或者 ListView）的滑动冲突这种老大难问题的理论基础就是“事件分发机制”。</p>
+<h1 id="2-基础认知"><a href="#2-基础认知" class="headerlink" title="2. 基础认知"></a>2. 基础认知</h1><p>Android <strong> “View”</strong>  虽然不是四大组件，但其并不比四大组件的地位低。而 View 的核心知识点<strong><font color="#FF0000"> “事件分发机制” </font></strong>则是不少刚入门童鞋的拦路虎（<strong>1、项目中处处遇到事件分发机制；2、面试管最喜欢提及的问题</strong>）。</p>
+<p>在实际项目的开发过程中，ScrollView 嵌套 RecyclerView（或者 ListView）的滑动冲突这种老大难问题的理论基础就是“事件分发机制”。</p>
 <p><strong>首先，我们了解一下“事件分发机制”中的基础知识点！</strong></p>
 <h2 id="2-1-事件分发的对象"><a href="#2-1-事件分发的对象" class="headerlink" title="2.1 事件分发的对象"></a>2.1 事件分发的对象</h2><p>事件分发的对象：<strong><font color="#0000FF">点击事件（Touch事件）</font></strong></p>
 <p><strong>1. 定义</strong></p>
@@ -573,6 +570,7 @@ frameworks/b">
 </tr>
 </tbody>
 </table>
+<p><br></p>
 <p><strong>3. 事件序列</strong></p>
 <p>所谓事件序列就是指：从手指接触屏幕至手指离开屏幕，这个过程产生的一系列事件。</p>
 <p>一般情况下，<font color="#FF0000">事件列都是以 DOWN 事件开始、UP 事件结束，中间有无数的 MOVE 事件</font>。</p>
@@ -588,8 +586,8 @@ frameworks/b">
 <blockquote>
 <p>Android 的 UI 界面由 Activity、ViewGroup、View 及其派生类组成。</p>
 </blockquote>
-<p>如下图：（图有点模糊，回头得补画下）</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-b8a64e07cc1ff705.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000" alt="1.png"></center>
+<p>如下图：</p>
+<center><img src="https://upload-images.jianshu.io/upload_images/3517194-b8a64e07cc1ff705.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000" alt="UI 界面.png"></center>
 
 <h2 id="2-4-事件分发的顺序"><a href="#2-4-事件分发的顺序" class="headerlink" title="2.4 事件分发的顺序"></a>2.4 事件分发的顺序</h2><p><strong><font color="#FF0000" size="4">顺序：</font></strong> Activity -&gt; ViewGroup -&gt; View </p>
 <blockquote>
@@ -1418,16 +1416,16 @@ frameworks/b">
 <hr>
 <h3 id="3-3-5-总结"><a href="#3-3-5-总结" class="headerlink" title="3.3.5 总结"></a>3.3.5 总结</h3><p>OK，又到了流程图的展现时候了，如下所示：</p>
 <p><center><img src="https://upload-images.jianshu.io/upload_images/3517194-812be931bd432a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View事件分发机制流程图.png"></center><br><br></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;1、Android 事件分发机制主要由 “事件分发” —&gt; “事件拦截” —&gt; “事件响应” 这三步来进行逻辑控制的。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;2、ViewGroup 默认不拦截任何事件。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;3、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;4、Android 中的事件 onClick、onLongClick、onScroll 等，都是由多个 Touch 事件（一个 ACTION_DOWN，多个 ACTION_MOVE，一个 ACTION_UP）组成。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;5、子 View 可以通过使用 getParent().requestDisallowInterceptTouchEvent(true) ，阻止 ViewGroup 对其 MOVE 或 UP 事件进行拦截。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;6、MotionEvent 对象的四种状态：MotionEvent.ACTION_DOWN：手指按下屏幕的瞬间</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_MOVE：手指在屏幕上移动</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_UP：手指离开屏幕瞬间</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_CANCEL：取消手势</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;7、点击某个控件，首先会去调用该控件所在布局的 dispatchTouchEvent 方法，然后在布局的 dispatchTouchEvent 方法中找到被点击的相应控件，再去调用该控件的 dispatchTouchEvent方法。</p>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;1、Android 事件分发机制主要由 “事件分发” —&gt; “事件拦截” —&gt; “事件响应” 这三步来进行逻辑控制的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;2、ViewGroup 默认不拦截任何事件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;3、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;4、Android 中的事件 onClick、onLongClick、onScroll 等，都是由多个 Touch 事件（一个 ACTION_DOWN，多个 ACTION_MOVE，一个 ACTION_UP）组成。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;5、子 View 可以通过使用 getParent().requestDisallowInterceptTouchEvent(true) ，阻止 ViewGroup 对其 MOVE 或 UP 事件进行拦截。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;6、MotionEvent 对象的四种状态：MotionEvent.ACTION_DOWN：手指按下屏幕的瞬间</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_MOVE：手指在屏幕上移动</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_UP：手指离开屏幕瞬间</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_CANCEL：取消手势</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;7、点击某个控件，首先会去调用该控件所在布局的 dispatchTouchEvent 方法，然后在布局的 dispatchTouchEvent 方法中找到被点击的相应控件，再去调用该控件的 dispatchTouchEvent方法。</p>
 <h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/01/01/00.%20Thinking%20in%20Android%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a></p>
 
             </div>
