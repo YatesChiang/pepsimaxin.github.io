@@ -5,11 +5,8 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="探讨 Fragment 的生命周期, Hexo">
-    <meta name="description" content="
-在应用的开发过程中，Fragement 的使用是很普遍的，比如在 Settings 中，就随处可见它的身影！我们一起来看看它的生命周期！
-
-
-1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销">
+    <meta name="description" content="1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销毁状态）。那么碎片（Fragment）的状态如何？其实 Fragment 和 Activity 类似，只是有些许细微的差别！
+每个 Fragme">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -475,7 +472,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        1.8k
+                        1.7k
                     </div>
                     
 
@@ -494,11 +491,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">在应用的开发过程中，Fragement 的使用是很普遍的，比如在 Settings 中，就随处可见它的身影！我们一起来看看它的生命周期！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="1-碎片状态"><a href="#1-碎片状态" class="headerlink" title="1. 碎片状态"></a>1. 碎片状态</h1><p>我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销毁状态）。那么碎片（Fragment）的状态如何？其实 Fragment 和 Activity 类似，只是有些许细微的差别！</p>
+                <h1 id="1-碎片状态"><a href="#1-碎片状态" class="headerlink" title="1. 碎片状态"></a>1. 碎片状态</h1><p>我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销毁状态）。那么碎片（Fragment）的状态如何？其实 Fragment 和 Activity 类似，只是有些许细微的差别！</p>
 <p>每个 Fragment 在其生命周期中也有 <strong><font color="#FF0000">4</font></strong> 种状态：</p>
 <p><strong><font color="#436EEE">1、运行状态</font></strong></p>
 <p>当一个碎片是可见的，并且它所关联的活动正处于运行状态时，该碎片也处于运行状态。</p>
@@ -886,11 +879,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-作为四大组件之一的 Service，随处可见，我们这边重点看两个小技巧：Forground Service 和 IntentService！
-
-
-开篇核心源码
+                    <div class="summary block-with-text">开篇核心源码
 
 
 关键类
@@ -900,7 +889,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 Service.java
-frameworks/ba</div>
+frameworks/base/core/java/android/app/Service.java
+
+
+
+服务是什么？服务（Service）是 Android 中实现程序后</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-25
@@ -944,15 +937,15 @@ frameworks/ba</div>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-作为四大组件之一的 Activity，重要性就不言而喻了，它的生命周期更是在开发过程中需要熟记于心！我们通过 Code Demo 温故一下！
-
-
-1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：
+                    <div class="summary block-with-text">1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：
 
 运行状态
 
-当一个活动位于返</div>
+当一个活动位于返回栈的栈顶时，这时活动就处于运行状态。系统最不愿意回收的就是处于运行状态的活动，因为这会带来非常差的用户体验。
+
+暂停状态
+
+当一个活动不再处于栈顶</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-20

@@ -5,11 +5,10 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="探讨 “动态广播” 和 “静态广播” 的用法和区别, Hexo">
-    <meta name="description" content="
-作为四大组件之一的 Broadcast，实现方法很简单，主要分为：动态广播和静态广播！我们通过 Code Demo 来看看两者的用法和区别！
+    <meta name="description" content="动态注册Code新建一个 BroadcastTest 项目，修改 MainActivity ：
+package com.example.marco.broadcasttest;
 
-
-动态注册Code新建一个 BroadcastTest 项目，修改 MainActivity ">
+import android.content.Broadca">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -475,7 +474,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        685
+                        638
                     </div>
                     
 
@@ -494,11 +493,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">作为四大组件之一的 Broadcast，实现方法很简单，主要分为：动态广播和静态广播！我们通过 Code Demo 来看看两者的用法和区别！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="动态注册"><a href="#动态注册" class="headerlink" title="动态注册"></a>动态注册</h1><h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p>新建一个 BroadcastTest 项目，修改 MainActivity ：</p>
+                <h1 id="动态注册"><a href="#动态注册" class="headerlink" title="动态注册"></a>动态注册</h1><h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p>新建一个 BroadcastTest 项目，修改 MainActivity ：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>marco<span class="token punctuation">.</span>broadcasttest<span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> android<span class="token punctuation">.</span>content<span class="token punctuation">.</span>BroadcastReceiver<span class="token punctuation">;</span>
@@ -749,11 +744,7 @@
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-作为四大组件之一的 Service，随处可见，我们这边重点看两个小技巧：Forground Service 和 IntentService！
-
-
-开篇核心源码
+                    <div class="summary block-with-text">开篇核心源码
 
 
 关键类
@@ -763,7 +754,11 @@
 
 
 Service.java
-frameworks/ba</div>
+frameworks/base/core/java/android/app/Service.java
+
+
+
+服务是什么？服务（Service）是 Android 中实现程序后</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-25

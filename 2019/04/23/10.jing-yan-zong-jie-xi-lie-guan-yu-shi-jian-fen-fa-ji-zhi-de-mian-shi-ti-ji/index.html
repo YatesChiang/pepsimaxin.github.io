@@ -4,9 +4,12 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="深入解读 GMS 认证（修订中...）, Hexo">
-    <meta name="description" content="1. CTS关于何为 CTS，不再展开来描述，你可以直接参阅官方文档：CTS官方资料。
-1.1 Compatibility Test Suite1.2 CTS Verifier">
+    <meta name="keywords" content="“事件分发机制” - 面试题集（持续更新...）, Hexo">
+    <meta name="description" content="1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？
+我们看下源码：
+// frameworks/base/core/java/android/view/View.java
+
+    public boolean ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>深入解读 GMS 认证（修订中...） | Hexo</title>
+    <title>“事件分发机制” - 面试题集（持续更新...） | Hexo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -324,13 +327,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('http://poobjb5p7.bkt.clouddn.com/GMS%E8%AE%A4%E8%AF%81%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('http://poobjb5p7.bkt.clouddn.com/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%EF%BC%88%E5%9F%BA%E7%A1%80%E7%AF%87%EF%BC%89.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        深入解读 GMS 认证（修订中...）
+                        “事件分发机制” - 面试题集（持续更新...）
                     </div>
                 </div>
             </div>
@@ -340,99 +343,10 @@
 
 
 
-<main class="post-container content">
+<main class="container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
-
-    #articleContent :focus {
-        outline: none;
-    }
-
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 20px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
+    <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -441,24 +355,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/CTS/" target="_blank">
-                                <span class="chip bg-color">CTS</span>
+                            <a href="/tags/面试题集/" target="_blank">
+                                <span class="chip bg-color">面试题集</span>
                             </a>
                         
-                            <a href="/tags/GTS/" target="_blank">
-                                <span class="chip bg-color">GTS</span>
+                            <a href="/tags/事件分发/" target="_blank">
+                                <span class="chip bg-color">事件分发</span>
                             </a>
                         
-                            <a href="/tags/VTS/" target="_blank">
-                                <span class="chip bg-color">VTS</span>
-                            </a>
-                        
-                            <a href="/tags/STS/" target="_blank">
-                                <span class="chip bg-color">STS</span>
-                            </a>
-                        
-                            <a href="/tags/GMS/" target="_blank">
-                                <span class="chip bg-color">GMS</span>
+                            <a href="/tags/经验总结/" target="_blank">
+                                <span class="chip bg-color">经验总结</span>
                             </a>
                         
                     </div>
@@ -469,8 +375,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/GMS-认证/" class="post-category" target="_blank">
-                                GMS 认证
+                            <a href="/categories/技术细节/" class="post-category" target="_blank">
+                                技术细节
                             </a>
                         
                     </div>
@@ -481,14 +387,14 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>&nbsp;发布日期 :&nbsp;
-                    2019-04-01
+                    2019-04-23
                 </div>
 
                 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        38
+                        267
                     </div>
                     
 
@@ -507,8 +413,37 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="1-CTS"><a href="#1-CTS" class="headerlink" title="1. CTS"></a>1. CTS</h1><p>关于何为 CTS，不再展开来描述，你可以直接参阅官方文档：<a href="https://source.android.com/compatibility/cts/setup" target="_blank" rel="noopener">CTS官方资料</a>。</p>
-<h2 id="1-1-Compatibility-Test-Suite"><a href="#1-1-Compatibility-Test-Suite" class="headerlink" title="1.1 Compatibility Test Suite"></a>1.1 Compatibility Test Suite</h2><h2 id="1-2-CTS-Verifier"><a href="#1-2-CTS-Verifier" class="headerlink" title="1.2 CTS Verifier"></a>1.2 CTS Verifier</h2>
+                <h3 id="1-onTouch-和-onTouchEvent-有什么区别，又该如何使用？"><a href="#1-onTouch-和-onTouchEvent-有什么区别，又该如何使用？" class="headerlink" title="1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？"></a><center>1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？</center></h3><p><br></p>
+<p>我们看下源码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/android/view/View.java</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">onFilterTouchEventForSecurity</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            ListenerInfo li <span class="token operator">=</span> mListenerInfo<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>li <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnTouchListener <span class="token operator">!=</span> null
+                    <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>mViewFlags <span class="token operator">&amp;</span> ENABLED_MASK<span class="token punctuation">)</span> <span class="token operator">==</span> ENABLED
+                    <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnTouchListener<span class="token punctuation">.</span><span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>   <span class="token comment" spellcheck="true">// 1</span>
+                result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>result <span class="token operator">&amp;&amp;</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>                    <span class="token comment" spellcheck="true">// 2</span>
+                result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>这两个方法都是在 View 的 <code>dispatchTouchEvent</code> 中调用的，<code>onTouch</code> 优先于 <code>onTouchEvent</code> 执行。如果在 <code>onTouch</code> 方法中通过返回 <code>true</code> 将事件消费掉，<code>onTouchEvent</code> 将不会再执行。</p>
+<p>另外需要注意的是，onTouch 能够得到执行需要两个前提条件：</p>
+<p>1、<code>mOnTouchListener</code> 的值不能为空！这个我们知道，只要我们给控件注册了 <code>Touch 事件</code>，<code>mOnTouchListener</code> 就一定被赋值（不为空）！</p>
+<p>2、当前点击的控件必须是 <code>enable</code> 的。因此如果你有一个控件是<code>非enable</code>的（比如：ImageView），那么给它注册 <code>onTouch</code> 事件将永远得不到执行。对于这一类控件，如果我们想要监听它的 <code>touch事件</code>，就必须通过在该控件中重写 <code>onTouchEvent</code> 方法来实现。</p>
+<p><br></p>
+
             </div>
             <hr>
 
@@ -531,7 +466,7 @@
                     </span>
                     <a href="https://superandroid.pro" class="b-link-green">Hexo</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2019/04/01/09.gu-ge-ren-zheng-xi-lie-shen-ru-jie-du-gms-ren-zheng/" class="b-link-green">深入解读 GMS 认证（修订中...）</a>
+                    <a href="/2019/04/23/10.jing-yan-zong-jie-xi-lie-guan-yu-shi-jian-fen-fa-ji-zhi-de-mian-shi-ti-ji/" class="b-link-green">“事件分发机制” - 面试题集（持续更新...）</a>
                 </p>
             </div>
         </div>
@@ -578,6 +513,80 @@
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
+                <a href="/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/">
+                    <div class="card-image">
+                        
+                        <img src="http://poobjb5p7.bkt.clouddn.com/%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%BF%97%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="博客日志">
+                        
+                        <span class="card-title">博客日志</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">Thinking in Android – “新增”
+
+
+
+日期
+新增博文
+
+
+
+
+2019.04.23
+ 《“事件分发机制” - 面试题集》 
+
+
+2019.04.15
+ 《Android 开发常见问题总结（基础篇）》 
+
+
+2019.0</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-12-29
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/博客优化/" target="_blank">
+                        <span class="chip bg-color">博客优化</span>
+                    </a>
+                    
+                    <a href="/tags/修订记录/" target="_blank">
+                        <span class="chip bg-color">修订记录</span>
+                    </a>
+                    
+                    <a href="/tags/方向规划/" target="_blank">
+                        <span class="chip bg-color">方向规划</span>
+                    </a>
+                    
+                    <a href="/tags/日志/" target="_blank">
+                        <span class="chip bg-color">日志</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
                 <a href="/2019/04/15/10.jing-yan-zong-jie-xi-lie-android-kai-fa-chang-jian-wen-ti-ji-chu-pian/">
                     <div class="card-image">
                         
@@ -592,9 +601,9 @@
 ✒ 问题现象（这个问题主要是针对 MTK 平台）
 Device 切</div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-04-15
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-04-15
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -620,59 +629,6 @@ Device 切</div>
                     
                     <a href="/tags/Bug-需求/" target="_blank">
                         <span class="chip bg-color">Bug/需求</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/03/01/11.suan-fa-zhuan-lan-xi-lie-tan-tan-shi-jian-fu-za-du/">
-                    <div class="card-image">
-                        
-                        <img src="http://poobjb5p7.bkt.clouddn.com/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%EF%BC%88%E5%B0%81%E9%9D%A2%EF%BC%89.jpg" class="responsive-img" alt="谈谈算法中的 “时间复杂度”">
-                        
-                        <span class="card-title">谈谈算法中的 “时间复杂度”</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">1、算法效率虽然随着计算机硬件的迭代更新，运算处理的性能越来越强，但实际上，它也需要根据输入数据的大小和算法效率来消耗一定的处理器资源。要想编写出能高效运行的程序，我们就需要考虑到 “算法的效率”。
-衡量算法的 “好坏” 和 “效率” 主要</div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-01
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/算法专栏/" class="post-category" target="_blank">
-                                    算法专栏
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/算法/" target="_blank">
-                        <span class="chip bg-color">算法</span>
-                    </a>
-                    
-                    <a href="/tags/数据结构/" target="_blank">
-                        <span class="chip bg-color">数据结构</span>
-                    </a>
-                    
-                    <a href="/tags/时间复杂度/" target="_blank">
-                        <span class="chip bg-color">时间复杂度</span>
                     </a>
                     
                 </div>
@@ -722,58 +678,6 @@ Device 切</div>
     });
 </script>
 
-    </div>
-    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget">
-            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
-            <div id="toc-content"></div>
-        </div>
-    </div>
-</div>
-
-<!-- TOC 悬浮按钮. -->
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
-        tocbot.init({
-            tocSelector: '#toc-content',
-            contentSelector: '#articleContent',
-            headingsOffset: -($(window).height() * 0.4 - 45),
-            // headingsOffset: -205,
-            headingSelector: 'h1, h2, h3, h4, h5'
-        });
-
-        // modify the toc link href to support Chinese.
-        let i = 0;
-        let tocHeading = 'toc-heading-';
-        $('#toc-content a').each(function () {
-            $(this).attr('href', '#' + tocHeading + (++i));
-        });
-
-        // modify the heading title id to support Chinese.
-        i = 0;
-        $('#articleContent').children('h1, h2, h3, h4, h5').each(function () {
-            $(this).attr('id', tocHeading + (++i));
-        });
-
-        // Set scroll toc fixed.
-        let tocHeight = parseInt($(window).height() * 0.4 - 64);
-        let $tocWidget = $('.toc-widget');
-        $(window).scroll(function () {
-            let scroll = $(window).scrollTop();
-            /* add post toc fixed. */
-            if (scroll > tocHeight) {
-                $tocWidget.addClass('toc-fixed');
-            } else {
-                $tocWidget.removeClass('toc-fixed');
-            }
-        });
-
-        
-    });
-</script>
     
 
 </main>

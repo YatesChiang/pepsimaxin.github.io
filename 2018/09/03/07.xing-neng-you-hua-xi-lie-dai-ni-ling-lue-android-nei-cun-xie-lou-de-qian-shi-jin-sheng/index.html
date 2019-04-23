@@ -5,11 +5,8 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="带你领略 Android 内存泄漏的前世今生, Hexo">
-    <meta name="description" content="
-内存泄漏在项目的开发过程中是常见的问题，本章节对常见的泄漏原因，如：永远的单例、static 关键字、AsyncTask等作了详细的说明！
-
-
-基础了解什么是内存泄漏？内存泄漏是当程序不再使用到的内存时，释放内存失败而产生了无用的内存消耗">
+    <meta name="description" content="基础了解什么是内存泄漏？内存泄漏是当程序不再使用到的内存时，释放内存失败而产生了无用的内存消耗。内存泄漏并不是指物理上的内存消失，这里的内存泄漏是指由程序分配的内存但是由于程序逻辑错误而导致程序失去了对该内存的控制，使得内存浪费。
+Java">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -494,11 +491,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">内存泄漏在项目的开发过程中是常见的问题，本章节对常见的泄漏原因，如：永远的单例、static 关键字、AsyncTask等作了详细的说明！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="基础了解"><a href="#基础了解" class="headerlink" title="基础了解"></a>基础了解</h1><h2 id="什么是内存泄漏？"><a href="#什么是内存泄漏？" class="headerlink" title="什么是内存泄漏？"></a>什么是内存泄漏？</h2><p>内存泄漏是当程序不再使用到的内存时，释放内存失败而产生了无用的内存消耗。内存泄漏并不是指物理上的内存消失，这里的内存泄漏是指由程序分配的内存但是由于程序逻辑错误而导致程序失去了对该内存的控制，使得内存浪费。</p>
+                <h1 id="基础了解"><a href="#基础了解" class="headerlink" title="基础了解"></a>基础了解</h1><h2 id="什么是内存泄漏？"><a href="#什么是内存泄漏？" class="headerlink" title="什么是内存泄漏？"></a>什么是内存泄漏？</h2><p>内存泄漏是当程序不再使用到的内存时，释放内存失败而产生了无用的内存消耗。内存泄漏并不是指物理上的内存消失，这里的内存泄漏是指由程序分配的内存但是由于程序逻辑错误而导致程序失去了对该内存的控制，使得内存浪费。</p>
 <h2 id="Java-内存分配策略"><a href="#Java-内存分配策略" class="headerlink" title="Java 内存分配策略"></a>Java 内存分配策略</h2><p>Java 程序运行时的内存分配策略有三种，分别是 <strong><font color="#FF00FF">静态分配</font></strong>、<strong><font color="#FF00FF">栈式分配</font></strong> 和 <strong><font color="#FF00FF">堆式分配</font></strong>，对应的三种存储策略使用的内存空间主要分别是 <strong><font color="#FF00FF">静态存储区（也称方法区）</font></strong>、<strong><font color="#FF00FF">栈区</font></strong> 和 <strong><font color="#FF00FF">堆区</font></strong>。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 <strong>静态存储区（方法区）</strong>：主要存放 <u><strong>静态数据</strong></u>、<u><strong>全局 static 数据</strong></u> 和 <u><strong>常量</strong></u>。这块内存在程序编译时就已经分配好，并且在程序整个运行期间都存在。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔰 <strong>栈区</strong>：当方法被执行时，方法体内的 <u><strong>局部变量</strong></u>（其中包括基础数据类型、对象的引用）都在栈上创建，并在方法执行结束时这些局部变量所持有的内存将会自动被释放。因为栈内存分配运算内置于处理器的指令集中，效率很高，但是分配的内存容量有限。</p>
@@ -1214,11 +1207,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-不管是系统开发还是应用开发，ANR 一直是挥之不去的存在！本文从 ANR 的触发机制以及一个简单的范例来探讨 ANR 的原理和处理方法！
-
-
-开篇核心源码
+                    <div class="summary block-with-text">开篇核心源码
 
 
 关键类
@@ -1228,7 +1217,10 @@ context <span class="token operator">=</span> <span class="token function">getAp
 
 
 ActiveServices.java
-framewor</div>
+frameworks/base/services/core/java/com/android/server/am/ActiveServices.java
+
+
+A</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-26

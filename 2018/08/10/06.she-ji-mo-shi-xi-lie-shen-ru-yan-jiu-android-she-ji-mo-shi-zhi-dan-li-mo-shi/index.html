@@ -5,11 +5,9 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="深入钻研 Android 设计模式 之 单例模式, Hexo">
-    <meta name="description" content="
-单例模式（Singleton Pattern）是 Java 中最简单的模式之一。这种类型的设计属于创建型模式，提供了一种创建对象的最佳方式。
-
-
-1. 概述1.1 什么是单例模式？这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确">
+    <meta name="description" content="1. 概述1.1 什么是单例模式？这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
+注意：
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -494,11 +492,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">单例模式（Singleton Pattern）是 Java 中最简单的模式之一。这种类型的设计属于创建型模式，提供了一种创建对象的最佳方式。</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h1><h2 id="1-1-什么是单例模式？"><a href="#1-1-什么是单例模式？" class="headerlink" title="1.1 什么是单例模式？"></a>1.1 什么是单例模式？</h2><p>这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
+                <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h1><h2 id="1-1-什么是单例模式？"><a href="#1-1-什么是单例模式？" class="headerlink" title="1.1 什么是单例模式？"></a>1.1 什么是单例模式？</h2><p>这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
 <p><strong><font color="#FF0000" size="4">注意：</font></strong></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 &nbsp;单例类只能有一个实例。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 &nbsp;单例类必须自己创建自己的唯一实例。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 &nbsp;单例类必须给所有其他对象提供这一实例。</p>
 <p>我们先来看看关于“单例模式”的以下几点：</p>

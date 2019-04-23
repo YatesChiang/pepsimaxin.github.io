@@ -5,15 +5,15 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="探讨 Activity 的生命周期, Hexo">
-    <meta name="description" content="
-作为四大组件之一的 Activity，重要性就不言而喻了，它的生命周期更是在开发过程中需要熟记于心！我们通过 Code Demo 温故一下！
-
-
-1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：
+    <meta name="description" content="1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：
 
 运行状态
 
-当一个活动位于返">
+当一个活动位于返回栈的栈顶时，这时活动就处于运行状态。系统最不愿意回收的就是处于运行状态的活动，因为这会带来非常差的用户体验。
+
+暂停状态
+
+当一个活动不再处于栈顶">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -498,11 +498,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">作为四大组件之一的 Activity，重要性就不言而喻了，它的生命周期更是在开发过程中需要熟记于心！我们通过 Code Demo 温故一下！</font></strong></p>
-</blockquote>
-<hr>
-<h3 id="1、活动状态"><a href="#1、活动状态" class="headerlink" title="1、活动状态"></a>1、活动状态</h3><p>每个活动在其生命周期中最多可能会有 <strong><font color="#FF0000">4</font></strong> 种状态：</p>
+                <h3 id="1、活动状态"><a href="#1、活动状态" class="headerlink" title="1、活动状态"></a>1、活动状态</h3><p>每个活动在其生命周期中最多可能会有 <strong><font color="#FF0000">4</font></strong> 种状态：</p>
 <blockquote>
 <p>运行状态</p>
 </blockquote>
@@ -851,11 +847,8 @@
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-在应用的开发过程中，Fragement 的使用是很普遍的，比如在 Settings 中，就随处可见它的身影！我们一起来看看它的生命周期！
-
-
-1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销</div>
+                    <div class="summary block-with-text">1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销毁状态）。那么碎片（Fragment）的状态如何？其实 Fragment 和 Activity 类似，只是有些许细微的差别！
+每个 Fragme</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-22
@@ -899,11 +892,11 @@
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-Activity的启动模式一共有四种，分别是 standard、singleTop、singleTask、singleInstance！
+                    <div class="summary block-with-text">LaunchMode可以在 AndroidManifest.xml 中通过给  标签指定 android:launchMode 属性来选择启动模式。
 
+standard
 
-LaunchMode可以在 AndroidManifest.xml 中通过给  标签指定 and</div>
+standard 是活动默认的启动模式，在不进行显式指定的情况下，所</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-18

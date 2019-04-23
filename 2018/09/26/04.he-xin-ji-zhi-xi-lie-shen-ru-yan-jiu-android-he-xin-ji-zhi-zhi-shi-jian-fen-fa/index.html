@@ -485,7 +485,7 @@ frameworks/base/core/java/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.8k
+                        5.9k
                     </div>
                     
 
@@ -614,15 +614,18 @@ frameworks/base/core/java/">
 <center><img src="https://upload-images.jianshu.io/upload_images/3517194-13579e321d5f0f4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="事件分发的方法.png"></center>
 
 <p><br></p>
+<p>我们可以做个总结：</p>
+<p>Activity 的点击事件事实上是调用它内部的 ViewGroup 的点击事件，可以直接当成 ViewGroup 处理。</p>
+<p>ViewGroup 的相关事件方法有三个：<code>onInterceptTouchEvent</code>、<code>dispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
+<p>View 的相关事件方法只有两个：<code>dispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
 <hr>
 <h1 id="3-源码分析"><a href="#3-源码分析" class="headerlink" title="3. 源码分析"></a>3. 源码分析</h1><p>还记得我们上节说到的事件分发的 <strong><font color="#FF0000">传递顺序</font></strong> 吗？</p>
 <blockquote>
 <p>即：1个点击事件发生后，事件先传到 Activity、再传到 ViewGroup、最终再传到 View。</p>
 </blockquote>
 <p>所以，要想充分理解 Android 事件分发机制，本质上是要理解以下三个部分：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;✯ <strong><font color="#0000FF">Activity 对点击事件的分发机制</font></strong>&nbsp;&nbsp;&nbsp;&nbsp; ✯ <strong><font color="#0000FF">ViewGroup 对点击事件的分发机制</font></strong> &nbsp;&nbsp;&nbsp;&nbsp; ✯ <strong><font color="#0000FF">View 对点击事件的分发机制</font></strong> </p>
-<p><br></p>
-<h2 id="3-1-点击事件分发-–-Activity"><a href="#3-1-点击事件分发-–-Activity" class="headerlink" title="3.1 点击事件分发 – Activity"></a>3.1 点击事件分发 – Activity</h2><p>当一个点击事件发生时，事件最先传到 Activity 的 dispatchTouchEvent() ，进行事件分发。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;✯ <strong><font color="#0000FF">Activity - Touch 事件分发</font></strong>&nbsp;&nbsp;&nbsp;&nbsp; ✯ <strong><font color="#0000FF">ViewGroup - Touch 事件分发</font></strong> &nbsp;&nbsp;&nbsp;&nbsp; ✯ <strong><font color="#0000FF">View - Touch 事件分发</font></strong> </p>
+<h2 id="3-1-Touch-事件分发-–-Activity"><a href="#3-1-Touch-事件分发-–-Activity" class="headerlink" title="3.1 Touch 事件分发 – Activity"></a>3.1 Touch 事件分发 – Activity</h2><p>当一个点击事件发生时，事件最先传到 Activity 的 dispatchTouchEvent() ，进行事件分发。</p>
 <h3 id="3-1-1-dispatchTouchEvent"><a href="#3-1-1-dispatchTouchEvent" class="headerlink" title="3.1.1 dispatchTouchEvent"></a>3.1.1 dispatchTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent ev<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 一般事件列开始都是 DOWN 事件，即按下事件，所以此处基本是 true</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>ev<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -703,7 +706,7 @@ frameworks/base/core/java/">
 <h3 id="3-1-7-总结"><a href="#3-1-7-总结" class="headerlink" title="3.1.7 总结"></a>3.1.7 总结</h3><center><img src="https://upload-images.jianshu.io/upload_images/3517194-09f4ddd079792c82.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Activity 事件分发处理流程.png"></center>
 
 <p>至此，我们分析了 Activity 对点击事件的分发机制处理流程，我们不难发现，Activity 的事件走到了 ViewGroup 进行处理，那么接下来就是分析 ViewGroup 对点击事件的分发机制了。</p>
-<h2 id="3-2-点击事件分发-–-ViewGroup"><a href="#3-2-点击事件分发-–-ViewGroup" class="headerlink" title="3.2 点击事件分发 – ViewGroup"></a>3.2 点击事件分发 – ViewGroup</h2><p>从上面 Activity 事件分发机制可知，ViewGroup 事件分发机制从 dispatchTouchEvent() 开始。</p>
+<h2 id="3-2-Touch-事件分发-–-ViewGroup"><a href="#3-2-Touch-事件分发-–-ViewGroup" class="headerlink" title="3.2 Touch 事件分发 – ViewGroup"></a>3.2 Touch 事件分发 – ViewGroup</h2><p>从上面 Activity 事件分发机制可知，ViewGroup 事件分发机制从 dispatchTouchEvent() 开始。</p>
 <h3 id="3-2-1-dispatchTouchEvent"><a href="#3-2-1-dispatchTouchEvent" class="headerlink" title="3.2.1 dispatchTouchEvent"></a>3.2.1 dispatchTouchEvent</h3><p>ViewGroup 对点击事件的分发流程就复杂很多了，我们细细研究：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent ev<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
@@ -1125,7 +1128,7 @@ frameworks/base/core/java/">
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据流程图 - 梳理流程来整理思路是最好的方法：（<strong> 了解整个事件分发机制的流程即可，细节慢慢体会！ </strong>）</p>
 <center><img src="https://upload-images.jianshu.io/upload_images/3517194-751a10fb6d6dcd5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ViewGroup 事件分发处理流程.png"></center>
 
-<h2 id="3-3-点击事件分发-–-View"><a href="#3-3-点击事件分发-–-View" class="headerlink" title="3.3 点击事件分发 – View"></a>3.3 点击事件分发 – View</h2><p>从 Activity 事件分发机制可知，ViewGroup 事件分发机制从 dispatchTouchEvent() 开始，从 ViewGroup 事件分发机制可知，View 事件分发机制从 dispatchTouchEvent()开始。</p>
+<h2 id="3-3-Touch-事件分发-–-View"><a href="#3-3-Touch-事件分发-–-View" class="headerlink" title="3.3 Touch 事件分发 – View"></a>3.3 Touch 事件分发 – View</h2><p>从 Activity 事件分发机制可知，ViewGroup 事件分发机制从 dispatchTouchEvent() 开始，从 ViewGroup 事件分发机制可知，View 事件分发机制从 dispatchTouchEvent()开始。</p>
 <blockquote>
 <p>其实，只要你触摸了任何控件，就一定会调用该控件的 <code>dispatchTouchEvent</code> 方法！严格一点来说：当你点击了某个控件，首先会去调用该控件所在布局的 <code>dispatchTouchEvent</code> 方法，然后在布局的 <code>dispatchTouchEvent</code> 方法中<code>找到被点击的相应控件</code>，再去调用该控件的 <code>dispatchTouchEvent</code>方法。</p>
 </blockquote>
@@ -1144,7 +1147,7 @@ frameworks/base/core/java/">
             ★ ★ ★ ★ ★ ★ ★ ★ 重点方法 ★ ★ ★ ★ ★ ★ ★ ★ 
             <span class="token comment" spellcheck="true">/*
              * 注意：只有以下3个条件都为真，dispatchTouchEvent() 才返回 true
-             *       1. li != null &amp; mListenerInfo.mOnTouchListener != null
+             *       1. li != null &amp; li.mOnTouchListener != null
              *       2. (mViewFlags &amp; ENABLED_MASK) == ENABLED
              *       3. mListenerInfo.mOnTouchListener.onTouch(this, event)
              */</span>
@@ -1167,7 +1170,7 @@ frameworks/base/core/java/">
     <span class="token punctuation">}</span>
 </code></pre>
 <blockquote>
-<p><strong><font color="0000FF">条件 1：mListenerInfo != null &amp; mListenerInfo.mOnTouchListener != null</font></strong></p>
+<p><strong><font color="0000FF">条件 li != null &amp; li.mOnTouchListener != null</font></strong></p>
 </blockquote>
 <p>mOnTouchListener 这个变量是在哪里赋值的呢？</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**

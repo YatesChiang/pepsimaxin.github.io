@@ -5,11 +5,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="探讨 Service 的使用方法, Hexo">
-    <meta name="description" content="
-作为四大组件之一的 Service，随处可见，我们这边重点看两个小技巧：Forground Service 和 IntentService！
-
-
-开篇核心源码
+    <meta name="description" content="开篇核心源码
 
 
 关键类
@@ -19,7 +15,11 @@
 
 
 Service.java
-frameworks/ba">
+frameworks/base/core/java/android/app/Service.java
+
+
+
+服务是什么？服务（Service）是 Android 中实现程序后">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -485,7 +485,7 @@ frameworks/ba">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        4.3k
+                        4.2k
                     </div>
                     
 
@@ -504,11 +504,7 @@ frameworks/ba">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><strong><font color="#AAAAAA">作为四大组件之一的 Service，随处可见，我们这边重点看两个小技巧：Forground Service 和 IntentService！</font></strong></p>
-</blockquote>
-<hr>
-<h1 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h1><h2 id="核心源码"><a href="#核心源码" class="headerlink" title="核心源码"></a>核心源码</h2><table>
+                <h1 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h1><h2 id="核心源码"><a href="#核心源码" class="headerlink" title="核心源码"></a>核心源码</h2><table>
 <thead>
 <tr>
 <th>关键类</th>
@@ -1019,11 +1015,10 @@ frameworks/ba">
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-作为四大组件之一的 Broadcast，实现方法很简单，主要分为：动态广播和静态广播！我们通过 Code Demo 来看看两者的用法和区别！
+                    <div class="summary block-with-text">动态注册Code新建一个 BroadcastTest 项目，修改 MainActivity ：
+package com.example.marco.broadcasttest;
 
-
-动态注册Code新建一个 BroadcastTest 项目，修改 MainActivity </div>
+import android.content.Broadca</div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-28
@@ -1067,11 +1062,8 @@ frameworks/ba">
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-在应用的开发过程中，Fragement 的使用是很普遍的，比如在 Settings 中，就随处可见它的身影！我们一起来看看它的生命周期！
-
-
-1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销</div>
+                    <div class="summary block-with-text">1. 碎片状态我们之前讨论过 Activity 生命周期的状态（运行状态、暂停状态、停止状态、销毁状态）。那么碎片（Fragment）的状态如何？其实 Fragment 和 Activity 类似，只是有些许细微的差别！
+每个 Fragme</div>
                     <div class="publish-info">
                             <span class="publish-date">
                                 <i class="fa fa-clock-o fa-fw icon-date"></i>2018-07-22
