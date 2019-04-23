@@ -485,14 +485,14 @@ frameworks/base/core/java/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        6k
+                        5.8k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        27 分钟
+                        26 分钟
                     </div>
                     
                 
@@ -671,7 +671,7 @@ frameworks/base/core/java/">
 
     <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">superDispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 调用父类的方法：ViewGroup 的 dispatchTouchEvent()，</span>
-        <span class="token comment" spellcheck="true">// 即：将事件传递到 ViewGroup 去处理，详细的我们在 ViewGroup 的事件分发机制继续讨论。</span>
+        <span class="token comment" spellcheck="true">// 即：将事件传递到 ViewGroup 去处理，我们在 ViewGroup 的事件分发机制继续讨论。</span>
         <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
@@ -688,10 +688,10 @@ frameworks/base/core/java/">
 </code></pre>
 <h3 id="3-1-6-shouldCloseOnTouch"><a href="#3-1-6-shouldCloseOnTouch" class="headerlink" title="3.1.6 shouldCloseOnTouch"></a>3.1.6 shouldCloseOnTouch</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/** @hide */</span>
     <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">shouldCloseOnTouch</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 主要是对于处理边界外点击事件的判断：是否是 DOWN 事件，event 的坐标是否在边界内等</span>
-        <span class="token keyword">final</span> <span class="token keyword">boolean</span> isOutside <span class="token operator">=</span>
-            event<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN <span class="token operator">&amp;&amp;</span> <span class="token function">isOutOfBounds</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> event<span class="token punctuation">)</span>
-            <span class="token operator">||</span> event<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_OUTSIDE<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 主要是对于处理边界外点击事件的判断：是否是 DOWN 事件，事件坐标是否在边界内等</span>
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> isOutside <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN 
+                <span class="token operator">&amp;&amp;</span> <span class="token function">isOutOfBounds</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> event<span class="token punctuation">)</span>
+                <span class="token operator">||</span> event<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_OUTSIDE<span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">// 返回true：说明事件在边界外，即 消费事件</span>
         <span class="token comment" spellcheck="true">// 返回false：未消费（默认）</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mCloseOnTouchOutside <span class="token operator">&amp;&amp;</span> <span class="token function">peekDecorView</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> isOutside<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -732,9 +732,10 @@ frameworks/base/core/java/">
         <span class="token comment" spellcheck="true">// 如果当前是 Down 事件，或者已经有处理 Touch 事件的目标了</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN <span class="token operator">||</span> mFirstTouchTarget <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token comment" spellcheck="true">// disallowIntercept：是否禁用事件拦截的功能，默认为 false</span>
-            <span class="token keyword">final</span> <span class="token keyword">boolean</span> disallowIntercept <span class="token operator">=</span> <span class="token punctuation">(</span>mGroupFlags <span class="token operator">&amp;</span> FLAG_DISALLOW_INTERCEPT<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+            <span class="token keyword">final</span> <span class="token keyword">boolean</span> disallowIntercept <span class="token operator">=</span> 
+                                     <span class="token punctuation">(</span>mGroupFlags <span class="token operator">&amp;</span> FLAG_DISALLOW_INTERCEPT<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>disallowIntercept<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token comment" spellcheck="true">// ViewGroup 每次事件分发时，都需调用 onInterceptTouchEvent() 询问是否拦截事件</span>
+                <span class="token comment" spellcheck="true">// 每次事件分发时，都需调用 onInterceptTouchEvent() 询问是否拦截事件</span>
                 intercepted <span class="token operator">=</span> <span class="token function">onInterceptTouchEvent</span><span class="token punctuation">(</span>ev<span class="token punctuation">)</span><span class="token punctuation">;</span> 
                 <span class="token comment" spellcheck="true">// 重新恢复 Action，以免 Action 在上面的步骤被人为地改变了</span>
                 ev<span class="token punctuation">.</span><span class="token function">setAction</span><span class="token punctuation">(</span>action<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// restore action in case it was changed</span>
@@ -755,7 +756,7 @@ frameworks/base/core/java/">
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> canceled <span class="token operator">=</span> <span class="token function">resetCancelNextUpFlag</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
                    <span class="token operator">||</span> actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_CANCEL<span class="token punctuation">;</span>
 
-        <span class="token comment" spellcheck="true">// 如果需要（不是取消，也没有被拦截）的话，那么在触摸 Down 事件的时候更新触摸目标列表</span>
+        <span class="token comment" spellcheck="true">// 如果需要（不取消，也没有被拦截），那么在触摸 Down 事件的时候更新触摸目标列表</span>
         <span class="token comment" spellcheck="true">// split：代表当前的 ViewGroup 是不是支持分割 MotionEvent 到不同的 View 当中</span>
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> split <span class="token operator">=</span> <span class="token punctuation">(</span>mGroupFlags <span class="token operator">&amp;</span> FLAG_SPLIT_MOTION_EVENTS<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 
@@ -783,8 +784,8 @@ frameworks/base/core/java/">
                 <span class="token keyword">final</span> <span class="token keyword">int</span> actionIndex <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getActionIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// always 0 for down</span>
 
                 <span class="token comment" spellcheck="true">// 获取分配的 ID 的 bit 数量</span>
-                <span class="token keyword">final</span> <span class="token keyword">int</span> idBitsToAssign <span class="token operator">=</span> split <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> ev<span class="token punctuation">.</span><span class="token function">getPointerId</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span>
-                        <span class="token operator">:</span> TouchTarget<span class="token punctuation">.</span>ALL_POINTER_IDS<span class="token punctuation">;</span>
+                <span class="token keyword">final</span> <span class="token keyword">int</span> idBitsToAssign <span class="token operator">=</span> split <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> 
+                       ev<span class="token punctuation">.</span><span class="token function">getPointerId</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span> <span class="token operator">:</span> TouchTarget<span class="token punctuation">.</span>ALL_POINTER_IDS<span class="token punctuation">;</span>
 
                 <span class="token comment" spellcheck="true">// 清理之前触摸这个指针标识，以防它们的目标变得不同步</span>
                 <span class="token function">removePointersFromTouchTargets</span><span class="token punctuation">(</span>idBitsToAssign<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -796,7 +797,8 @@ frameworks/base/core/java/">
                     <span class="token keyword">final</span> <span class="token keyword">float</span> x <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getX</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">final</span> <span class="token keyword">float</span> y <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getY</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-                    <span class="token keyword">final</span> ArrayList<span class="token operator">&lt;</span>View<span class="token operator">></span> preorderedList <span class="token operator">=</span> <span class="token function">buildTouchDispatchChildList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">final</span> ArrayList<span class="token operator">&lt;</span>View<span class="token operator">></span> preorderedList 
+                                              <span class="token operator">=</span> <span class="token function">buildTouchDispatchChildList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">final</span> <span class="token keyword">boolean</span> customOrder <span class="token operator">=</span> preorderedList <span class="token operator">==</span> null
                             <span class="token operator">&amp;&amp;</span> <span class="token function">isChildrenDrawingOrderEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">final</span> View<span class="token punctuation">[</span><span class="token punctuation">]</span> children <span class="token operator">=</span> mChildren<span class="token punctuation">;</span>
@@ -817,13 +819,14 @@ frameworks/base/core/java/">
                         <span class="token punctuation">}</span>
 
                         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">canViewReceivePointerEvents</span><span class="token punctuation">(</span>child<span class="token punctuation">)</span>
-                                <span class="token operator">||</span> <span class="token operator">!</span><span class="token function">isTransformedTouchPointInView</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> child<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token operator">||</span> <span class="token operator">!</span><span class="token function">isTransformedTouchPointInView</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> child<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                             ev<span class="token punctuation">.</span><span class="token function">setTargetAccessibilityFocus</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                             <span class="token keyword">continue</span><span class="token punctuation">;</span>
                         <span class="token punctuation">}</span>
 
-                        <span class="token comment" spellcheck="true">// 获取新的触摸对象，如果当前的子 View 在之前的触摸目标的列表当中</span>
-                        <span class="token comment" spellcheck="true">// 就返回 touchTarget，子 View 不在之前的触摸目标列表那么就返回 null</span>
+                        <span class="token comment" spellcheck="true">// 获取新的触摸对象，如果当前的子 View 在之前的触摸目标的</span>
+                        <span class="token comment" spellcheck="true">// 列表当中就返回 touchTarget，子 View 不在之前的触摸目标</span>
+                        <span class="token comment" spellcheck="true">// 列表那么就返回 null</span>
                         newTouchTarget <span class="token operator">=</span> <span class="token function">getTouchTarget</span><span class="token punctuation">(</span>child<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
                         <span class="token comment" spellcheck="true">// 如果新的触摸目标对象不为空，那么就把这个触摸的 ID 赋予它</span>
@@ -833,17 +836,18 @@ frameworks/base/core/java/">
                             <span class="token keyword">break</span><span class="token punctuation">;</span>
                         <span class="token punctuation">}</span>
 
-                        <span class="token comment" spellcheck="true">// 如果子 View 不在之前的触摸目标列表中，先重置 childView 的标志，</span>
-                        <span class="token comment" spellcheck="true">// 去除掉 CANCEL 的标志</span>
+                        <span class="token comment" spellcheck="true">// 如果子 View 不在之前的触摸目标列表中，</span>
+                        <span class="token comment" spellcheck="true">// 先重置 childView 的标志，去除掉 CANCEL 的标志</span>
                         <span class="token function">resetCancelNextUpFlag</span><span class="token punctuation">(</span>child<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 
                         <span class="token comment" spellcheck="true">/*
-                         * 派发事件到子 View 处理（调用子 View 的 dispatchTouchEvent） ，
+                         * 派发事件到子 View 处理，
                          * 并且把 pointer 的 id 赋予进去
                          * 如果说，子 View 接收并且处理了这个事件，
                          * 那么就更新上一次触摸事件的信息，
-                         * 并且创建一个新的触摸目标对象，并且绑定这个子 View 和 Pointer 的 ID
+                         * 并且创建一个新的触摸目标对象，
+                         * 并且绑定这个子 View 和 Pointer 的 ID
                          */</span>
                         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">dispatchTransformedTouchEvent</span><span class="token punctuation">(</span>ev<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
                             <span class="token comment" spellcheck="true">// Child wants to receive touch within its bounds.</span>
@@ -873,8 +877,9 @@ frameworks/base/core/java/">
                 <span class="token punctuation">}</span>
 
                 <span class="token comment" spellcheck="true">/*
-                 * 如果 newTouchTarget 为 null，就代表，这个事件没有找到子 View 去处理它，
-                 * 如果之前已经有了触摸对象，那么就把这个之前那个触摸目标定为第一个触摸对象，
+                 * 如果 newTouchTarget 为 null，就代表，这个事件没有找到子 View 
+                 * 去处理它，如果之前已经有了触摸对象，那么就把这个之前
+                 * 那个触摸目标定为第一个触摸对象，
                  * 并且把这个触摸（pointer）分配给最近添加的触摸目标。
                  */</span>
                 <span class="token keyword">if</span> <span class="token punctuation">(</span>newTouchTarget <span class="token operator">==</span> null <span class="token operator">&amp;&amp;</span> mFirstTouchTarget <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -899,7 +904,7 @@ frameworks/base/core/java/">
             <span class="token comment" spellcheck="true">// 那么我们就不再分发给 newTouchTarget</span>
             <span class="token keyword">while</span> <span class="token punctuation">(</span>target <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token keyword">final</span> TouchTarget next <span class="token operator">=</span> target<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>alreadyDispatchedToNewTouchTarget <span class="token operator">&amp;&amp;</span> target <span class="token operator">==</span> newTouchTarget<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>alreadyDispatchedToNewTouchTarget<span class="token operator">&amp;&amp;</span>target <span class="token operator">==</span> newTouchTarget<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     handled <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
                     <span class="token comment" spellcheck="true">// 是否让 child 取消处理事件，如果为 true，</span>
@@ -912,7 +917,8 @@ frameworks/base/core/java/">
                         handled <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
                     <span class="token punctuation">}</span>
 
-                    <span class="token comment" spellcheck="true">// cancelChild：派发给了当前 child 一个 ACTION_CANCEL 事件，移除这个 child</span>
+                    <span class="token comment" spellcheck="true">// cancelChild：派发给了当前 child 一个 ACTION_CANCEL 事件，</span>
+                    <span class="token comment" spellcheck="true">// 移除这个 child</span>
                     <span class="token keyword">if</span> <span class="token punctuation">(</span>cancelChild<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                         <span class="token keyword">if</span> <span class="token punctuation">(</span>predecessor <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                             mFirstTouchTarget <span class="token operator">=</span> next<span class="token punctuation">;</span>
@@ -962,13 +968,11 @@ frameworks/base/core/java/">
         <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="3-3-3-dispatchTransformedTouchEvent"><a href="#3-3-3-dispatchTransformedTouchEvent" class="headerlink" title="3.3.3 dispatchTransformedTouchEvent"></a>3.3.3 dispatchTransformedTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTransformedTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">,</span> <span class="token keyword">boolean</span> cancel<span class="token punctuation">,</span>
-            View child<span class="token punctuation">,</span> <span class="token keyword">int</span> desiredPointerIdBits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h3 id="3-3-3-dispatchTransformedTouchEvent"><a href="#3-3-3-dispatchTransformedTouchEvent" class="headerlink" title="3.3.3 dispatchTransformedTouchEvent"></a>3.3.3 dispatchTransformedTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTransformedTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">,</span> <span class="token keyword">boolean</span> cancel<span class="token punctuation">,</span> View child<span class="token punctuation">,</span> <span class="token keyword">int</span> desiredPointerIdBits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> handled<span class="token punctuation">;</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
         <span class="token keyword">if</span> <span class="token punctuation">(</span>newPointerIdBits <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            Log<span class="token punctuation">.</span><span class="token function">i</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Dispatch transformed touch event without pointers in "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
@@ -982,7 +986,8 @@ frameworks/base/core/java/">
                     <span class="token keyword">final</span> <span class="token keyword">float</span> offsetY <span class="token operator">=</span> mScrollY <span class="token operator">-</span> child<span class="token punctuation">.</span>mTop<span class="token punctuation">;</span>
                     event<span class="token punctuation">.</span><span class="token function">offsetLocation</span><span class="token punctuation">(</span>offsetX<span class="token punctuation">,</span> offsetY<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-                    handled <span class="token operator">=</span> child<span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// dispatchTouchEvent()</span>
+                    <span class="token comment" spellcheck="true">// dispatchTouchEvent()</span>
+                    handled <span class="token operator">=</span> child<span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
                     event<span class="token punctuation">.</span><span class="token function">offsetLocation</span><span class="token punctuation">(</span><span class="token operator">-</span>offsetX<span class="token punctuation">,</span> <span class="token operator">-</span>offsetY<span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span>
@@ -1004,7 +1009,8 @@ frameworks/base/core/java/">
                 transformedEvent<span class="token punctuation">.</span><span class="token function">transform</span><span class="token punctuation">(</span>child<span class="token punctuation">.</span><span class="token function">getInverseMatrix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
 
-            handled <span class="token operator">=</span> child<span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>transformedEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// dispatchTouchEvent()</span>
+            <span class="token comment" spellcheck="true">// dispatchTouchEvent()</span>
+            handled <span class="token operator">=</span> child<span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>transformedEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -1121,31 +1127,24 @@ frameworks/base/core/java/">
 
 <h2 id="3-3-点击事件分发-–-View"><a href="#3-3-点击事件分发-–-View" class="headerlink" title="3.3 点击事件分发 – View"></a>3.3 点击事件分发 – View</h2><p>从 Activity 事件分发机制可知，ViewGroup 事件分发机制从 dispatchTouchEvent() 开始，从 ViewGroup 事件分发机制可知，View 事件分发机制从 dispatchTouchEvent()开始。</p>
 <blockquote>
-<p>其实，你只需要清楚这样的说法（原理）：只要你触摸了任何控件，就一定会调用该控件的 dispatchTouchEvent 方法！<strong>严格一点来说：</strong>当你点击了某个控件，首先会去调用该<strong>控件所在布局的 dispatchTouchEvent 方法</strong>，然后在布局的 dispatchTouchEvent 方法中<strong>找到被点击的相应控件</strong>，再去调用该<strong>控件的 dispatchTouchEvent方法</strong>。</p>
+<p>其实，只要你触摸了任何控件，就一定会调用该控件的 <code>dispatchTouchEvent</code> 方法！严格一点来说：当你点击了某个控件，首先会去调用该控件所在布局的 <code>dispatchTouchEvent</code> 方法，然后在布局的 <code>dispatchTouchEvent</code> 方法中<code>找到被点击的相应控件</code>，再去调用该控件的 <code>dispatchTouchEvent</code>方法。</p>
 </blockquote>
-<h3 id="3-3-1-dispatchTouchEvent"><a href="#3-3-1-dispatchTouchEvent" class="headerlink" title="3.3.1 dispatchTouchEvent"></a>3.3.1 dispatchTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
-     * Pass the touch screen motion event down to the target view, or this
-     * view if it is the target.
-     *
-     * @param event The motion event to be dispatched.
-     * @return True if the event was handled by the view, false otherwise.
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// If the event should be handled by accessibility focus first.</span>
+<h3 id="3-3-1-dispatchTouchEvent"><a href="#3-3-1-dispatchTouchEvent" class="headerlink" title="3.3.1 dispatchTouchEvent"></a>3.3.1 dispatchTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">onFilterTouchEventForSecurity</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>mViewFlags <span class="token operator">&amp;</span> ENABLED_MASK<span class="token punctuation">)</span> <span class="token operator">==</span> ENABLED <span class="token operator">&amp;&amp;</span> <span class="token function">handleScrollBarDragging</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>mViewFlags <span class="token operator">&amp;</span> ENABLED_MASK<span class="token punctuation">)</span> <span class="token operator">==</span> ENABLED 
+                                          <span class="token operator">&amp;&amp;</span> <span class="token function">handleScrollBarDragging</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
             <span class="token comment" spellcheck="true">//noinspection SimplifiableIfStatement</span>
             ListenerInfo li <span class="token operator">=</span> mListenerInfo<span class="token punctuation">;</span>
 
-            💥💥💥💥💥💥💥💥💥💥💥💥重点方法💥💥💥💥💥💥💥💥💥💥💥💥
+            ★ ★ ★ ★ ★ ★ ★ ★ 重点方法 ★ ★ ★ ★ ★ ★ ★ ★ 
             <span class="token comment" spellcheck="true">/*
              * 注意：只有以下3个条件都为真，dispatchTouchEvent() 才返回 true
-             *       1. mListenerInfo != null &amp; mListenerInfo.mOnTouchListener != null
+             *       1. li != null &amp; mListenerInfo.mOnTouchListener != null
              *       2. (mViewFlags &amp; ENABLED_MASK) == ENABLED
              *       3. mListenerInfo.mOnTouchListener.onTouch(this, event)
              */</span>
@@ -1154,10 +1153,10 @@ frameworks/base/core/java/">
                     <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnTouchListener<span class="token punctuation">.</span><span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
-            💥💥💥💥💥💥💥💥💥💥分别分析上面几个条件💥💥💥💥💥💥💥💥💥💥
+            ★ ★ ★ ★ ★ ★ ★ ★ 分别分析以上几个条件 ★ ★ ★ ★ ★ ★ ★ ★ 
 
             <span class="token comment" spellcheck="true">// 如果上面没有返回 true，那么执行 onTouchEvent()</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>result <span class="token operator">&amp;&amp;</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>               <span class="token comment" spellcheck="true">// 下面再分析</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>result <span class="token operator">&amp;&amp;</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token comment" spellcheck="true">// 下面再分析</span>
                 result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
@@ -1168,11 +1167,11 @@ frameworks/base/core/java/">
     <span class="token punctuation">}</span>
 </code></pre>
 <blockquote>
-<p><strong><font color="0000FF">条件1：mListenerInfo != null &amp; mListenerInfo.mOnTouchListener != null</font></strong></p>
+<p><strong><font color="0000FF">条件 1：mListenerInfo != null &amp; mListenerInfo.mOnTouchListener != null</font></strong></p>
 </blockquote>
 <p>mOnTouchListener 这个变量是在哪里赋值的呢？</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
-      * 条件1：mListenerInfo.mOnTouchListener != null
+      * 条件 1：mListenerInfo.mOnTouchListener != null
       * 说明：mOnTouchListener 变量在 View.setOnTouchListener() 方法里赋值
       */</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setOnTouchListener</span><span class="token punctuation">(</span>OnTouchListener l<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1181,22 +1180,22 @@ frameworks/base/core/java/">
     <span class="token punctuation">}</span>
 </code></pre>
 <blockquote>
-<p><strong><font color="0000FF">条件2：(mViewFlags &amp; ENABLED_MASK) == ENABLED</font></strong></p>
+<p><strong><font color="0000FF">条件 2：(mViewFlags &amp; ENABLED_MASK) == ENABLED</font></strong></p>
 </blockquote>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
-      * 条件2：(mViewFlags &amp; ENABLED_MASK) == ENABLED
+      * 条件 2：(mViewFlags &amp; ENABLED_MASK) == ENABLED
       * 说明：
       *     a. 该条件是判断当前点击的控件是否 enable
       *     b. 一般 View 默认 enable，故该条件恒定为 true
       */</span>
 </code></pre>
 <blockquote>
-<p><strong><font color="0000FF">条件3：mListenerInfo.mOnTouchListener.onTouch(this, event)</font></strong></p>
+<p><strong><font color="0000FF">条件 3：mListenerInfo.mOnTouchListener.onTouch(this, event)</font></strong></p>
 </blockquote>
 <p>mListenerInfo.mOnTouchListener.onTouch(this, event)，其实也就是去回调控件注册 touch 事件时的 onTouch 方法。</p>
 <p>也就是说如果我们在 onTouch 方法里返回 true，就会让这三个条件全部成立，从而整个方法直接返回 true。如果我们在 onTouch 方法里返回 false，就会再去执行 onTouchEvent(event) 方法。</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
-      * 条件3：mOnTouchListener.onTouch(this, event)
+      * 条件 3：mOnTouchListener.onTouch(this, event)
       * 说明：回调控件注册 Touch 事件时的 onTouch()
       */</span>
     button<span class="token punctuation">.</span><span class="token function">setOnTouchListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OnTouchListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
@@ -1221,7 +1220,7 @@ frameworks/base/core/java/">
         <span class="token comment" spellcheck="true">// 若该控件可点击，则进入 switch 判断中</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>clickable <span class="token operator">||</span> <span class="token punctuation">(</span>viewFlags <span class="token operator">&amp;</span> TOOLTIP<span class="token punctuation">)</span> <span class="token operator">==</span> TOOLTIP<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">switch</span> <span class="token punctuation">(</span>action<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                💥 <span class="token comment" spellcheck="true">// a. 若当前的事件 = 抬起 View</span>
+                <span class="token comment" spellcheck="true">// a. 若当前的事件 = 抬起 View</span>
                 <span class="token keyword">case</span> MotionEvent<span class="token punctuation">.</span>ACTION_UP<span class="token operator">:</span>
                     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
                     <span class="token keyword">boolean</span> prepressed <span class="token operator">=</span> <span class="token punctuation">(</span>mPrivateFlags <span class="token operator">&amp;</span> PFLAG_PREPRESSED<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -1231,11 +1230,7 @@ frameworks/base/core/java/">
                             <span class="token comment" spellcheck="true">// This is a tap, so remove the longpress check</span>
                             <span class="token function">removeLongPressCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-                            <span class="token comment" spellcheck="true">// Only perform take click actions if we were in the pressed state</span>
                             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>focusTaken<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                                <span class="token comment" spellcheck="true">// Use a Runnable and post this rather than calling</span>
-                                <span class="token comment" spellcheck="true">// performClick directly. This lets other visual state</span>
-                                <span class="token comment" spellcheck="true">// of the view update before click actions start.</span>
                                 <span class="token keyword">if</span> <span class="token punctuation">(</span>mPerformClick <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                                     mPerformClick <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PerformClick</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                                 <span class="token punctuation">}</span>
@@ -1248,17 +1243,17 @@ frameworks/base/core/java/">
                     <span class="token punctuation">}</span>
                     <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-                💥 <span class="token comment" spellcheck="true">// b. 若当前的事件 = 按下 View</span>
+                <span class="token comment" spellcheck="true">// b. 若当前的事件 = 按下 View</span>
                 <span class="token keyword">case</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN<span class="token operator">:</span>
                     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
                     <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-                💥 <span class="token comment" spellcheck="true">// c. 若当前的事件 = 结束事件（非人为原因）</span>
+                <span class="token comment" spellcheck="true">// c. 若当前的事件 = 结束事件（非人为原因）</span>
                 <span class="token keyword">case</span> MotionEvent<span class="token punctuation">.</span>ACTION_CANCEL<span class="token operator">:</span>
                     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
                     <span class="token keyword">break</span><span class="token punctuation">;</span>
 
-                💥 <span class="token comment" spellcheck="true">// d. 若当前的事件 = 滑动 View</span>
+                <span class="token comment" spellcheck="true">// d. 若当前的事件 = 滑动 View</span>
                 <span class="token keyword">case</span> MotionEvent<span class="token punctuation">.</span>ACTION_MOVE<span class="token operator">:</span>
                     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
                     <span class="token keyword">break</span><span class="token punctuation">;</span>
@@ -1277,7 +1272,8 @@ frameworks/base/core/java/">
         <span class="token keyword">final</span> ListenerInfo li <span class="token operator">=</span> mListenerInfo<span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">/*
          * 只要我们通过 setOnClickListener() 为控件 View 注册1个点击事件，
-         * 那么就会给 li.mOnClickListener 变量赋值（即不为空），则会往下回调 onClick()，performClick() 返回 true。
+         * 那么就会给 li.mOnClickListener 变量赋值（即不为空），
+         * 则会往下回调 onClick()，performClick() 返回 true。
          */</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>li <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnClickListener <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token function">playSoundEffect</span><span class="token punctuation">(</span>SoundEffectConstants<span class="token punctuation">.</span>CLICK<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1294,9 +1290,7 @@ frameworks/base/core/java/">
         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<hr>
-<h3 id="3-3-4-Demo"><a href="#3-3-4-Demo" class="headerlink" title="3.3.4 Demo"></a>3.3.4 Demo</h3><p>老规矩，看完源码，再来个 Demo 解解乏！</p>
-<p><strong>Layout代码：</strong></p>
+<h3 id="3-3-4-Demo"><a href="#3-3-4-Demo" class="headerlink" title="3.3.4 Demo"></a>3.3.4 Demo</h3><p><strong>Layout代码：</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token operator">&lt;</span><span class="token operator">?</span>xml version<span class="token operator">=</span><span class="token string">"1.0"</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token operator">?</span><span class="token operator">></span>
 <span class="token operator">&lt;</span>LinearLayout xmlns<span class="token operator">:</span>android<span class="token operator">=</span><span class="token string">"http://schemas.android.com/apk/res/android"</span>
     xmlns<span class="token operator">:</span>app<span class="token operator">=</span><span class="token string">"http://schemas.android.com/apk/res-auto"</span>
@@ -1354,14 +1348,15 @@ frameworks/base/core/java/">
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token comment" spellcheck="true">// 2. 通过 OnClickListener（）为控件设置点击事件，为 mOnClickListener 变量赋值（即不为空），从而往下回调 onClick（）</span>
+        <span class="token comment" spellcheck="true">// 2. 通过 OnClickListener（）为控件设置点击事件，</span>
+        <span class="token comment" spellcheck="true">//    为 mOnClickListener 变量赋值（即不为空），从而往下回调 onClick（）</span>
         button_01<span class="token punctuation">.</span><span class="token function">setOnClickListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">View<span class="token punctuation">.</span>OnClickListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token annotation punctuation">@Override</span>
             <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onClick</span><span class="token punctuation">(</span>View v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token string">"TAG"</span><span class="token punctuation">,</span> <span class="token string">"run onClick()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+
         <span class="token comment" spellcheck="true">/**
           * 结论验证2：在回调 onTouch() 里返回 true
           */</span>
@@ -1374,7 +1369,8 @@ frameworks/base/core/java/">
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token comment" spellcheck="true">// 2. 通过 OnClickListener（）为控件设置点击事件，为 mOnClickListener 变量赋值（即不为空），从而往下回调 onClick（）</span>
+        <span class="token comment" spellcheck="true">// 2. 通过 OnClickListener（）为控件设置点击事件，</span>
+        <span class="token comment" spellcheck="true">//    为 mOnClickListener 变量赋值（即不为空），从而往下回调 onClick（）</span>
         button_01<span class="token punctuation">.</span><span class="token function">setOnClickListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">View<span class="token punctuation">.</span>OnClickListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token annotation punctuation">@Override</span>
             <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onClick</span><span class="token punctuation">(</span>View v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1400,22 +1396,22 @@ frameworks/base/core/java/">
 <span class="token number">09</span><span class="token operator">-</span><span class="token number">26</span> <span class="token number">18</span><span class="token operator">:</span><span class="token number">16</span><span class="token operator">:</span><span class="token number">29.856</span> <span class="token number">23847</span> <span class="token number">23847</span> D TAG <span class="token operator">:</span> run <span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> action<span class="token operator">:</span><span class="token number">2</span>    <span class="token comment" spellcheck="true">// ACTION_MOVE</span>
 <span class="token number">09</span><span class="token operator">-</span><span class="token number">26</span> <span class="token number">18</span><span class="token operator">:</span><span class="token number">16</span><span class="token operator">:</span><span class="token number">29.858</span> <span class="token number">23847</span> <span class="token number">23847</span> D TAG <span class="token operator">:</span> run <span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> action<span class="token operator">:</span><span class="token number">1</span>    <span class="token comment" spellcheck="true">// ACTION_UP</span>
 </code></pre>
-<p><strong>结果说明：</strong></p>
-<p>通过上面的 Demo，感觉怎么样？是不是很清楚了？仔细琢磨一下，手动写个 Demo，你会发现原来原理就是这么简单！</p>
-<hr>
 <h3 id="3-3-5-总结"><a href="#3-3-5-总结" class="headerlink" title="3.3.5 总结"></a>3.3.5 总结</h3><p>OK，又到了流程图的展现时候了，如下所示：</p>
-<p><center><img src="https://upload-images.jianshu.io/upload_images/3517194-812be931bd432a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View 事件分发机制流程图.png"></center><br><br></p>
-<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;1、Android 事件分发机制主要由 “事件分发” —&gt; “事件拦截” —&gt; “事件响应” 这三步来进行逻辑控制的。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;2、ViewGroup 默认不拦截任何事件。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;3、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;4、Android 中的事件 onClick、onLongClick、onScroll 等，都是由多个 Touch 事件（一个 ACTION_DOWN，多个 ACTION_MOVE，一个 ACTION_UP）组成。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;5、子 View 可以通过使用 getParent().requestDisallowInterceptTouchEvent(true) ，阻止 ViewGroup 对其 MOVE 或 UP 事件进行拦截。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;6、MotionEvent 对象的四种状态：MotionEvent.ACTION_DOWN：手指按下屏幕的瞬间</p>
+<center><img src="https://upload-images.jianshu.io/upload_images/3517194-812be931bd432a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View 事件分发机制流程图.png"></center>
+
+<p><br></p>
+<hr>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由 “事件分发” —&gt; “事件拦截” —&gt; “事件响应” 这三步来进行逻辑控制的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;2、ViewGroup 默认不拦截任何事件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;3、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;4、Android 中的事件 onClick、onLongClick、onScroll 等，都是由多个 Touch 事件（一个 ACTION_DOWN，多个 ACTION_MOVE，一个 ACTION_UP）组成。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;5、子 View 可以通过使用 getParent().requestDisallowInterceptTouchEvent(true) ，阻止 ViewGroup 对其 MOVE 或 UP 事件进行拦截。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;6、MotionEvent 对象的四种状态：MotionEvent.ACTION_DOWN：手指按下屏幕的瞬间</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_MOVE：手指在屏幕上移动</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_UP：手指离开屏幕瞬间</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_CANCEL：取消手势</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✨&nbsp;7、点击某个控件，首先会去调用该控件所在布局的 dispatchTouchEvent 方法，然后在布局的 dispatchTouchEvent 方法中找到被点击的相应控件，再去调用该控件的 dispatchTouchEvent方法。</p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/01/01/00.%20Thinking%20in%20Android%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;7、点击某个控件，首先会去调用该控件所在布局的 dispatchTouchEvent 方法，然后在布局的 dispatchTouchEvent 方法中找到被点击的相应控件，再去调用该控件的 dispatchTouchEvent方法。</p>
+<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/">博客索引（Android 9.0）</a></p>
 
             </div>
             <hr>
