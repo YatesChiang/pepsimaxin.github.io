@@ -1013,10 +1013,9 @@ frameworks/base/">
 <h2 id="4-3-小结"><a href="#4-3-小结" class="headerlink" title="4.3 小结"></a>4.3 小结</h2><center><img src="https://upload-images.jianshu.io/upload_images/3517194-751a10fb6d6dcd5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ViewGroup 事件分发处理流程.png"></center>
 
 <p><br></p>
-<h1 id="5-Touch-事件分发-–-View"><a href="#5-Touch-事件分发-–-View" class="headerlink" title="5. Touch 事件分发 – View"></a>5. Touch 事件分发 – View</h1><p>从 Activity 事件分发机制可知，ViewGroup 事件分发机制从 dispatchTouchEvent() 开始，从 ViewGroup 事件分发机制可知，View 事件分发机制从 dispatchTouchEvent()开始。</p>
-<blockquote>
-<p>其实，只要你触摸了任何控件，就一定会调用该控件的 <code>dispatchTouchEvent</code> 方法！严格一点来说：当你点击了某个控件，首先会去调用该控件所在<code>布局</code>的 <code>dispatchTouchEvent</code> 方法，然后在布局的 <code>dispatchTouchEvent</code> 方法中<code>找到被点击的相应控件</code>，再去调用该控件的 <code>dispatchTouchEvent</code>方法。</p>
-</blockquote>
+<h1 id="5-Touch-事件分发-–-View"><a href="#5-Touch-事件分发-–-View" class="headerlink" title="5. Touch 事件分发 – View"></a>5. Touch 事件分发 – View</h1><p><strong><font color="#ff0000">这边我们先做个说明：</font></strong></p>
+<p>其实，只要你触摸了任何控件，就一定会调用该控件的 <code>dispatchTouchEvent</code> 方法！</p>
+<p><strong><font color="#ff00ff">严格一点来说：</font></strong>当你点击了某个控件，首先会去调用该控件所在<code>布局</code>的 <code>dispatchTouchEvent</code> 方法，然后在<code>布局</code>的 <code>dispatchTouchEvent</code> 方法中<code>找到被点击的相应控件</code>，再去调用该<code>控件</code>的 <code>dispatchTouchEvent</code>方法。</p>
 <h3 id="3-3-1-dispatchTouchEvent"><a href="#3-3-1-dispatchTouchEvent" class="headerlink" title="3.3.1 dispatchTouchEvent"></a>3.3.1 dispatchTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -1055,7 +1054,7 @@ frameworks/base/">
     <span class="token punctuation">}</span>
 </code></pre>
 <blockquote>
-<p><strong><font color="0000FF">条件 li != null &amp; li.mOnTouchListener != null</font></strong></p>
+<p><strong><font color="0000FF">条件 1：li != null &amp; li.mOnTouchListener != null</font></strong></p>
 </blockquote>
 <p>mOnTouchListener 这个变量是在哪里赋值的呢？</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
@@ -1093,7 +1092,7 @@ frameworks/base/">
         <span class="token punctuation">}</span>  
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<h3 id="3-3-2-onTouchEvent"><a href="#3-3-2-onTouchEvent" class="headerlink" title="3.3.2 onTouchEvent"></a>3.3.2 onTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h2 id="3-3-2-onTouchEvent"><a href="#3-3-2-onTouchEvent" class="headerlink" title="3.3.2 onTouchEvent"></a>3.3.2 onTouchEvent</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> <span class="token keyword">float</span> x <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getX</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> <span class="token keyword">float</span> y <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getY</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> <span class="token keyword">int</span> viewFlags <span class="token operator">=</span> mViewFlags<span class="token punctuation">;</span>
@@ -1155,7 +1154,7 @@ frameworks/base/">
         <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="3-3-3-performClick"><a href="#3-3-3-performClick" class="headerlink" title="3.3.3 performClick"></a>3.3.3 performClick</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">performClick</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h2 id="3-3-3-performClick"><a href="#3-3-3-performClick" class="headerlink" title="3.3.3 performClick"></a>3.3.3 performClick</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">performClick</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> result<span class="token punctuation">;</span>
         <span class="token keyword">final</span> ListenerInfo li <span class="token operator">=</span> mListenerInfo<span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">/*
@@ -1178,7 +1177,7 @@ frameworks/base/">
         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="3-3-4-Demo"><a href="#3-3-4-Demo" class="headerlink" title="3.3.4 Demo"></a>3.3.4 Demo</h3><p><strong>Layout代码：</strong></p>
+<h2 id="3-3-4-Demo"><a href="#3-3-4-Demo" class="headerlink" title="3.3.4 Demo"></a>3.3.4 Demo</h2><p><strong>Layout代码：</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token operator">&lt;</span><span class="token operator">?</span>xml version<span class="token operator">=</span><span class="token string">"1.0"</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token operator">?</span><span class="token operator">></span>
 <span class="token operator">&lt;</span>LinearLayout xmlns<span class="token operator">:</span>android<span class="token operator">=</span><span class="token string">"http://schemas.android.com/apk/res/android"</span>
     xmlns<span class="token operator">:</span>app<span class="token operator">=</span><span class="token string">"http://schemas.android.com/apk/res-auto"</span>
@@ -1284,11 +1283,9 @@ frameworks/base/">
 <span class="token number">09</span><span class="token operator">-</span><span class="token number">26</span> <span class="token number">18</span><span class="token operator">:</span><span class="token number">16</span><span class="token operator">:</span><span class="token number">29.856</span> <span class="token number">23847</span> <span class="token number">23847</span> D TAG <span class="token operator">:</span> run <span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> action<span class="token operator">:</span><span class="token number">2</span>    <span class="token comment" spellcheck="true">// ACTION_MOVE</span>
 <span class="token number">09</span><span class="token operator">-</span><span class="token number">26</span> <span class="token number">18</span><span class="token operator">:</span><span class="token number">16</span><span class="token operator">:</span><span class="token number">29.858</span> <span class="token number">23847</span> <span class="token number">23847</span> D TAG <span class="token operator">:</span> run <span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> action<span class="token operator">:</span><span class="token number">1</span>    <span class="token comment" spellcheck="true">// ACTION_UP</span>
 </code></pre>
-<h3 id="3-3-5-总结"><a href="#3-3-5-总结" class="headerlink" title="3.3.5 总结"></a>3.3.5 总结</h3><p>OK，又到了流程图的展现时候了，如下所示：</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-812be931bd432a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View 事件分发机制流程图.png"></center>
+<h2 id="3-3-5-小结"><a href="#3-3-5-小结" class="headerlink" title="3.3.5 小结"></a>3.3.5 小结</h2><center><img src="https://upload-images.jianshu.io/upload_images/3517194-812be931bd432a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View 事件分发机制流程图.png"></center>
 
 <p><br></p>
-<hr>
 <h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由 “事件分发” —&gt; “事件拦截” —&gt; “事件响应” 这三步来进行逻辑控制的。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;2、ViewGroup 默认不拦截任何事件。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;3、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
