@@ -394,7 +394,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        267
+                        369
                     </div>
                     
 
@@ -442,6 +442,12 @@
 <p>另外需要注意的是，onTouch 能够得到执行需要两个前提条件：</p>
 <p>1、<code>mOnTouchListener</code> 的值不能为空！这个我们知道，只要我们给控件注册了 <code>Touch 事件</code>，<code>mOnTouchListener</code> 就一定被赋值（不为空）！</p>
 <p>2、当前点击的控件必须是 <code>enable</code> 的。因此如果你有一个控件是<code>非enable</code>的（比如：ImageView），那么给它注册 <code>onTouch</code> 事件将永远得不到执行。对于这一类控件，如果我们想要监听它的 <code>touch事件</code>，就必须通过在该控件中重写 <code>onTouchEvent</code> 方法来实现。</p>
+<p><br></p>
+<h3 id="2-事件分发、拦截与消费"><a href="#2-事件分发、拦截与消费" class="headerlink" title="2. 事件分发、拦截与消费"></a><center>2. 事件分发、拦截与消费</center></h3><p><br></p>
+<center><img src="https://upload-images.jianshu.io/upload_images/3517194-971a1d903f18bc14.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="事件分发、拦截与消费.jpg"></center>
+
+<p><strong>其中，Activity 与 View 没有事件拦截，主要原因是：</strong></p>
+<p>Activity 作为原始的事件分发者，如果 Activity 拦截了事件会导致整个屏幕无法响应事件，不是我们想要的效果；View 作为事件传递的最末端，要么消费事件，要么不处理事件进行回传，根本没必要拦截。</p>
 <p><br></p>
 
             </div>
