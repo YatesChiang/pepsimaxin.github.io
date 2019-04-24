@@ -789,11 +789,9 @@ Device 切">
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？
-我们看下源码：
-// frameworks/base/core/java/android/view/View.java
-
-    public boolean </div>
+                    <div class="summary block-with-text">1. 为什么会有事件分发机制？
+安卓上面的 View 是树形结构的，View 可能会重叠在一起，当点击的地方有多个 View 可以响应的时候，这个点击事件应该给谁呢？为了解决这个问题，就有了事件分发机制。
+PhoneWindow：是抽象类 </div>
                     <div class="publish-info">
                         <span class="publish-date">
                             <i class="fa fa-clock-o fa-fw icon-date"></i>2019-04-23

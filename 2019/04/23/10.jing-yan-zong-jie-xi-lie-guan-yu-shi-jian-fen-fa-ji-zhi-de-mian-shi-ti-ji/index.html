@@ -5,11 +5,9 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="“事件分发机制” - 面试题集（持续更新...）, Hexo">
-    <meta name="description" content="1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？
-我们看下源码：
-// frameworks/base/core/java/android/view/View.java
-
-    public boolean ">
+    <meta name="description" content="1. 为什么会有事件分发机制？
+安卓上面的 View 是树形结构的，View 可能会重叠在一起，当点击的地方有多个 View 可以响应的时候，这个点击事件应该给谁呢？为了解决这个问题，就有了事件分发机制。
+PhoneWindow：是抽象类 ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -394,14 +392,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        426
+                        732
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        1 分钟
+                        2 分钟
                     </div>
                     
                 
@@ -413,7 +411,11 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="1-onTouch-和-onTouchEvent-有什么区别，又该如何使用？"><a href="#1-onTouch-和-onTouchEvent-有什么区别，又该如何使用？" class="headerlink" title="1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？"></a><center>1. onTouch 和 onTouchEvent 有什么区别，又该如何使用？</center></h3><p><br></p>
+                <h3 id="1-为什么会有事件分发机制？"><a href="#1-为什么会有事件分发机制？" class="headerlink" title="1. 为什么会有事件分发机制？"></a><center>1. 为什么会有事件分发机制？</center></h3><p><br></p>
+<p>安卓上面的 View 是树形结构的，View 可能会重叠在一起，当点击的地方有多个 View 可以响应的时候，这个点击事件应该给谁呢？为了解决这个问题，就有了事件分发机制。</p>
+<p><strong><font color="#0000ff">PhoneWindow：</font></strong>是抽象类 Window 的实现类，抽象类 Window 是所有视图最顶层的容器，包括 View 视图的外观和行为都归Window管。</p>
+<p><strong><font color="#0000ff">DecorView：</font></strong>PhoneWindow 的内部类，通过 DecorView 传递信息给下面的 View，下面的 View 也通过 DecorView 返回消息给 PhoneWindow。</p>
+<h3 id="2-onTouch-和-onTouchEvent-有什么区别，又该如何使用？"><a href="#2-onTouch-和-onTouchEvent-有什么区别，又该如何使用？" class="headerlink" title="2. onTouch 和 onTouchEvent 有什么区别，又该如何使用？"></a><center>2. onTouch 和 onTouchEvent 有什么区别，又该如何使用？</center></h3><p><br></p>
 <p>我们看下源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/android/view/View.java</span>
 
@@ -443,13 +445,16 @@
 <p>1、<code>mOnTouchListener</code> 的值不能为空！这个我们知道，只要我们给控件注册了 <code>Touch 事件</code>，<code>mOnTouchListener</code> 就一定被赋值（不为空）！</p>
 <p>2、当前点击的控件必须是 <code>enable</code> 的。因此如果你有一个控件是<code>非enable</code>的（比如：ImageView），那么给它注册 <code>onTouch</code> 事件将永远得不到执行。对于这一类控件，如果我们想要监听它的 <code>touch事件</code>，就必须通过在该控件中重写 <code>onTouchEvent</code> 方法来实现。</p>
 <p><br></p>
-<h3 id="2-事件分发、拦截与消费"><a href="#2-事件分发、拦截与消费" class="headerlink" title="2. 事件分发、拦截与消费"></a><center>2. 事件分发、拦截与消费</center></h3><p><br></p>
+<h3 id="3-事件分发、拦截与消费（三个重要的事件分发的方法）"><a href="#3-事件分发、拦截与消费（三个重要的事件分发的方法）" class="headerlink" title="3. 事件分发、拦截与消费（三个重要的事件分发的方法）"></a><center>3. 事件分发、拦截与消费（三个重要的事件分发的方法）</center></h3><p><br></p>
+<p>✒&nbsp;<strong><font color="#0000ff">dispatchTouchEvent：</font></strong>处在链首，用于分发事件，该方法决定是由当前 View 自己的 onTouchEvent 来处理，还是分发给子 View 递归调用其自身的 dispatchTouchEvent 来处理。</p>
+<p>✒&nbsp;<strong><font color="#0000ff">onInterceptTouchEvent：</font></strong>是用来拦截事件的，当父控件下发事件给子控件进行拦截处理的时候，如果子控件需要对事件进行处理，就要在 onInterceptTouchEvent 方法中进行拦截，然后到子控件的 onTouchEvent 方法中进行事件的监听以及逻辑的判断。</p>
+<p>✒&nbsp;<strong><font color="#0000ff">onTouchEvent：</font></strong>用于处理传递到 View 的手势事件。</p>
 <center><img src="https://upload-images.jianshu.io/upload_images/3517194-971a1d903f18bc14.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="事件分发、拦截与消费.jpg"></center>
 
 <p><strong>其中，Activity 与 View 没有事件拦截，主要原因是：</strong></p>
 <p>Activity 作为原始的事件分发者，如果 Activity 拦截了事件会导致整个屏幕无法响应事件，不是我们想要的效果；View 作为事件传递的最末端，要么消费事件，要么不处理事件进行回传，根本没必要拦截。</p>
 <p><br></p>
-<h3 id="3-事件分发流程"><a href="#3-事件分发流程" class="headerlink" title="3. 事件分发流程"></a><center>3. 事件分发流程</center></h3><p><br></p>
+<h3 id="4-事件分发流程"><a href="#4-事件分发流程" class="headerlink" title="4. 事件分发流程"></a><center>4. 事件分发流程</center></h3><p><br></p>
 <p>Android View 是树形结构，事件分发流程采用的是责任链模式。</p>
 <p>事件传递：</p>
 <blockquote>
