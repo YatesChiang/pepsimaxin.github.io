@@ -485,14 +485,14 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        4.9k
+                        5k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        22 分钟
+                        23 分钟
                     </div>
                     
                 
@@ -1286,16 +1286,22 @@ frameworks/base/">
 <h2 id="3-3-5-小结"><a href="#3-3-5-小结" class="headerlink" title="3.3.5 小结"></a>3.3.5 小结</h2><center><img src="https://upload-images.jianshu.io/upload_images/3517194-812be931bd432a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="View 事件分发机制流程图.png"></center>
 
 <p><br></p>
-<h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由 “事件分发” —&gt; “事件拦截” —&gt; “事件响应” 这三步来进行逻辑控制的。</p>
+<h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由【“事件分发” —&gt; “事件拦截” —&gt; “事件响应”】这三步来进行逻辑控制的。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;2、ViewGroup 默认不拦截任何事件。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;3、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;4、Android 中的事件 onClick、onLongClick、onScroll 等，都是由多个 Touch 事件（一个 ACTION_DOWN，多个 ACTION_MOVE，一个 ACTION_UP）组成。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;5、子 View 可以通过使用 getParent().requestDisallowInterceptTouchEvent(true) ，阻止 ViewGroup 对其 MOVE 或 UP 事件进行拦截。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;6、MotionEvent 对象的四种状态：MotionEvent.ACTION_DOWN：手指按下屏幕的瞬间</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;3、onInterceptTouchEvent 返回 true 表示事件拦截，onTouchEvent 返回 true 表示事件消费。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;4、点击事件的分发过程如下：dispatchTouchEvent —&gt; onTouchListener 的 OnTouch 方法 —&gt; onTouchEvent —&gt; onClickListener 的 onClick 方法。从而也可以看出 onTouch 是优先于 onClick 执行，事件传递的顺序是先经过 onTouch，再传递到 onClick。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;5、Android 中的事件 onClick、onLongClick、onScroll 等，都是由多个 Touch 事件（一个 ACTION_DOWN，多个 ACTION_MOVE，一个 ACTION_UP）组成。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;6、子 View 可以通过使用 getParent().requestDisallowInterceptTouchEvent(true) ，阻止 ViewGroup 对其 MOVE 或 UP 事件进行拦截。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;7、MotionEvent 对象的四种状态：MotionEvent.ACTION_DOWN：手指按下屏幕的瞬间</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_MOVE：手指在屏幕上移动</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_UP：手指离开屏幕瞬间</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MotionEvent.ACTION_CANCEL：取消手势</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;7、点击某个控件，首先会去调用该控件所在布局的 dispatchTouchEvent 方法，然后在布局的 dispatchTouchEvent 方法中找到被点击的相应控件，再去调用该控件的 dispatchTouchEvent方法。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;8、点击某个控件，首先会去调用该控件所在布局的 dispatchTouchEvent 方法，然后在布局的 dispatchTouchEvent 方法中找到被点击的相应控件，再去调用该控件的 dispatchTouchEvent方法。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;9、如果 View 没有消费 ACTION_DOWN 事件，则之后的 ACTION_MOVE 等事件都不会再接收。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;10、事件在从 Activity.dispatchTouchEvent 往下分发的过程中：</p>
+<blockquote>
+<p>如果中间的 ViewGroup 都不拦截，进入最底层的 View 后，由 View.onTouchEvent 处理，如果 View 也没有消费事件，最后会返回到 Activity.onTouchEvent。<br>如果中间任何一层 ViewGroup 拦截事件，则事件不再往下分发，交由拦截的 ViewGroup 的 onTouchEvent 来处理。</p>
+</blockquote>
 
             </div>
             <hr>

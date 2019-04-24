@@ -394,7 +394,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        369
+                        426
                     </div>
                     
 
@@ -449,6 +449,16 @@
 <p><strong>其中，Activity 与 View 没有事件拦截，主要原因是：</strong></p>
 <p>Activity 作为原始的事件分发者，如果 Activity 拦截了事件会导致整个屏幕无法响应事件，不是我们想要的效果；View 作为事件传递的最末端，要么消费事件，要么不处理事件进行回传，根本没必要拦截。</p>
 <p><br></p>
+<h3 id="3-事件分发流程"><a href="#3-事件分发流程" class="headerlink" title="3. 事件分发流程"></a><center>3. 事件分发流程</center></h3><p><br></p>
+<p>Android View 是树形结构，事件分发流程采用的是责任链模式。</p>
+<p>事件传递：</p>
+<blockquote>
+<p>Activity －&gt; PhoneWindow －&gt; DecorView －&gt; ViewGroup －&gt; … －&gt; View</p>
+</blockquote>
+<p>事件回传：</p>
+<blockquote>
+<p>Activity &lt;－ PhoneWindow &lt;－ DecorView &lt;－ ViewGroup &lt;－ … &lt;－ View</p>
+</blockquote>
 
             </div>
             <hr>
