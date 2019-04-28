@@ -166,9 +166,9 @@
       <category term="性能优化" scheme="https://superandroid.pro/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
-      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-    
       <category term="Broadcast" scheme="https://superandroid.pro/tags/Broadcast/"/>
+    
+      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
       <category term="ANR" scheme="https://superandroid.pro/tags/ANR/"/>
     
@@ -568,11 +568,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（1）- 启动流程</title>
+    <title>Framework 核心服务 之 PMS 钻研 (1) - 启动流程</title>
     <link href="https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/"/>
     <id>https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/</id>
     <published>2019-01-01T01:08:00.000Z</published>
-    <updated>2019-04-28T03:04:58.039Z</updated>
+    <updated>2019-04-28T03:09:03.759Z</updated>
     
     <summary type="html">
     
