@@ -144,13 +144,13 @@
       
         <tags>
             
-            <tag> Broadcast </tag>
-            
             <tag> 性能优化 </tag>
             
             <tag> ANR </tag>
             
             <tag> 无响应 </tag>
+            
+            <tag> Broadcast </tag>
             
         </tags>
       
