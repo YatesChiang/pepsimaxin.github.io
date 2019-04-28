@@ -365,11 +365,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（8） - APK 安装（下）</title>
+    <title>PackageManagerService 钻研（8）- APK 安装（下）</title>
     <link href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-8-zhi-apk-an-zhuang-xia/"/>
     <id>https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-8-zhi-apk-an-zhuang-xia/</id>
     <published>2019-02-06T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:45.722Z</updated>
+    <updated>2019-04-28T03:14:45.491Z</updated>
     
     <summary type="html">
     
@@ -394,11 +394,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（7） - APK 安装（中）</title>
+    <title>PackageManagerService 钻研（7）- APK 安装（中）</title>
     <link href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-7-zhi-apk-an-zhuang-zhong/"/>
     <id>https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-7-zhi-apk-an-zhuang-zhong/</id>
     <published>2019-02-01T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:23.211Z</updated>
+    <updated>2019-04-28T03:14:48.955Z</updated>
     
     <summary type="html">
     
@@ -423,11 +423,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（6） - APK 安装（上）</title>
+    <title>PackageManagerService 钻研（6）- APK 安装（上）</title>
     <link href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-6-zhi-apk-an-zhuang-shang/"/>
     <id>https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-6-zhi-apk-an-zhuang-shang/</id>
     <published>2019-01-26T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:19.138Z</updated>
+    <updated>2019-04-28T03:14:51.811Z</updated>
     
     <summary type="html">
     
@@ -452,11 +452,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（5） - PackageParser</title>
+    <title>PackageManagerService 钻研（5）- PackageParser</title>
     <link href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-5-zhi-packageparser/"/>
     <id>https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-5-zhi-packageparser/</id>
     <published>2019-01-22T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:29.172Z</updated>
+    <updated>2019-04-28T03:14:54.862Z</updated>
     
     <summary type="html">
     
@@ -481,11 +481,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（4） - PackageInstaller</title>
+    <title>PackageManagerService 钻研（4）- PackageInstaller</title>
     <link href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-4-zhi-packageinstaller/"/>
     <id>https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-4-zhi-packageinstaller/</id>
     <published>2019-01-16T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:34.547Z</updated>
+    <updated>2019-04-28T03:14:57.668Z</updated>
     
     <summary type="html">
     
@@ -510,11 +510,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（3） - PackageManager</title>
+    <title>PackageManagerService 钻研（3）- PackageManager</title>
     <link href="https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-3-zhi-packagemanager/"/>
     <id>https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-3-zhi-packagemanager/</id>
     <published>2019-01-12T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:39.421Z</updated>
+    <updated>2019-04-28T03:15:00.651Z</updated>
     
     <summary type="html">
     
@@ -539,11 +539,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（2） - 构造函数</title>
+    <title>PackageManagerService 钻研（2）- 构造函数</title>
     <link href="https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/"/>
     <id>https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-2-zhi-gou-zao-han-shu/</id>
     <published>2019-01-05T01:08:00.000Z</published>
-    <updated>2019-04-28T03:12:43.123Z</updated>
+    <updated>2019-04-28T03:15:05.137Z</updated>
     
     <summary type="html">
     
@@ -568,11 +568,11 @@
   </entry>
   
   <entry>
-    <title>PackageManagerService 钻研（1） - 启动流程</title>
+    <title>PackageManagerService 钻研（1）- 启动流程</title>
     <link href="https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/"/>
     <id>https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-shen-ru-yan-jiu-pms-xi-lie-1-zhi-qi-dong-liu-cheng/</id>
     <published>2019-01-01T01:08:00.000Z</published>
-    <updated>2019-04-28T03:13:11.137Z</updated>
+    <updated>2019-04-28T03:15:08.307Z</updated>
     
     <summary type="html">
     
