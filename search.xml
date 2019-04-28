@@ -279,9 +279,9 @@
     
     
     <entry>
-      <title>关于 GMS 认证的相关工作</title>
-      <link href="/2019/04/01/09.gu-ge-ren-zheng-xi-lie-guan-yu-gms-ren-zheng-de-xiang-guan-gong-zuo/"/>
-      <url>/2019/04/01/09.gu-ge-ren-zheng-xi-lie-guan-yu-gms-ren-zheng-de-xiang-guan-gong-zuo/</url>
+      <title>关于 “GMS 认证”</title>
+      <link href="/2019/04/01/09.gu-ge-ren-zheng-xi-lie-guan-yu-gms-ren-zheng/"/>
+      <url>/2019/04/01/09.gu-ge-ren-zheng-xi-lie-guan-yu-gms-ren-zheng/</url>
       
         <content type="html"><![CDATA[<h1 id="1-CTS"><a href="#1-CTS" class="headerlink" title="1. CTS"></a>1. CTS</h1><p>关于何为 CTS，不再展开来描述，你可以直接参阅官方文档：<a href="https://source.android.com/compatibility/cts/setup" target="_blank" rel="noopener">CTS官方资料</a>。</p><h2 id="1-1-Compatibility-Test-Suite"><a href="#1-1-Compatibility-Test-Suite" class="headerlink" title="1.1 Compatibility Test Suite"></a>1.1 Compatibility Test Suite</h2><h2 id="1-2-CTS-Verifier"><a href="#1-2-CTS-Verifier" class="headerlink" title="1.2 CTS Verifier"></a>1.2 CTS Verifier</h2><h1 id="2-GTS"><a href="#2-GTS" class="headerlink" title="2. GTS"></a>2. GTS</h1>]]></content>
       
