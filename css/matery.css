@@ -162,6 +162,14 @@ mark {
     background-image: linear-gradient(to right, #00CD66 0%, #228B22 100%);
 }
 
+.bg-color-header-marco {
+    background-image: linear-gradient(to right, #4A708B 0%, #000000 100%);
+}
+
+.bg-color-foot-marco {
+	background-image: linear-gradient(to right, #4A708B 0%, #000000 100%);
+}
+
 .text-color {
     color: #0f9d58 !important;
 }
