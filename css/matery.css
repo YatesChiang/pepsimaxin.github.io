@@ -159,7 +159,7 @@ mark {
 
 
 .bg-color {
-    background-image: linear-gradient(to right, #3CB371 0%, #228B22 100%);
+    background-image: linear-gradient(to right, #436EEE 0%, #228B22 100%);
 }
 
 .text-color {
@@ -704,9 +704,9 @@ article .article-tags .chip {
 }
 
 .paging .page-info {
-    font-size: 1.4rem;
+    font-size: 1.0rem;
     color: #888;
-    padding-top: 1rem;
+    padding-top: 0.6rem;
 }
 
 .paging i {
