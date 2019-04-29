@@ -28,7 +28,7 @@
 }
 
 body {
-    background-color: #262626;
+    background-color: #ffffff;
     margin: 0;
     color: #34495e;
 }
@@ -159,7 +159,7 @@ mark {
 
 
 .bg-color {
-    background-image: linear-gradient(to right, #000000 0%, #000000 100%);
+    background-image: linear-gradient(to right, #3CB371 0%, #228B22 100%);
 }
 
 .text-color {
