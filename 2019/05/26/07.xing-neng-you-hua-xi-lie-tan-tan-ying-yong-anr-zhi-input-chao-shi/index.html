@@ -1,0 +1,986 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="谈谈 ANR 之 Input 超时, Thinking in Android">
+    <meta name="description" content="1. 核心源码
+
+
+关键类
+路径（/frameworks/base/）
+
+
+
+
+ActiveServices.java
+services/core/java/com/android/server/am/ActiveServices.java">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>谈谈 ANR 之 Input 超时 | Thinking in Android</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color-header-marco nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <!--<div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Thinking in Android</span>
+                </a>
+            </div>-->
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>目录</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/四大组件/" class="waves-effect waves-light">
+            
+            <i class="fa fa-cube"></i>
+            
+            <span>组件</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/系统启动/" class="waves-effect waves-light">
+            
+            <i class="fa fa-spinner"></i>
+            
+            <span>开机</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/框架服务/" class="waves-effect waves-light">
+            
+            <i class="fa fa-superpowers"></i>
+            
+            <span>框架</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/核心机制/" class="waves-effect waves-light">
+            
+            <i class="fa fa-link"></i>
+            
+            <span>机制</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/性能优化/" class="waves-effect waves-light">
+            
+            <i class="fa fa-yelp"></i>
+            
+            <span>优化</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/设计模式/" class="waves-effect waves-light">
+            
+            <i class="fa fa-envira"></i>
+            
+            <span>模式</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/算法专栏/" class="waves-effect waves-light">
+            
+            <i class="fa fa-modx"></i>
+            
+            <span>算法</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/技术储备/" class="waves-effect waves-light">
+            
+            <i class="fa fa-linode"></i>
+            
+            <span>拓展</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>作者</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/技术细节/" class="waves-effect waves-light">
+            
+            <i class="fa fa-file-text"></i>
+            
+            <span>FAQ</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="检索博文"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Thinking in Android</div>
+        <div class="logo-desc">
+            
+            Victory belongs to the most persevering.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                目录
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/四大组件/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-cube"></i>
+                
+                组件
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/系统启动/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-spinner"></i>
+                
+                开机
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/框架服务/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-superpowers"></i>
+                
+                框架
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/核心机制/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                机制
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/性能优化/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-yelp"></i>
+                
+                优化
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/设计模式/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-envira"></i>
+                
+                模式
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/算法专栏/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-modx"></i>
+                
+                算法
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/技术储备/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-linode"></i>
+                
+                拓展
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                作者
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/技术细节/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-file-text"></i>
+                
+                FAQ
+            </a>
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/ANR-04.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        谈谈 ANR 之 Input 超时
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="container content">
+
+    
+    <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/性能优化/" target="_blank">
+                                <span class="chip bg-color">性能优化</span>
+                            </a>
+                        
+                            <a href="/tags/ANR/" target="_blank">
+                                <span class="chip bg-color">ANR</span>
+                            </a>
+                        
+                            <a href="/tags/无响应/" target="_blank">
+                                <span class="chip bg-color">无响应</span>
+                            </a>
+                        
+                            <a href="/tags/Input/" target="_blank">
+                                <span class="chip bg-color">Input</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/性能优化/" class="post-category" target="_blank">
+                                性能优化
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>&nbsp;发布日期 :&nbsp;
+                    2019-05-26
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
+                        4k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
+                        15 分钟
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>&nbsp;阅读次数 :&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+		<br>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="1-核心源码"><a href="#1-核心源码" class="headerlink" title="1. 核心源码"></a>1. 核心源码</h1><table>
+<thead>
+<tr>
+<th>关键类</th>
+<th>路径（/frameworks/base/）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><font color="#D15FEE">ActiveServices.java</font></td>
+<td>services/core/java/com/android/server/am/ActiveServices.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">ActivityManagerService.java</font></td>
+<td>services/core/java/com/android/server/am/ActivityManagerService.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">AppErrors.java</font></td>
+<td>services/core/java/com/android/server/am/AppErrors.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">BroadcastQueue.java</font></td>
+<td>services/core/java/com/android/server/am/BroadcastQueue.java</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr>
+<h1 id="2-ANR-基础认知"><a href="#2-ANR-基础认知" class="headerlink" title="2. ANR 基础认知"></a>2. ANR 基础认知</h1><h2 id="2-1-ANR-是什么？"><a href="#2-1-ANR-是什么？" class="headerlink" title="2.1 ANR 是什么？"></a>2.1 ANR 是什么？</h2><p><strong><font color="#FF00FF">ANR(Application Not Responding)</font></strong>，应用程序无响应，简单一个定义，却涵盖了很多 Android 系统的设计思想。</p>
+<p>首先，<font color="#0000FF">ANR 属于应用程序的范畴</font>，这不同于 SNR(System Not Respoding)，SNR 反映的问题是系统进程(system_server)失去了响应能力，而 ANR 明确将问题圈定在应用程序。<strong><code>SNR 由 Watchdog 机制保证，ANR 由消息处理机制保证</code></strong>，Android 在系统层实现了一套精密的机制来发现 ANR，核心原理是<strong><code>消息调度</code></strong>和<strong><code>超时处理</code></strong>。</p>
+<p>其次，ANR 机制<strong><code>主体实现在系统层</code></strong>。所有与 ANR 相关的消息，都会经过系统进程(system_server)调度，然后派发到应用进程完成对消息的实际处理，同时，系统进程设计了不同的超时限制来跟踪消息的处理。一旦应用程序处理消息不当，超时限制就起作用了，它收集一些系统状态，例如：CPU/IO使用情况、进程函数调用栈，并且报告用户有进程<strong><code>无响应了（ANR 对话框）</code></strong>。</p>
+<p>然后，ANR 问题<strong><code>本质是一个性能问题</code></strong>。ANR 机制实际上对应用程序主线程的限制，要求主线程在限定的时间内处理完一些最常见的操作(启动服务、处理广播、处理输入)，如果处理超时，则认为主线程已经失去了响应其他操作的能力。主线程中的<strong><code>耗时操作</code></strong>，例如：密集CPU运算、大量IO、复杂界面布局等，都会降低应用程序的响应能力。</p>
+<p>最后，部分 ANR 问题是很难分析的，有时候由于系统底层的一些影响，导致消息调度失败，出现问题的场景又难以复现。这类 ANR 问题往往需要花费大量的时间去了解系统的一些行为，超出了 ANR 机制本身的范畴。</p>
+<h2 id="2-2-ANR-机制"><a href="#2-2-ANR-机制" class="headerlink" title="2.2 ANR 机制"></a>2.2 ANR 机制</h2><p>分析一些初级的 ANR 问题，只需要简单理解最终输出的日志即可，但对于一些由系统问题(例如：CPU 负载过高、进程卡死)引发的 ANR，就需要对整个 ANR 机制有所了解，才能定位出问题的原因。</p>
+<p><strong><font color="#FF0000" size="3">ANR 机制可以分为两部分：</font></strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;<strong>ANR的监测</strong>：Android 对于不同的 ANR 类型(Broadcast，Service，InputEvent)都有一套监测机制。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;<strong>ANR的报告</strong>：在监测到 ANR 以后，需要显示 ANR 对话框、输出日志(发生 ANR 时的进程函数调用栈、CPU 使用情况等)。</p>
+<h2 id="2-3-ANR-的触发原因"><a href="#2-3-ANR-的触发原因" class="headerlink" title="2.3 ANR 的触发原因"></a>2.3 ANR 的触发原因</h2><p>前面我们说过，出现 ANR 之后一个直观现象就是系统会展示出一个 ANR 对话框。</p>
+<p><strong><font color="#FF0000" size="3">谷歌文档中对 ANR 产生的原因是这么描述的：</font></strong></p>
+<p>Android 系统中的应用被 <code>ActivityManagerService</code> 及 <code>WindowManagerService</code> 两个系统服务监控着，系统会在如下两种情况展示出 ANR 的对话框！</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;<font color="#ff00ff" size="3">KeyDispatchTimeout</font>&nbsp;(<font color="#FF0000"> 5 seconds</font> ) ：按键或触摸事件在特定时间内无响应<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;<font color="#ff00ff" size="3">BroadcastTimeout</font>&nbsp;(<font color="#FF0000"> 10 seconds</font> )：BroadcastReceiver 在特定时间内无法处理完成<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;<font color="#ff00ff" size="3">ServiceTimeout</font>&nbsp;(<font color="#FF0000"> 20 seconds</font> ) ：Service 在特定的时间内无法处理完成</p>
+<h1 id="3-ANR-的监测机制"><a href="#3-ANR-的监测机制" class="headerlink" title="3. ANR 的监测机制"></a>3. ANR 的监测机制</h1><h2 id="3-3-Input-超时处理"><a href="#3-3-Input-超时处理" class="headerlink" title="3.3 Input 超时处理"></a>3.3 Input 超时处理</h2><p>应用程序可以接收输入事件(按键、触屏、轨迹球等)，当 <strong><font color="#FF0000">5秒</font></strong> 内没有处理完毕时，则会引发 ANR。</p>
+<p><strong><font color="#7FF000" size="3">和分析 Broadcast ANR 一样，我们先抛出 Input ANR 两个问题：</font></strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 输入事件经历了一些什么工序才能被派发到应用的界面？</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 如何检测输入事件处理超时？</p>
+<p>我们先来看看第一个问题。</p>
+<h3 id="输入事件派发工序"><a href="#输入事件派发工序" class="headerlink" title="输入事件派发工序"></a>输入事件派发工序</h3><p>输入事件最开始由硬件设备（如按键或触摸屏幕）发起，Android 有一套输入子系统来发现各种输入事件，这些事件最终都会被 <font color="#FF00FF">InputDispatcher</font> 分发到各个需要接收事件的窗口。那么，窗口如何告之 InputDispatcher 自己需要处理输入事件呢？Android 通过 <font color="#FF00FF">InputChannel</font> 连接 InputDispatcher 和窗口，<font color="#FF7F24">InputChannel 其实是封装后的 Linux管道(Pipe)。每一个窗口都会有一个独立的 InputChannel ，窗口需要将这个 InputChannel 注册到 InputDispatcher 中</font>:</p>
+<pre class=" language-cpp"><code class="language-cpp">status_t InputDispatcher<span class="token operator">::</span><span class="token function">registerInputChannel</span><span class="token punctuation">(</span><span class="token keyword">const</span> sp<span class="token operator">&lt;</span>InputChannel<span class="token operator">></span><span class="token operator">&amp;</span> inputChannel<span class="token punctuation">,</span>
+        <span class="token keyword">const</span> sp<span class="token operator">&lt;</span>InputWindowHandle<span class="token operator">></span><span class="token operator">&amp;</span> inputWindowHandle<span class="token punctuation">,</span> <span class="token keyword">bool</span> monitor<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    sp<span class="token operator">&lt;</span>Connection<span class="token operator">></span> connection <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">Connection</span><span class="token punctuation">(</span>inputChannel<span class="token punctuation">,</span> inputWindowHandle<span class="token punctuation">,</span> monitor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> fd <span class="token operator">=</span> inputChannel<span class="token operator">-</span><span class="token operator">></span><span class="token function">getFd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mConnectionsByFd<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> connection<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    mLooper<span class="token operator">-</span><span class="token operator">></span><span class="token function">addFd</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> ALOOPER_EVENT_INPUT<span class="token punctuation">,</span> handleReceiveCallback<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    mLooper<span class="token operator">-</span><span class="token operator">></span><span class="token function">wake</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> OK<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>对于 InputDispatcher 而言，每注册一个 InputChannel 都被视为一个 Connection ，通过文件描述符来区别。InputDispatcher 是一个消息处理循环，当有新的 Connection 时，就需要唤醒消息循环队列进行处理。</p>
+<p>输入事件的类型有很多，按键、轨迹球、触屏等，Android 对这些事件进行了分类，处理这些事件的窗口也被赋予了一个类型(targetType)：Foucused 或 Touched。</p>
+<p>如果当前输入事件是按键类型，则寻找 Focused 类型的窗口。如果当前输入事件类型是触摸类型，则寻找 Touched 类型的窗口。</p>
+<p>InputDispatcher 需要经过以下复杂的调用关系，才能把一个输入事件派发出去(调用关系以按键事件为例，触屏事件的调用关系类似)：</p>
+<pre><code>InputDispatcherThread::threadLoop()
+└── InputDispatcher::dispatchOnce()
+    └── InputDispatcher::dispatchOnceInnerLocked()
+        └── InputDispatcher::dispatchKeyLocked()
+            └── InputDispatcher::dispatchEventLocked()
+                └── InputDispatcher::prepareDispatchCycleLocked()
+                    └── InputDispatcher::enqueueDispatchEntriesLocked()
+                        └── InputDispatcher::startDispatchCycleLocked()
+                            └── InputPublisher::publishKeyEvent()
+</code></pre><p>具体每个函数的实现逻辑此处不表。我们提炼出几个关键点：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 InputDispatcherThread 是一个线程，它处理一次消息的派发。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 输入事件作为一个消息，需要排队等待派发，每一个 Connection 都维护两个队列：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· outboundQueue: 等待发送给窗口的事件。每一个新消息到来，都会先进入到此队列。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· waitQueue: 已经发送给窗口的事件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 publishKeyEvent 完成后，表示事件已经派发了，就将事件从 outboundQueue 挪到了 waitQueue。</p>
+<p>事件经过这么一轮处理，就算是从 InputDispatcher 派发出去了，但事件是不是被窗口收到了，还需要等待接收方的 <font color="#FF00FF">“finished”</font> 通知。在向 InputDispatcher 注册 InputChannel 的时候，同时会注册一个回调函数 handleReceiveCallback():</p>
+<pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> InputDispatcher<span class="token operator">::</span><span class="token function">handleReceiveCallback</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span> <span class="token keyword">int</span> events<span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">*</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        status <span class="token operator">=</span> connection<span class="token operator">-</span><span class="token operator">></span>inputPublisher<span class="token punctuation">.</span><span class="token function">receiveFinishedSignal</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>seq<span class="token punctuation">,</span> <span class="token operator">&amp;</span>handled<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        d<span class="token operator">-</span><span class="token operator">></span><span class="token function">finishDispatchCycleLocked</span><span class="token punctuation">(</span>currentTime<span class="token punctuation">,</span> connection<span class="token punctuation">,</span> seq<span class="token punctuation">,</span> handled<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    d<span class="token operator">-</span><span class="token operator">></span><span class="token function">unregisterInputChannelLocked</span><span class="token punctuation">(</span>connection<span class="token operator">-</span><span class="token operator">></span>inputChannel<span class="token punctuation">,</span> notify<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>当收到的 status 为 OK 时，会调用 <font color="#FF00FF">finishDispatchCycleLocked()</font> 来完成一个消息的处理：</p>
+<pre><code>InputDispatcher::finishDispatchCycleLocked()
+└── InputDispatcher::onDispatchCycleFinishedLocked()
+    └── InputDispatcher::doDispatchCycleFinishedLockedInterruptible()
+        └── InputDispatcher::startDispatchCycleLocked()
+</code></pre><p>调用到 <font color="#FF00FF">doDispatchCycleFinishedLockedInterruptible()</font> 方法时，会将已经成功派发的消息从 <font color="#FF00FF">waitQueue</font> 中移除， 进一步调用会 <font color="#FF00FF">startDispatchCycleLocked</font> 开始派发新的事件。</p>
+<p><strong><font color="#FF0000">至此，我们回答了第一个问题：</font></strong></p>
+<p><strong><font color="#FF7F24">一个正常的输入事件会经过从 outboundQueue 挪到 waitQueue 的过程，表示消息已经派发出去；再经过从 waitQueue 中移除的过程，表示消息已经被窗口接收。InputDispatcher 作为中枢，不停地在递送着输入事件，当一个事件无法得到处理的时候，InputDispatcher 不能就此死掉啊，否则系统也太容易崩溃了。InputDispatcher 的策略是放弃掉处理不过来的事件，并发出通知(这个通知机制就是ANR)，继续进行下一轮消息的处理。</font></strong></p>
+<p><strong><font color="#FF0000">理解输入事件分发模型，我们可以举一个生活中的例子：</font></strong></p>
+<pre><code>每一个输入事件可以比做一个快递，InputDispatcher 就像一个快递中转站，窗口就像是收件人，InputChannel 就像是快递员。
+所有快递都会经过中转站中处理，中转站需要知道每一个快递的收件人是谁，通过快递员将快递发送到具体的收件人。
+这其中有很多场景导致快递不能及时送到：譬如联系不到收件人;快递很多，快递员会忙不过来;快递员受伤休假了等等…
+这时候快递员就需要告知中转站：有快递无法及时送到了。中转站在收到快递员的通知后，一边继续派发其他快递，一边报告上级。
+</code></pre><h3 id="检测输入事件处理超时"><a href="#检测输入事件处理超时" class="headerlink" title="检测输入事件处理超时"></a>检测输入事件处理超时</h3><p>在了解输入事件分发模型之后，我们可以见识一下ANR机制了。在派发事件时，<font color="#FF00FF">dispatchKeyLocked()</font> 和 <font color="#FF00FF">dispatchMotionLocked()</font>，需要找到当前的焦点窗口，焦点窗口才是最终接收事件的地方，找窗口的过程就会判断是否已经发生了ANR：</p>
+<pre><code>InputDispatcher::findFocusedWindowTargetsLocked()
+InputDispatcher::findTouchedWindowTargetsLocked()
+└── InputDispatcher::handleTargetsNotReadyLocked()
+    └── InputDispatcher::onANRLocked()
+        └── InputDispatcher::doNotifyANRLockedInterruptible()
+            └── NativeInputManager::notifyANR()
+</code></pre><p>（1）首先，会调用 <font color="#FF00FF">findFocusedWindowTargetsLocked()</font> 或 <font color="#FF00FF">findTouchedWindowTargetsLocked()</font> 寻找接收输入事件的窗口。</p>
+<p>在找到窗口以后，会调用 <font color="#FF00FF">checkWindowReadyForMoreInputLocked()</font> 检查窗口是否有能力再接收新的输入事件，会有一系列的场景阻碍事件的继续派发：</p>
+<p><strong><font color="#7FF000" size="3">场景1: 窗口处于paused状态，不能处理输入事件</font></strong></p>
+<p>“Waiting because the [targetType] window is paused.”</p>
+<p><strong><font color="#7FF000" size="3">场景2: 窗口还未向InputDispatcher注册，无法将事件派发到窗口</font></strong></p>
+<p>“Waiting because the [targetType] window’s input channel is not registered with the input dispatcher. The window may be in the process of being removed.”</p>
+<p><strong><font color="#7FF000" size="3">场景3: 窗口和InputDispatcher的连接已经中断，即InputChannel不能正常工作</font></strong></p>
+<p>“Waiting because the [targetType] window’s input connection is [status]. The window may be in the process of being removed.”</p>
+<p><strong><font color="#7FF000" size="3">场景4: InputChannel已经饱和，不能再处理新的事件</font></strong></p>
+<p>“Waiting because the [targetType] window’s input channel is full. Outbound queue length: %d. Wait queue length: %d.”</p>
+<p><strong><font color="#7FF000" size="3">场景5: 对于按键类型(KeyEvent)的输入事件，需要等待上一个事件处理完毕</font></strong></p>
+<p>“Waiting to send key event because the [targetType] window has not finished processing all of the input events that were previously delivered to it. Outbound queue length: %d. Wait queue length: %d.”</p>
+<p><strong><font color="#7FF000" size="3">场景6: 对于触摸类型(TouchEvent)的输入事件，可以立即派发到当前的窗口，因为TouchEvent都是发生在用户当前可见的窗口。但有一种情况， 如果当前应用由于队列有太多的输入事件等待派发，导致发生了ANR，那TouchEvent事件就需要排队等待派发。</font></strong></p>
+<p>“Waiting to send non-key event because the %s window has not finished processing certain input events that were delivered to it over %0.1fms ago. Wait queue length: %d. Wait queue head age: %0.1fms.”</p>
+<p>（2）然后，上述有任何一个场景发生了，则输入事件需要继续等待，紧接着就会调用 <font color="#FF00FF">handleTargetsNotReadyLocked()</font> 来判断是不是已经的等待超时了：</p>
+<pre class=" language-cpp"><code class="language-cpp">int32_t InputDispatcher<span class="token operator">::</span><span class="token function">handleTargetsNotReadyLocked</span><span class="token punctuation">(</span>nsecs_t currentTime<span class="token punctuation">,</span>
+        <span class="token keyword">const</span> EventEntry<span class="token operator">*</span> entry<span class="token punctuation">,</span>
+        <span class="token keyword">const</span> sp<span class="token operator">&lt;</span>InputApplicationHandle<span class="token operator">></span><span class="token operator">&amp;</span> applicationHandle<span class="token punctuation">,</span>
+        <span class="token keyword">const</span> sp<span class="token operator">&lt;</span>InputWindowHandle<span class="token operator">></span><span class="token operator">&amp;</span> windowHandle<span class="token punctuation">,</span>
+        nsecs_t<span class="token operator">*</span> nextWakeupTime<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> reason<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentTime <span class="token operator">>=</span> mInputTargetWaitTimeoutTime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">onANRLocked</span><span class="token punctuation">(</span>currentTime<span class="token punctuation">,</span> applicationHandle<span class="token punctuation">,</span> windowHandle<span class="token punctuation">,</span>
+            entry<span class="token operator">-</span><span class="token operator">></span>eventTime<span class="token punctuation">,</span> mInputTargetWaitStartTime<span class="token punctuation">,</span> reason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">*</span>nextWakeupTime <span class="token operator">=</span> LONG_LONG_MIN<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> INPUT_EVENT_INJECTION_PENDING<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p>最后，如果当前事件派发已经超时，则说明已经检测到了 ANR ，调用 <font color="#FF00FF">onANRLocked()</font> 方法，然后将 <font color="#FF00FF">nextWakeupTime</font> 设置为最小值，马上开始下一轮调度。在 onANRLocked() 方法中， 会保存 ANR 的一些状态信息，调用 <font color="#FF00FF">doNotifyANRLockedInterruptible()</font> ，进一步会调用到 JNI 层的 <font color="#FF00FF">NativeInputManager::notifyANR()</font> 方法，它的主要功能就是衔接 Native 层和 Java 层，直接调用 Java 层的 <font color="#FF00FF">InputManagerService.notifyANR()</font> 方法。</p>
+<p><strong><font color="#FF0000">至此，ANR的处理逻辑转交到了Java层。</font></strong>底层(Native)发现一旦有输入事件派发超时，就会通知上层(Java)，上层收到ANR通知后，决定是否终止当前输入事件的派发。</p>
+<p>发生ANR时，Java层最开始的入口是 <font color="#FF00FF">InputManagerService.notifyANR()</font> ，它是直接被 Native 层调用的。我们先把 ANR 的Java层调用关系列出来：</p>
+<pre><code>InputManagerService.notifyANR()
+└── InputMonitor.notifyANR()
+    ├── IApplicationToken.keyDispatchingTimedOut()
+    │   └── ActivityRecord.keyDispatchingTimedOut()
+    │       └── AMS.inputDispatchingTimedOut()
+    │           └── AMS.appNotResponding()
+    │
+    └── AMS.inputDispatchingTimedOut()
+        └── AMS.appNotResponding()
+</code></pre><p><font color="#FF00FF">InputManagerService.notifyANR()</font> 只是为 Native层 定义了一个接口，它直接调用 <font color="#FF00FF">InputMonitor.notifyANR()</font>。如果该方法的返回值等于0，则放弃本次输入事件；如果大于0，则表示需要继续等待的时间。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">notifyANR</span><span class="token punctuation">(</span>InputApplicationHandle inputApplicationHandle<span class="token punctuation">,</span>
+      InputWindowHandle inputWindowHandle<span class="token punctuation">,</span> String reason<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>appWindowToken <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> appWindowToken<span class="token punctuation">.</span>appToken <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// appToken实际上就是当前的ActivityRecord。</span>
+        <span class="token comment" spellcheck="true">// 如果发生ANR的Activity还存在，则直接通过ActivityRecord通知事件派发超时</span>
+        <span class="token keyword">boolean</span> abort <span class="token operator">=</span> appWindowToken<span class="token punctuation">.</span>appToken<span class="token punctuation">.</span><span class="token function">keyDispatchingTimedOut</span><span class="token punctuation">(</span>reason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span> abort<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> appWindowToken<span class="token punctuation">.</span>inputDispatchingTimeoutNanos<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>windowState <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 如果发生ANR的Activity已经销毁了，则通过AMS通知事件派发超时</span>
+        <span class="token keyword">long</span> timeout <span class="token operator">=</span> ActivityManagerNative<span class="token punctuation">.</span><span class="token function">getDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">inputDispatchingTimedOut</span><span class="token punctuation">(</span>
+                        windowState<span class="token punctuation">.</span>mSession<span class="token punctuation">.</span>mPid<span class="token punctuation">,</span> aboveSystem<span class="token punctuation">,</span> reason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token keyword">if</span> <span class="token punctuation">(</span>timeout <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+             <span class="token keyword">return</span> timeout<span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// abort dispatching</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>上述方法中有两种不同的调用方式，但最终都会交由 <font color="#FF00FF">AMS.inputDispatchingTimedOut()</font> 处理。AMS 有重载的 <font color="#FF00FF">inputDispatchingTimedOut()</font> 方法，他们的参数不一样。ActivityRecord 调用时，可以传入的信息更多一点(当前发生ANR的界面是哪一个)。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">inputDispatchingTimedOut</span><span class="token punctuation">(</span><span class="token keyword">int</span> pid<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> aboveSystem<span class="token punctuation">,</span> String reason<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 1. 根据进程号获取到ProcessRecord</span>
+    proc <span class="token operator">=</span> mPidsSelfLocked<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>pid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token comment" spellcheck="true">// 2. 获取超时时间</span>
+    <span class="token comment" spellcheck="true">// 测试环境下的超时时间是INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT(60秒)，</span>
+    <span class="token comment" spellcheck="true">// 正常环境下的超时时间是KEY_DISPATCHING_TIMEOUT(5秒)</span>
+    timeout <span class="token operator">=</span> <span class="token function">getInputDispatchingTimeoutLocked</span><span class="token punctuation">(</span>proc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 调用重载的函数，如果返回True，则表示需要中断当前的事件派发;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">inputDispatchingTimedOut</span><span class="token punctuation">(</span>proc<span class="token punctuation">,</span> null<span class="token punctuation">,</span> null<span class="token punctuation">,</span> aboveSystem<span class="token punctuation">,</span> reason<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 3. 返回继续等待的时间，这个值会传递到Native层</span>
+    <span class="token keyword">return</span> timeout<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">inputDispatchingTimedOut</span><span class="token punctuation">(</span><span class="token keyword">final</span> ProcessRecord proc<span class="token punctuation">,</span>
+        <span class="token keyword">final</span> ActivityRecord activity<span class="token punctuation">,</span> <span class="token keyword">final</span> ActivityRecord parent<span class="token punctuation">,</span>
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> aboveSystem<span class="token punctuation">,</span> String reason<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token comment" spellcheck="true">// 1. 发生ANR进程正处于调试状态，不需要中断事件</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>proc<span class="token punctuation">.</span>debugging<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 2. 当前正在做dexopt操作，这会比较耗时，不需要中断</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mDidDexOpt<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Give more time since we were dexopting.</span>
+        mDidDexOpt <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 3. 发生ANR的进程是测试进程，需要中断，但不在UI界面显示ANR信息判断</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>proc<span class="token punctuation">.</span>instrumentationClass <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token function">finishInstrumentationLocked</span><span class="token punctuation">(</span>proc<span class="token punctuation">,</span> Activity<span class="token punctuation">.</span>RESULT_CANCELED<span class="token punctuation">,</span> info<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 4. 通知UI界面显示ANR信息</span>
+    mHandler<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">appNotResponding</span><span class="token punctuation">(</span>proc<span class="token punctuation">,</span> activity<span class="token punctuation">,</span> parent<span class="token punctuation">,</span> aboveSystem<span class="token punctuation">,</span> annotation<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong><font color="#FF0000">至此，我们回答了第二个问题：</font></strong></p>
+<p><strong><font color="#FF7F24">在 InputDispatcher 派发输入事件时，会寻找接收事件的窗口，如果无法正常派发，则可能会导致当前需要派发的事件超时(默认是5秒)。Native层发现超时了，会通知Java层，Java层经过一些处理后，会反馈给Native层，是继续等待还是丢弃当前派发的事件。</font></strong></p>
+<h2 id="3-4-小结"><a href="#3-4-小结" class="headerlink" title="3.4 小结"></a>3.4 小结</h2><p><strong>ANR监测机制包含三种：</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 <strong><font color="#7FF000">Service ANR</font></strong>，前台进程中Service生命周期不能超过 <strong><font color="#FF0000">20秒</font></strong>，后台进程中Service的生命周期不能超过<strong><font color="#FF0000"> 200秒</font></strong>。 在启动Service时，抛出定时消息 <strong><font color="#FF34B3">SERVICE_TIMEOUT_MSG</font></strong> 或 <strong><font color="#FF34B3">SERVICE_BACKGOURND_TIMEOUT_MSG</font></strong>，如果定时消息响应了，则说明发生了ANR。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 <strong><font color="#7FF000">Broadcast ANR</font></strong>，前台的“串行广播消息”必须在 <strong><font color="#FF0000">10秒</font></strong> 内处理完毕，后台的“串行广播消息”必须在<strong><font color="#FF0000"> 60秒 </font></strong>处理完毕， 每派发串行广播消息到一个接收器时，都会抛出一个定时消息 <strong><font color="#FF34B3">BROADCAST_TIMEOUT_MSG</font></strong>，如果定时消息响应，则判断是否广播消息处理超时，超时就说明发生了ANR。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 <strong><font color="#7FF000">Input ANR</font></strong>，输入事件必须在 <strong><font color="#FF0000">5秒</font></strong> 内处理完毕。在派发一个输入事件时，会判断当前输入事件是否需要等待，如果需要等待，则判断是否等待已经超时，超时就说明发生了ANR。</p>
+<p>ANR监测机制实际上是对应用程序主线程的要求，要求主线成必须在限定的时间内，完成对几种操作的响应；否则，就可以认为应用程序主线程失去响应能力。</p>
+<p><strong>从ANR的三种监测机制中，我们看到不同超时机制的设计：</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 Service 和 Broadcast 都是由 AMS 调度，利用 Handler 和 Looper，设计了一个 TIMEOUT 消息交由 AMS 线程来处理，整个超时机制的实现都是在Java层；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 InputEvent 由 InputDispatcher 调度，待处理的输入事件都会进入队列中等待，设计了一个等待超时的判断，超时机制的实现在Native层。</p>
+
+            </div>
+            <hr>
+
+            
+
+            <!--<link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>-->
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="https://superandroid.pro" class="b-link-green">Thinking in Android</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2019/05/26/07.xing-neng-you-hua-xi-lie-tan-tan-ying-yong-anr-zhi-input-chao-shi/" class="b-link-green">谈谈 ANR 之 Input 超时</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <!--
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/博客日志.gif" class="responsive-img" alt="博客日志">
+                        
+                        <span class="card-title">博客日志</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">《Thinking in Android》 - - “新增”
+
+
+
+日期
+新增博文
+
+
+
+
+2019.04.01
+ 《“事件分发机制” - 面试题集》 
+
+
+
+
+《Thinking in Android》 - - “修订”
+
+
+
+日期
+修订</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-12-29
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Android/" class="post-category" target="_blank">
+                                    Android
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/博客优化/" target="_blank">
+                        <span class="chip bg-color">博客优化</span>
+                    </a>
+                    
+                    <a href="/tags/修订记录/" target="_blank">
+                        <span class="chip bg-color">修订记录</span>
+                    </a>
+                    
+                    <a href="/tags/方向规划/" target="_blank">
+                        <span class="chip bg-color">方向规划</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/05/22/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/事件分发.jpg" class="responsive-img" alt="深入钻研 Android 核心机制 之 " 事件分发"">
+                        
+                        <span class="card-title">深入钻研 Android 核心机制 之 "事件分发"</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">1. 核心源码
+
+
+关键类
+路径
+
+
+
+
+Activity.java
+frameworks/base/core/java/android/app/Activity.java
+
+
+DecorView.java
+frameworks/base/</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-05-22
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/核心机制/" class="post-category" target="_blank">
+                                    核心机制
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/事件分发/" target="_blank">
+                        <span class="chip bg-color">事件分发</span>
+                    </a>
+                    
+                    <a href="/tags/Android-9-0/" target="_blank">
+                        <span class="chip bg-color">Android 9.0</span>
+                    </a>
+                    
+                    <a href="/tags/核心机制/" target="_blank">
+                        <span class="chip bg-color">核心机制</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>-->
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Thinking in Android<br />'
+            + '作者: Marco<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    
+
+</main>
+
+
+<footer class="page-footer bg-color-foot-marco">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+		    &copy; 2018 - 2019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In-depth analysis of Android system source code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;Marco<br>
+            
+			
+                
+                <span id="busuanzi_container_site_pv">
+                    Total visits to this site: <span id="busuanzi_value_site_pv"></span> ,&nbsp;
+                </span>
+				<span id="busuanzi_container_site_uv">
+                    Total visitor: <span id="busuanzi_value_site_uv"></span> .
+                </span>
+			
+		</div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/pepsimaxin/pepsimaxin.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:pepsimaxin@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=516749232" class="tooltipped" data-tooltip="QQ联系我: 516749232" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+<!--
+    <a href="https://blog.csdn.net/pepsimaxin" class="tooltipped" data-tooltip="访问我的CSDN" data-position="top" data-delay="50">
+        <i class="fa fa-chain-broken"></i>
+    </a>
+-->
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<!--<div class="progress-bar"></div>-->
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;检索博文</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的技术关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<!--<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>-->
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
