@@ -103,7 +103,7 @@ pre {
 
 code {
     padding: 1px 5px;
-    font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace;
+    font-family: 'Courier New', Consolas, Courier, Inconsolata, Monaco, monospace;
     font-size: 0.91rem;
     color: #e96900;
     background-color: #00FFFF;
