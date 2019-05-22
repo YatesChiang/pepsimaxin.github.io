@@ -430,6 +430,7 @@ PhoneWindow：是抽象类 ">
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">onFilterTouchEventForSecurity</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
             ListenerInfo li <span class="token operator">=</span> mListenerInfo<span class="token punctuation">;</span>
+
             <span class="token keyword">if</span> <span class="token punctuation">(</span>li <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnTouchListener <span class="token operator">!=</span> null
                     <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>mViewFlags <span class="token operator">&amp;</span> ENABLED_MASK<span class="token punctuation">)</span> <span class="token operator">==</span> ENABLED
                     <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnTouchListener<span class="token punctuation">.</span><span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>   <span class="token comment" spellcheck="true">// 1</span>
