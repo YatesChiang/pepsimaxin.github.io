@@ -4,7 +4,7 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="深入钻研 Android 核心机制 之 &#34;自动背光&#34;, Thinking in Android">
+    <meta name="keywords" content="深入钻研 Android 核心机制 之 自动背光, Thinking in Android">
     <meta name="description" content="
 一、开篇1.1 核心源码
 
@@ -24,7 +24,7 @@ frameworks/base/packages/SystemUI/src/com/android/systemui/settings">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>深入钻研 Android 核心机制 之 &#34;自动背光&#34; | Thinking in Android</title>
+    <title>深入钻研 Android 核心机制 之 自动背光 | Thinking in Android</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -340,7 +340,7 @@ frameworks/base/packages/SystemUI/src/com/android/systemui/settings">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        深入钻研 Android 核心机制 之 &#34;自动背光&#34;
+                        深入钻研 Android 核心机制 之 自动背光
                     </div>
                 </div>
             </div>
@@ -368,6 +368,10 @@ frameworks/base/packages/SystemUI/src/com/android/systemui/settings">
                         
                             <a href="/tags/自动背光/" target="_blank">
                                 <span class="chip bg-color">自动背光</span>
+                            </a>
+                        
+                            <a href="/tags/亮度调节/" target="_blank">
+                                <span class="chip bg-color">亮度调节</span>
                             </a>
                         
                     </div>
@@ -462,7 +466,7 @@ frameworks/base/packages/SystemUI/src/com/android/systemui/settings">
 </table>
 <h2 id="1-2-国际单位制"><a href="#1-2-国际单位制" class="headerlink" title="1.2 国际单位制"></a>1.2 国际单位制</h2><p><strong><font color="#0000ff">光照度：</font></strong>从光源照射到单位面积上的光通量，以 <code>E</code> 表示，照度的单位为<code>勒克斯</code>（Lux，简称 lx）；</p>
 <p><strong><font color="#0000ff">光亮度：</font></strong>指一个表面的明亮程度，以 <code>L</code> 表示，即从一个表面反射出来的光通量。不同物体对光有不同的反射系数或吸收系数。光的强度可用照在平面上的光的总量来度量，这叫<code>入射光</code>(inci-dentlight)或<code>照度</code>(illuminance)。若用从平面反射到眼球中的光量来度量光的强度，这种光称为<code>反射光</code>或<code>亮度</code>。例如，一般白纸大约吸收入射光量的20%，反射光量为80%；黑纸只反射入射光量的3%。所以，白纸和黑纸在亮度上差异很大。</p>
-<p><code>光照度</code>和<code>光亮度</code>的关系可以用如下公式表示：<strong><font color="#ff0000">L = R × E</font></strong>，式中 <code>L 为亮度</code>，<code>R 为反射系数</code>，<code>E 为照度</code>。</p>
+<p><strong><font color="#ff0000">“光照度”</font></strong> 和 <strong><font color="#ff0000">“光亮度”</font></strong> 的关系可以用如下公式表示：<strong><font color="#ff0000">L = R × E</font></strong>，式中 <code>L 为亮度</code>，<code>R 为反射系数</code>，<code>E 为照度</code>。</p>
 <h1 id="二、手动调节亮度"><a href="#二、手动调节亮度" class="headerlink" title="二、手动调节亮度"></a>二、手动调节亮度</h1><h2 id="2-1-BrightnessController"><a href="#2-1-BrightnessController" class="headerlink" title="2.1 BrightnessController"></a>2.1 BrightnessController</h2><p>手动调节亮度主要两种方式：<code>SysmemUI</code>、<code>Settings</code>，入口：<code>BrightnessController.java</code>。</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// frameworks/base/packages/SystemUI/src/com/android/systemui/settings/BrightnessController.java</span>
 
@@ -1310,7 +1314,7 @@ frameworks/base/packages/SystemUI/src/com/android/systemui/settings">
                     </span>
                     <a href="https://superandroid.pro" class="b-link-green">Thinking in Android</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/" class="b-link-green">深入钻研 Android 核心机制 之 &#34;自动背光&#34;</a>
+                    <a href="/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/" class="b-link-green">深入钻研 Android 核心机制 之 自动背光</a>
                 </p>
             </div>
         </div>
