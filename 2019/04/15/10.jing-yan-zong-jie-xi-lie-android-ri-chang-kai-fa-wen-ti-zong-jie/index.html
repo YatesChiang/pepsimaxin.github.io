@@ -626,7 +626,8 @@ Device 切">
 <span class="token punctuation">}</span>
 </code></pre>
 <p><br></p>
-<h3 id="7-拨打紧急电话无通话记录"><a href="#7-拨打紧急电话无通话记录" class="headerlink" title="7. 拨打紧急电话无通话记录"></a><center>7. 拨打紧急电话无通话记录</center></h3><p>Android 原生代码中，默认不会将<code>紧急电话</code>作为通话记录保存，如以下源码：</p>
+<h3 id="7-拨打紧急电话无通话记录"><a href="#7-拨打紧急电话无通话记录" class="headerlink" title="7. 拨打紧急电话无通话记录"></a><center>7. 拨打紧急电话无通话记录</center></h3><p><br></p>
+<p>Android 原生代码中，默认不会将<code>紧急电话</code>作为通话记录保存，如以下源码：</p>
 <pre class=" language-java"><code class="language-java">        <span class="token comment" spellcheck="true">// On some devices, to avoid accidental redialing of emergency numbers, we *never* log</span>
         <span class="token comment" spellcheck="true">// emergency calls to the Call Log.  (This behavior is set on a per-product basis, based</span>
         <span class="token comment" spellcheck="true">// on carrier requirements.)</span>
@@ -687,6 +688,7 @@ Device 切">
         <span class="token comment" spellcheck="true">// sDefaults.putBoolean(KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL, false);</span>
         sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
+<p><br></p>
 
             </div>
             <hr>
