@@ -393,14 +393,14 @@ Device 切">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        1.3k
+                        1.6k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        5 分钟
+                        7 分钟
                     </div>
                     
                 
@@ -626,6 +626,67 @@ Device 切">
 <span class="token punctuation">}</span>
 </code></pre>
 <p><br></p>
+<h3 id="7-拨打紧急电话无通话记录"><a href="#7-拨打紧急电话无通话记录" class="headerlink" title="7. 拨打紧急电话无通话记录"></a><center>7. 拨打紧急电话无通话记录</center></h3><p>Android 原生代码中，默认不会将<code>紧急电话</code>作为通话记录保存，如以下源码：</p>
+<pre class=" language-java"><code class="language-java">        <span class="token comment" spellcheck="true">// On some devices, to avoid accidental redialing of emergency numbers, we *never* log</span>
+        <span class="token comment" spellcheck="true">// emergency calls to the Call Log.  (This behavior is set on a per-product basis, based</span>
+        <span class="token comment" spellcheck="true">// on carrier requirements.)</span>
+        <span class="token keyword">boolean</span> okToLogEmergencyNumber <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        CarrierConfigManager configManager <span class="token operator">=</span> <span class="token punctuation">(</span>CarrierConfigManager<span class="token punctuation">)</span> mContext<span class="token punctuation">.</span><span class="token function">getSystemService</span><span class="token punctuation">(</span>
+                Context<span class="token punctuation">.</span>CARRIER_CONFIG_SERVICE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        PersistableBundle configBundle <span class="token operator">=</span> configManager<span class="token punctuation">.</span><span class="token function">getConfigForSubId</span><span class="token punctuation">(</span>
+                mPhoneAccountRegistrar<span class="token punctuation">.</span><span class="token function">getSubscriptionIdForPhoneAccount</span><span class="token punctuation">(</span>accountHandle<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>configBundle <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            okToLogEmergencyNumber <span class="token operator">=</span> configBundle<span class="token punctuation">.</span><span class="token function">getBoolean</span><span class="token punctuation">(</span>
+                    CarrierConfigManager<span class="token punctuation">.</span>KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">// Don't log emergency numbers if the device doesn't allow it.</span>
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> isOkToLogThisCall <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token operator">!</span>isEmergency <span class="token operator">||</span> okToLogEmergencyNumber<span class="token punctuation">)</span>
+                <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token function">isUnloggableNumber</span><span class="token punctuation">(</span>number<span class="token punctuation">,</span> configBundle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">sendAddCallBroadcast</span><span class="token punctuation">(</span>callType<span class="token punctuation">,</span> duration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isOkToLogThisCall<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Logging Call log entry: "</span> <span class="token operator">+</span> callerInfo <span class="token operator">+</span> <span class="token string">", "</span>
+                    <span class="token operator">+</span> Log<span class="token punctuation">.</span><span class="token function">pii</span><span class="token punctuation">(</span>number<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">","</span> <span class="token operator">+</span> presentation <span class="token operator">+</span> <span class="token string">", "</span> <span class="token operator">+</span> callType
+                    <span class="token operator">+</span> <span class="token string">", "</span> <span class="token operator">+</span> start <span class="token operator">+</span> <span class="token string">", "</span> <span class="token operator">+</span> duration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">boolean</span> isRead <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>isSelfManaged<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// Mark self-managed calls are read since they're being handled by their own app.</span>
+                <span class="token comment" spellcheck="true">// Their inclusion in the call log is informational only.</span>
+                isRead <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            AddCallArgs args <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AddCallArgs</span><span class="token punctuation">(</span>mContext<span class="token punctuation">,</span> callerInfo<span class="token punctuation">,</span> number<span class="token punctuation">,</span> postDialDigits<span class="token punctuation">,</span>
+                    viaNumber<span class="token punctuation">,</span> presentation<span class="token punctuation">,</span> callType<span class="token punctuation">,</span> features<span class="token punctuation">,</span> accountHandle<span class="token punctuation">,</span> start<span class="token punctuation">,</span> duration<span class="token punctuation">,</span>
+                    dataUsage<span class="token punctuation">,</span> initiatingUser<span class="token punctuation">,</span> isRead<span class="token punctuation">,</span> logCallCompletedListener<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">logCallAsync</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Not adding emergency call to call log."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+</code></pre>
+<p>通过注释我们就知道，<code>okToLogEmergencyNumber</code> 留个各个厂商自己决定是否将<code>紧急电话</code>保存到通话记录中，我们看下：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
+     * Determines if the current device should allow emergency numbers to be logged in the Call Log.
+     * (Some carriers require that emergency calls *not* be logged, presumably to avoid the risk of
+     * accidental redialing from the call log UI. This is a good idea, so the default here is
+     * false.)
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String
+            KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL <span class="token operator">=</span> <span class="token string">"allow_emergency_numbers_in_call_log_bool"</span><span class="token punctuation">;</span>
+
+</code></pre>
+<p><code>allow_emergency_numbers_in_call_log_bool</code> 默认为 <code>false</code>，所以我们只需要如下修改即可。</p>
+<pre class=" language-java"><code class="language-java">   <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        sDefaults <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PersistableBundle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_ALLOW_HOLD_IN_IMS_CALL_BOOL<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_CARRIER_ALLOW_DEFLECT_IMS_CALL_BOOL<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_ALWAYS_PLAY_REMOTE_HOLD_TONE_BOOL<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_AUTO_RETRY_FAILED_WIFI_EMERGENCY_CALL<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_ADDITIONAL_CALL_SETTING_BOOL<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// sDefaults.putBoolean(KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL, false);</span>
+        sDefaults<span class="token punctuation">.</span><span class="token function">putBoolean</span><span class="token punctuation">(</span>KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
 
             </div>
             <hr>
