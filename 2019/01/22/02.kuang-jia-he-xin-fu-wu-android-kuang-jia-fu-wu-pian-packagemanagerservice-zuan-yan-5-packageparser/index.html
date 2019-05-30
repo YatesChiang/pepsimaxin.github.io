@@ -387,14 +387,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        3.3k
+                        2.9k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        16 分钟
+                        14 分钟
                     </div>
                     
                 
@@ -474,7 +474,8 @@
 </tbody>
 </table>
 <p><br></p>
-<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p>在分析 <code>PackageManagerService</code> 构造函数的时候，我们知道：Android 安装一个 APK 的时候首先会解析 APK，而解析 APK 则需要用到一个工具类，这个工具类就是我们这篇博文的主角 <code>PackageParser</code>（在我们之前研究的源码中，你已经见过它的身影了）！<br><br></p>
+<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p>在分析 <code>PackageManagerService</code> 构造函数的时候，我们知道：Android 安装一个 APK 的时候首先会解析 APK，而解析 APK 则需要用到一个工具类，这个工具类就是我们这篇博文的主角 <code>PackageParser</code>（在我们之前研究的源码中，你已经见过它的身影了）！</p>
+<p><br></p>
 <h1 id="二、PackageParser"><a href="#二、PackageParser" class="headerlink" title="二、PackageParser"></a>二、PackageParser</h1><h2 id="2-1-官方说明"><a href="#2-1-官方说明" class="headerlink" title="2.1 官方说明"></a>2.1 官方说明</h2><p>首先我们看下官方对 PackageParser 的说明：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Parser for package files (APKs) on disk. This supports apps packaged either
@@ -492,7 +493,6 @@
  * &lt;li>All installations must contain a single base APK.
  * &lt;/ul>
  *
- * 翻译如下：
  * 解析磁盘上的 APK 安装包文件。它既能解析一个"单一" APK 文件，也能解析一个"集群" APK 文件
 　* (即一个 APK 文件里面包含多个 APK 文件)。一个"集群" APK 有一个"基准" APK (base APK) 组成
  * 和其他一些"分割" APK ("split" APKs) 构成，其中这些"分割" APK 用一些数字来分割。
@@ -505,7 +505,6 @@
  */</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageParser</span> <span class="token punctuation">{</span>
 </code></pre>
-<p><br></p>
 <h2 id="2-2-创建解析器"><a href="#2-2-创建解析器" class="headerlink" title="2.2 创建解析器"></a>2.2 创建解析器</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 具体源码及逻辑流程省略...</span>
 
 <span class="token comment" spellcheck="true">// 创建解析器</span>
@@ -514,9 +513,9 @@
 <span class="token comment" spellcheck="true">// 解析 APK</span>
 tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.</span><span class="token function">parsePackage</span><span class="token punctuation">(</span>codePath<span class="token punctuation">,</span> parseFlags<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p><br></p>
-<h2 id="2-3-解析-APK"><a href="#2-3-解析-APK" class="headerlink" title="2.3 解析 APK"></a>2.3 解析 APK</h2><p>在分析 PackageParser 解析 APK 之前，我们有必要了解一下 Split APK 机制！<br><br></p>
-<h3 id="2-3-1-Split-APK机制"><a href="#2-3-1-Split-APK机制" class="headerlink" title="2.3.1 Split APK机制"></a>2.3.1 Split APK机制</h3><p>Split APK 是 Google 为解决 65536 上限，以及 APK 安装包越来越大等问题，在 <code>Android L</code> 中引入的机制。 Split APK 可以将一个庞大的 APK，按屏幕密度，ABI 等形式拆分成多个独立的 APK，在应用程序更新时，不必下载整个 APK，只需单独下载某个模块即可安装更新。</p>
+<h2 id="2-3-解析-APK"><a href="#2-3-解析-APK" class="headerlink" title="2.3 解析 APK"></a>2.3 解析 APK</h2><p>在分析 PackageParser 解析 APK 之前，我们有必要了解一下 Split APK 机制！</p>
+<h3 id="2-3-1-Split-APK机制"><a href="#2-3-1-Split-APK机制" class="headerlink" title="2.3.1 Split APK机制"></a>2.3.1 Split APK机制</h3><p><code>Split APK</code> 是 Google 为解决 65536 上限，以及 APK 安装包越来越大等问题，在 <code>Android L</code> 中引入的机制。</p>
+<p>Split APK 可以将一个庞大的 APK，按屏幕密度，ABI 等形式拆分成多个独立的 APK，在应用程序更新时，不必下载整个 APK，只需单独下载某个模块即可安装更新。</p>
 <p>Split APK 将原来一个 APK 中多个模块共享同一份资源的模型分离成多个 APK 使用各自的资源，并且可以继承 Base APK 中的资源，多个 APK 有相同的 data，cache 目录。</p>
 <blockquote>
 <p>在引入了 Split APK 机制后，APK 有两种分类：<br><code>Single APK</code>：安装文件为一个完整的 APK，即 Base APK，源码中定义为 <code>Monolithic</code>。<br><code>Mutiple APK</code>：安装文件在一个文件目录中，其内部有多个被拆分的 APK，这些 APK 由一个 Base APK 和一个或多个 Split APK 组成，源码中定义为 <code>Cluster</code>。</p>
@@ -561,9 +560,7 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
     <span class="token keyword">return</span> parsed<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>我们这边选取 parseClusterPackage 作为分析的分支，当你搞懂这个方法的具体逻辑，单个 APK 的解析原理就很简单了。</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-702816956a0fec31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.png"></center>
-
+<p>我们这边选取 <code>parseClusterPackage</code> 作为分析的分支，当你搞懂这个方法的具体逻辑，单个 APK 的解析原理就很简单了。</p>
 <p><br></p>
 <h1 id="三、parseClusterPackage"><a href="#三、parseClusterPackage" class="headerlink" title="三、parseClusterPackage"></a>三、parseClusterPackage</h1><p>我们来看看 <code>parseClusterPackage()</code> 的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> Package <span class="token function">parseClusterPackage</span><span class="token punctuation">(</span>File packageDir<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">)</span> <span class="token keyword">throws</span> PackageParserException <span class="token punctuation">{</span>
@@ -666,8 +663,7 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
             configForSplits<span class="token punctuation">,</span> splitCodePaths<span class="token punctuation">,</span> splitRevisionCodes<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
-<h2 id="3-2-parseBaseApk"><a href="#3-2-parseBaseApk" class="headerlink" title="3.2 parseBaseApk"></a>3.2 parseBaseApk</h2><p>我们来看看 Base Apk 的解析函数 <code>parseBaseApk()</code> 的源码：</p>
+<h2 id="3-2-parseBaseApk"><a href="#3-2-parseBaseApk" class="headerlink" title="3.2 parseBaseApk"></a>3.2 parseBaseApk</h2><p>我们来看看 <code>Base Apk</code> 的解析函数 <code>parseBaseApk()</code> 的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String MNT_EXPAND <span class="token operator">=</span> <span class="token string">"/mnt/expand/"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">private</span> Package <span class="token function">parseBaseApk</span><span class="token punctuation">(</span>File apkFile<span class="token punctuation">,</span> AssetManager assets<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">)</span>
@@ -725,9 +721,8 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
 </code></pre>
 <p>这个方法内部主要就是做了两件事：</p>
 <blockquote>
-<p>1、解析 volumeUuid<br>  2、调用 parseBaseApk(res, parser, flags, outError) 来获取 Package 对象 pkg 并返回</p>
+<p>1、解析 volumeUuid<br>2、调用 parseBaseApk(res, parser, flags, outError) 来获取 Package 对象 pkg 并返回</p>
 </blockquote>
-<p><br></p>
 <h2 id="3-3-parseBaseApk-重载"><a href="#3-3-parseBaseApk-重载" class="headerlink" title="3.3 parseBaseApk 重载"></a>3.3 parseBaseApk 重载</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> Package <span class="token function">parseBaseApk</span><span class="token punctuation">(</span>String apkPath<span class="token punctuation">,</span> Resources res<span class="token punctuation">,</span> XmlResourceParser parser<span class="token punctuation">,</span>
             <span class="token keyword">int</span> flags<span class="token punctuation">,</span> String<span class="token punctuation">[</span><span class="token punctuation">]</span> outError<span class="token punctuation">)</span> <span class="token keyword">throws</span> XmlPullParserException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
     <span class="token keyword">final</span> String splitName<span class="token punctuation">;</span>
@@ -774,7 +769,6 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
     <span class="token keyword">return</span> <span class="token function">parseBaseApkCommon</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> null<span class="token punctuation">,</span> res<span class="token punctuation">,</span> parser<span class="token punctuation">,</span> flags<span class="token punctuation">,</span> outError<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="3-4-parseBaseApkCommon"><a href="#3-4-parseBaseApkCommon" class="headerlink" title="3.4 parseBaseApkCommon"></a>3.4 parseBaseApkCommon</h2><p>最终调用了 <code>parseBaseApkCommon</code> 方法，这个方法主要用来解析 APK 的 <code>AndroidManifest</code> 中的 <code>各个标签</code>，比如 application、permission、uses-sdk、feature-group 等等。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> Package <span class="token function">parseBaseApkCommon</span><span class="token punctuation">(</span>Package pkg<span class="token punctuation">,</span> Set<span class="token operator">&lt;</span>String<span class="token operator">></span> acceptedTags<span class="token punctuation">,</span> Resources res<span class="token punctuation">,</span>
         XmlResourceParser parser<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">,</span> String<span class="token punctuation">[</span><span class="token punctuation">]</span> outError<span class="token punctuation">)</span> <span class="token keyword">throws</span> XmlPullParserException<span class="token punctuation">,</span>
@@ -820,7 +814,6 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="3-5-parseBaseApplication"><a href="#3-5-parseBaseApplication" class="headerlink" title="3.5 parseBaseApplication"></a>3.5 parseBaseApplication</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// parseBaseApplication 方法很长，我们这里只截取了解析四大组件相关的代码。</span>
 <span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">parseBaseApplication</span><span class="token punctuation">(</span>Package owner<span class="token punctuation">,</span> Resources res<span class="token punctuation">,</span>
         XmlResourceParser parser<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">,</span> String<span class="token punctuation">[</span><span class="token punctuation">]</span> outError<span class="token punctuation">)</span>
@@ -885,10 +878,6 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
 <span class="token punctuation">}</span>
 </code></pre>
 <p><br></p>
-<h2 id="3-6-总结"><a href="#3-6-总结" class="headerlink" title="3.6 总结"></a>3.6 总结</h2><p>PackageParser 解析 APK 的代码逻辑非常庞大且复杂，基本了解了本文所涉及的逻辑和原理，分析问题基本上足够了，如果有兴趣可以自行深入的研究源码。</p>
-<p>parseBaseApk 方法主要的解析结构可以理解为以下简图：<br><br></p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-f8f66b9d2ba70154.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800" alt="1417629-1a9039e0ad81bf21.png"></center>
-
 <h1 id="四、Package-数据结构"><a href="#四、Package-数据结构" class="headerlink" title="四、Package 数据结构"></a>四、Package 数据结构</h1><p>包被解析后，最终存储在 <code>Package</code> ，它是 <code>PackageParser</code> 的<code>内部类</code>，它的部分成员变量如下所示。</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Representation of a full package parsed from APK files on disk. A package
@@ -944,14 +933,7 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>Package 的数据结构简图如下所示：</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-12ea4aeb503246b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2.png"></center>
-
-<p>从这个简图中可以发现 Package 的数据结构是如何设计的：</p>
-<p>1、Package 中存有许多组件，比如 Acticity、Provider、Permission 等等，它们都继承基类 Component。<br>2、每个组件都包含一个 info 数据，比如 Activity 类中包含了成员变量 ActivityInfo，这个 ActivityInfo 才是真正的 Activity 数据。<br>3、四大组件的标签内可能包含 <intent-filter> 来过滤 Intent 信息，因此需要 IntentInfo 来保存组件的 intent 信息，组件基类 Component 依赖于 IntentInfo，IntentInfo 有三个子类 ActivityIntentInfo、ServiceIntentInfo 和 ProviderIntentInfo，不同组件依赖的 IntentInfo 会有所不同，比如 Activity 继承自Component<activityintentinfo> ，Permission 继承自 Component<intentinfo> 。</intentinfo></activityintentinfo></intent-filter></p>
-<p>最终的解析的数据会封装到 Package 中。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;📕 01. <a href="http://liuwangshu.cn/framework/pms/5-packageparser.html" target="_blank" rel="noopener">Android包管理机制（五）APK是如何被解析的</a><br>&nbsp;📕 02. <a href="https://www.jianshu.com/p/69fb6f9a6ac7" target="_blank" rel="noopener">APK安装流程详解9——PackageParser解析APK(上)</a></p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/%E3%80%8AThinking%20in%20Android%E3%80%8B%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/15/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%E4%B9%8B%20PackageInstaller/">Framework 核心服务之 PMS 钻研（4）- PackageInstaller</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/23/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%886%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88%E4%B8%8A%EF%BC%89/">Framework 核心服务之 PMS 钻研（6）- APK 安装流程（上）</a></p>
+<p><br></p>
 
             </div>
             <hr>
