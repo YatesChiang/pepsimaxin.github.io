@@ -387,14 +387,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.8k
+                        5.4k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        26 分钟
+                        25 分钟
                     </div>
                     
                 
@@ -547,12 +547,10 @@
 <blockquote>
 <p>安装场景</p>
 </blockquote>
-<p>目前，我们常见的安装 APK 的场景主要分为以下 <font color="#FF0000"><strong>四种</strong></font>：（这四种方式后面都单独进行研究）</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、通过 adb 命令安装：adb 命令包括 <code>adb push/install</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、用户下载的 Apk，通过系统安装器 <code>packageinstaller</code>（系统内置的应用程序，用于安装和卸载应用程序）安装该 Apk。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;3、系统开机时安装系统应用。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;4、电脑或者手机上的应用商店自动安装。</p>
+<p>目前，我们常见的安装 APK 的场景主要分为以下 <font color="#FF0000"><strong>四种</strong></font>：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;1、通过 adb 命令安装：adb 命令包括 <code>adb push/install</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;2、用户下载的 Apk，通过系统安装器 <code>packageinstaller</code>（系统内置的应用程序，用于安装和卸载应用程序）安装该 Apk。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;3、系统开机时安装系统应用。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;4、电脑或者手机上的应用商店自动安装。</p>
 <p>其实，这 4 种方式最终都是由 <code>PackageManagerService</code> 来进行处理，只是在此之前的调用链（逻辑）是不同的。</p>
-<p>我们在接下来的分析中，会优先选择第二种方式，因为对于开发者来说，这是调用链比较长的安装方式，其他三种方式也会再跟一遍逻辑，梳理 4 种逻辑的差异点。</p>
-<p>我们首先看下这种安装方式的<font color="#0000CD"> <strong>实际效果图</strong> </font>：（后面我们分析源码的流程会紧密联系着这几张图，大家可以对比理解！）</p>
-<p><center><img src="https://upload-images.jianshu.io/upload_images/3517194-7404e3513b6871cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/220" alt="未知权限.png">&nbsp;&nbsp;<img src="https://upload-images.jianshu.io/upload_images/3517194-7f3099737f62e7b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/220" alt="开启权限.png">&nbsp;&nbsp;<img src="https://upload-images.jianshu.io/upload_images/3517194-836d60ebb88bea77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/220" alt="确定安装.png">&nbsp;&nbsp;<img src="https://upload-images.jianshu.io/upload_images/3517194-088d3c221086bffb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/220" alt="安装界面.png">&nbsp;&nbsp;<img src="https://upload-images.jianshu.io/upload_images/3517194-6ce997c33e3193a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/220" alt="安装完成.png"></center><br><br></p>
+<p>我们在接下来的分析中，会优先选择第二种方式，因为对于开发者来说，这是调用链比较长的安装方式。</p>
 <blockquote>
 <p>安装目录</p>
 </blockquote>
@@ -585,12 +583,12 @@
 <td>该目录下的 packages.xml 文件类似于 Window 的注册表，这个文件是解析 apk 时由 writeLP() 创建的，里面记录了系统的 permissons，以及每个 apk 的 name，codePath，flag，ts，version ，userid 等信息，这些信息主要通过 apk 的 AndroidManifest 解析获取，解析完 apk 后将更新信息写入这个文件并保存到 flash，下次开机的时候直接从里面读取相关信息并添加到内存相关列表中。当有 apk 升级，安装或删除时会更新这个文件。</td>
 </tr>
 <tr>
-<td>/data/system/package.xml</td>
+<td>/data/system/packages.xml</td>
 <td>包含了该应用申请的权限、签名和代码所在的位置等信息系，并且两者都有同一个 userld。之所以每个应用都要一个 userId，是因为 Android 在系统设计上把每个应用当做 Linux 系统上的一个用户对待，这样就可以利用已有的 Linux 用户管理机制来设计 Android 应用，比如应用目录，应用权限，应用进程管理等。</td>
 </tr>
 <tr>
-<td>/data/system/package.list</td>
-<td>指定了应用的默认存储位置 /data/data/com.xxx.xxx。</td>
+<td>/data/system/packages.list</td>
+<td>指定了应用的默认存储位置 /data/user/0/com.xxx.xxx。</td>
 </tr>
 </tbody>
 </table>
@@ -612,20 +610,20 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <p>我们发现 <code>&quot;application/vnd.android.package-archive&quot;</code> 其实就是<code>文件类型</code>，具体对应 <code>apk</code> 类型。</p>
 <p>那么这个 <code>Intent 隐式匹配的 Activity</code> 是什么？这边我们直接告诉你：<font color="#FF0000"><strong>InstallStart</strong></font> ！为什么？源码为证！</p>
 <p>（源码中，7.0 隐式匹配的 Activity 为 <font color="#FF0000"><strong>PackageInstallerActivity</strong></font> ，两者的区别我们后面会讲解到！）。</p>
-<pre class=" language-xml"><code class="language-xml">// packages/apps/PackageInstaller/AndroidManifest.xml
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>activity</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>.InstallStart<span class="token punctuation">"</span></span>
-        <span class="token attr-name"><span class="token namespace">android:</span>exported</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
-        <span class="token attr-name"><span class="token namespace">android:</span>excludeFromRecents</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>intent-filter</span> <span class="token attr-name"><span class="token namespace">android:</span>priority</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>action</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.intent.action.VIEW<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>action</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.intent.action.INSTALL_PACKAGE<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>category</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>android.intent.category.DEFAULT<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>data</span> <span class="token attr-name"><span class="token namespace">android:</span>scheme</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>data</span> <span class="token attr-name"><span class="token namespace">android:</span>scheme</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>content<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>data</span> <span class="token attr-name"><span class="token namespace">android:</span>mimeType</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>application/vnd.android.package-archive<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>intent-filter</span><span class="token punctuation">></span></span>
-    ... ...
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>activity</span><span class="token punctuation">></span></span>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// packages/apps/PackageInstaller/AndroidManifest.xml</span>
+<span class="token operator">&lt;</span>activity android<span class="token operator">:</span>name<span class="token operator">=</span><span class="token string">".InstallStart"</span>
+        android<span class="token operator">:</span>exported<span class="token operator">=</span><span class="token string">"true"</span>
+        android<span class="token operator">:</span>excludeFromRecents<span class="token operator">=</span><span class="token string">"true"</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span>intent<span class="token operator">-</span>filter android<span class="token operator">:</span>priority<span class="token operator">=</span><span class="token string">"1"</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>action android<span class="token operator">:</span>name<span class="token operator">=</span><span class="token string">"android.intent.action.VIEW"</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>action android<span class="token operator">:</span>name<span class="token operator">=</span><span class="token string">"android.intent.action.INSTALL_PACKAGE"</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>category android<span class="token operator">:</span>name<span class="token operator">=</span><span class="token string">"android.intent.category.DEFAULT"</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>data android<span class="token operator">:</span>scheme<span class="token operator">=</span><span class="token string">"file"</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>data android<span class="token operator">:</span>scheme<span class="token operator">=</span><span class="token string">"content"</span> <span class="token operator">/</span><span class="token operator">></span>
+        <span class="token operator">&lt;</span>data android<span class="token operator">:</span>mimeType<span class="token operator">=</span><span class="token string">"application/vnd.android.package-archive"</span> <span class="token operator">/</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>intent<span class="token operator">-</span>filter<span class="token operator">></span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>activity<span class="token operator">></span>
 </code></pre>
 <h2 id="2-2-InstallStart"><a href="#2-2-InstallStart" class="headerlink" title="2.2 InstallStart"></a>2.2 InstallStart</h2><p>其实，<code>InstallStart</code> 是 <code>PackageInstaller</code> 的<code>入口</code>。当我们调用 <code>PackageInstaller</code> 来安装应用时会跳转到 <code>InstallStart</code>，并调用它的 <code>onCreate</code> 方法，我们来看看源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
@@ -636,23 +634,19 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
         mIPackageManager <span class="token operator">=</span> AppGlobals<span class="token punctuation">.</span><span class="token function">getPackageManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         Intent intent <span class="token operator">=</span> <span class="token function">getIntent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         String callingPackage <span class="token operator">=</span> <span class="token function">getCallingPackage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> isSessionInstall <span class="token operator">=</span>
+                      PackageInstaller<span class="token punctuation">.</span>ACTION_CONFIRM_PERMISSIONS<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>intent<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
-        <span class="token comment" spellcheck="true">/**
-         * public static final String ACTION_CONFIRM_PERMISSIONS = 
-                                     "android.content.pm.action.CONFIRM_PERMISSIONS";
-         * 判断 Intent 的 Action 是否为 CONFIRM_PERMISSIONS ;
-         */</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>PackageInstaller<span class="token punctuation">.</span>ACTION_CONFIRM_PERMISSIONS<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>intent<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 判断 Intent 的 Action 是否为 ACTION_CONFIRM_PERMISSIONS ;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isSessionInstall<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             nextActivity<span class="token punctuation">.</span><span class="token function">setClass</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> PackageInstallerActivity<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
             <span class="token comment" spellcheck="true">// 我们探讨的情景会走这边</span>
             Uri packageUri <span class="token operator">=</span> intent<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
             <span class="token comment" spellcheck="true">// 保证 packageUri 不为 null，判断 packageUri 的 Scheme 协议是否是 content 或者 File</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>packageUri <span class="token operator">!=</span> null 
-                    <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>packageUri<span class="token punctuation">.</span><span class="token function">getScheme</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>ContentResolver<span class="token punctuation">.</span>SCHEME_FILE<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>packageUri <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>packageUri<span class="token punctuation">.</span><span class="token function">getScheme</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>ContentResolver<span class="token punctuation">.</span>SCHEME_FILE<span class="token punctuation">)</span>
                     <span class="token operator">||</span> packageUri<span class="token punctuation">.</span><span class="token function">getScheme</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>ContentResolver<span class="token punctuation">.</span>SCHEME_CONTENT<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 跳转到 InstallStaging （Android 8.0 - 9.0）</span>
                 nextActivity<span class="token punctuation">.</span><span class="token function">setClass</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> InstallStaging<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -679,7 +673,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="2-3-InstallStaging"><a href="#2-3-InstallStaging" class="headerlink" title="2.3 InstallStaging"></a>2.3 InstallStaging</h2><p>我们是基于 Android 9.0 的代码进行的分析，所以会走到 <code>InstallStaging</code> 分支，继续看源码：</p>
+<h2 id="2-3-InstallStaging"><a href="#2-3-InstallStaging" class="headerlink" title="2.3 InstallStaging"></a>2.3 InstallStaging</h2><p>我们是基于 Android 9.0 的代码进行的分析，所以会走到 <code>InstallStaging</code> 分支。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InstallStaging</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -687,14 +681,10 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
     <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onResume</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onResume</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token comment" spellcheck="true">// This is the first onResume in a single life of the activity</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mStagingTask <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// File does not exist, or became invalid</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>mStagedFile <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token comment" spellcheck="true">// Create file delayed to be able to show error</span>
                 <span class="token keyword">try</span> <span class="token punctuation">{</span>
-                    <span class="token comment" spellcheck="true">// 如果 File 类型的 mStagedFile 为 null，</span>
-                    <span class="token comment" spellcheck="true">// 则创建 mStagedFile，mStagedFile 用于存储临时数据</span>
+                    <span class="token comment" spellcheck="true">// 如果 File 类型的 mStagedFile 为 null，则创建 mStagedFile，用于存储临时数据</span>
                     mStagedFile <span class="token operator">=</span> TemporaryFileManager<span class="token punctuation">.</span><span class="token function">getStagedFile</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     <span class="token function">showError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -711,12 +701,10 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <span class="token punctuation">}</span>
 </code></pre>
 <p>我们可以看到，<font color="#0000CD"><strong>InstallStaging 主要做了两部分工作</strong></font>：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、判断 <code>mStagingTask</code> 是否为空，主要用于存储临时数据；</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、创建并启动 <code>StagingAsyncTask</code> 线程。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;1、判断 <code>mStagingTask</code> 是否为空，主要用于存储临时数据；</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;2、创建并启动 <code>StagingAsyncTask</code> 线程。</p>
 <h2 id="2-4-StagingAsyncTask"><a href="#2-4-StagingAsyncTask" class="headerlink" title="2.4 StagingAsyncTask"></a>2.4 StagingAsyncTask</h2><p>接下来，我们看看这个线程所做的工作：</p>
-<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// /packages/apps/PackageInstaller/src/com/android/packageinstaller/InstallStaging.java</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InstallStaging</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InstallStaging</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">StagingAsyncTask</span> <span class="token keyword">extends</span> <span class="token class-name">AsyncTask</span><span class="token operator">&lt;</span>Uri<span class="token punctuation">,</span> Void<span class="token punctuation">,</span> Boolean<span class="token operator">></span> <span class="token punctuation">{</span>
@@ -772,11 +760,9 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <h2 id="2-5-DeleteStagedFileOnResult"><a href="#2-5-DeleteStagedFileOnResult" class="headerlink" title="2.5 DeleteStagedFileOnResult"></a>2.5 DeleteStagedFileOnResult</h2><p><code>doInBackground</code> 方法中将 <code>packageUri</code>（content 协议的 Uri）的内容写入到 <code>mStagedFile</code> 中，如果写入成功，<code>onPostExecute</code> 方法中会跳转到 <code>DeleteStagedFileOnResult</code> 中，并将 <code>mStagedFile</code> 传进去。</p>
-<p>直接看下源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DeleteStagedFileOnResult</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
     <span class="token annotation punctuation">@Override</span>
     <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Nullable</span> Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -803,6 +789,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <span class="token punctuation">}</span>
 </code></pre>
 <h2 id="2-6-小结"><a href="#2-6-小结" class="headerlink" title="2.6 小结"></a>2.6 小结</h2><p><font color="#0000CD"><strong>绕了一圈又回到了 PackageInstallerActivity</strong></font>，这里可以看出 <code>InstallStaging</code> 主要起了转换的作用，将 <code>content</code> 协议的 <code>Uri</code> 转换为 <code>File</code> 协议，然后跳转到 <code>PackageInstallerActivity</code>，接下来的安装流程就和 Android 7.0 一样了。</p>
+<p><br></p>
 <h1 id="三、PackageInstallerActivity"><a href="#三、PackageInstallerActivity" class="headerlink" title="三、PackageInstallerActivity"></a>三、PackageInstallerActivity</h1><p>接下来，我们就要重点分析 <code>PackageInstallerActivity</code> ！从功能上来说，<font color="#FF0000"><strong>PackageInstallerActivity 才是应用安装器 PackageInstaller 真正的入口 Activity</strong></font>。</p>
 <p>我们看下官方对于这个类的说明：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
@@ -869,7 +856,10 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token comment" spellcheck="true">// 可能是系统级别的应用安装时，需要授权走这个流程</span>
             <span class="token keyword">final</span> <span class="token keyword">int</span> sessionId <span class="token operator">=</span> intent<span class="token punctuation">.</span><span class="token function">getIntExtra</span><span class="token punctuation">(</span>PackageInstaller<span class="token punctuation">.</span>EXTRA_SESSION_ID<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">final</span> PackageInstaller<span class="token punctuation">.</span>SessionInfo info <span class="token operator">=</span> mInstaller<span class="token punctuation">.</span><span class="token function">getSessionInfo</span><span class="token punctuation">(</span>sessionId<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>info <span class="token operator">==</span> null <span class="token operator">||</span> <span class="token operator">!</span>info<span class="token punctuation">.</span>sealed <span class="token operator">||</span> info<span class="token punctuation">.</span>resolvedBaseCodePath <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token function">finish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
 
             mSessionId <span class="token operator">=</span> sessionId<span class="token punctuation">;</span>
             packageUri <span class="token operator">=</span> Uri<span class="token punctuation">.</span><span class="token function">fromFile</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span>resolvedBaseCodePath<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -897,17 +887,14 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token keyword">return</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
-        <span class="token comment" spellcheck="true">// 根据 Uri 的 Scheme 进行预处理</span>
-        <span class="token comment" spellcheck="true">// 💥 💥 💥 重点方法 1 💥 💥 💥 </span>
+        <span class="token comment" spellcheck="true">// 重点方法 1：根据 Uri 的 Scheme 进行预处理</span>
         <span class="token keyword">boolean</span> wasSetUp <span class="token operator">=</span> <span class="token function">processPackageUri</span><span class="token punctuation">(</span>packageUri<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>wasSetUp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
         <span class="token function">bindUi</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>install_confirm<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment" spellcheck="true">// 判断是否是未知来源的应用，如果开启允许安装未知来源选项则直接初始化安装</span>
-        <span class="token comment" spellcheck="true">// 💥 💥 💥 重点方法 2 💥 💥 💥</span>
+        <span class="token comment" spellcheck="true">// 重点方法 2：判断是否是未知来源的应用，如果开启允许安装未知来源选项则直接初始化安装</span>
         <span class="token function">checkIfAllowedAndInitiateInstall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
     <span class="token punctuation">}</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -928,8 +915,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token comment" spellcheck="true">// 处理 scheme 为 package 的情况</span>
             <span class="token keyword">case</span> SCHEME_PACKAGE<span class="token operator">:</span> <span class="token punctuation">{</span>
                 <span class="token keyword">try</span> <span class="token punctuation">{</span>
-                    <span class="token comment" spellcheck="true">// 获取 package 对应的 Android 应用信息 PackageInfo</span>
-                    <span class="token comment" spellcheck="true">// 如：应用名称，权限列表等...</span>
+                    <span class="token comment" spellcheck="true">// 获取 package 对应的 Android 应用信息 PackageInfo，如：应用名称，权限列表等</span>
                     mPkgInfo <span class="token operator">=</span> mPm<span class="token punctuation">.</span><span class="token function">getPackageInfo</span><span class="token punctuation">(</span>packageUri<span class="token punctuation">.</span><span class="token function">getSchemeSpecificPart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
                                         PackageManager<span class="token punctuation">.</span>GET_PERMISSIONS
                                         <span class="token operator">|</span> PackageManager<span class="token punctuation">.</span>MATCH_UNINSTALLED_PACKAGES<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -938,8 +924,6 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 
                 <span class="token comment" spellcheck="true">// 如果无法获取 PackageInfo ，弹出一个错误的对话框，然后直接退出安装</span>
                 <span class="token keyword">if</span> <span class="token punctuation">(</span>mPkgInfo <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                    Log<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Requested package "</span> <span class="token operator">+</span> packageUri<span class="token punctuation">.</span><span class="token function">getScheme</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-                            <span class="token operator">+</span> <span class="token string">" not available. Discontinuing installation"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token function">showDialogInner</span><span class="token punctuation">(</span>DLG_PACKAGE_ERROR<span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token function">setPmResult</span><span class="token punctuation">(</span>PackageManager<span class="token punctuation">.</span>INSTALL_FAILED_INVALID_APK<span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
@@ -954,7 +938,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token keyword">case</span> ContentResolver<span class="token punctuation">.</span>SCHEME_FILE<span class="token operator">:</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 根据 packageUri 创建一个新的 File</span>
                 File sourceFile <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>packageUri<span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token comment" spellcheck="true">// 创建 APK 文件的分析器 parsed，💥 💥 💥 重点方法 💥 💥 💥 </span>
+                <span class="token comment" spellcheck="true">// 创建 APK 文件的分析器 parsed</span>
                 PackageParser<span class="token punctuation">.</span>Package parsed <span class="token operator">=</span> PackageUtil<span class="token punctuation">.</span><span class="token function">getPackageInfo</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> sourceFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
                 <span class="token comment" spellcheck="true">// 说明解析错误，则弹出对话框，并退出安装</span>
@@ -969,10 +953,6 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
                 mPkgInfo <span class="token operator">=</span> PackageParser<span class="token punctuation">.</span><span class="token function">generatePackageInfo</span><span class="token punctuation">(</span>parsed<span class="token punctuation">,</span> null<span class="token punctuation">,</span>
                         PackageManager<span class="token punctuation">.</span>GET_PERMISSIONS<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">PackageUserState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-                <span class="token comment" spellcheck="true">// private PackageUtil.AppSnippet mAppSnippet; 获取 PackageUtil.AppSnippet，</span>
-                <span class="token comment" spellcheck="true">// AppSnippet 是 PackageUtil 的静态内部类，内部封装了icon和label；</span>
-                <span class="token comment" spellcheck="true">// AppSnippet 中只有两个属性：lable（应用名称）、icon（应用图标）;</span>
-                <span class="token comment" spellcheck="true">// return new PackageUtil.AppSnippet(label, icon); 返回的是 label 和 icon.</span>
                 mAppSnippet <span class="token operator">=</span> PackageUtil<span class="token punctuation">.</span><span class="token function">getAppSnippet</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> 
                                                     mPkgInfo<span class="token punctuation">.</span>applicationInfo<span class="token punctuation">,</span> sourceFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
@@ -1027,21 +1007,18 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
         <span class="token comment" spellcheck="true">// 判断如果允许安装未知来源或者根据 Intent 判断得出该 APK 不是未知来源</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mAllowUnknownSources <span class="token operator">||</span> <span class="token operator">!</span><span class="token function">isInstallRequestFromUnknownSource</span><span class="token punctuation">(</span><span class="token function">getIntent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token comment" spellcheck="true">// 初始化安装</span>
-            <span class="token function">initiateInstall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>               <span class="token comment" spellcheck="true">// 💥 💥 💥 重点方法 1 💥 💥 💥 </span>
+            <span class="token function">initiateInstall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>               <span class="token comment" spellcheck="true">// 重点方法 1</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">final</span> <span class="token keyword">int</span> unknownSourcesRestrictionSource <span class="token operator">=</span> mUserManager<span class="token punctuation">.</span>
-                            <span class="token function">getUserRestrictionSource</span><span class="token punctuation">(</span>
-                                          UserManager<span class="token punctuation">.</span>DISALLOW_INSTALL_UNKNOWN_SOURCES<span class="token punctuation">,</span> 
-                                          Process<span class="token punctuation">.</span><span class="token function">myUserHandle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">final</span> <span class="token keyword">int</span> unknownSourcesRestrictionSource <span class="token operator">=</span> mUserManager<span class="token punctuation">.</span><span class="token function">getUserRestrictionSource</span><span class="token punctuation">(</span>
+                      UserManager<span class="token punctuation">.</span>DISALLOW_INSTALL_UNKNOWN_SOURCES<span class="token punctuation">,</span> Process<span class="token punctuation">.</span><span class="token function">myUserHandle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token comment" spellcheck="true">// 如果管理员限制来自未知源的安装, 就弹出提示 Dialog</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>unknownSourcesRestrictionSource <span class="token operator">&amp;</span> 
-                                              UserManager<span class="token punctuation">.</span>RESTRICTION_SOURCE_SYSTEM<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>unknownSourcesRestrictionSource <span class="token operator">&amp;</span> UserManager<span class="token punctuation">.</span>RESTRICTION_SOURCE_SYSTEM<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token function">showDialogInner</span><span class="token punctuation">(</span>DLG_UNKNOWN_SOURCES_RESTRICTED_FOR_USER<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>unknownSourcesRestrictionSource <span class="token operator">!=</span> UserManager<span class="token punctuation">.</span>RESTRICTION_NOT_SET<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token function">startActivity</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Intent</span><span class="token punctuation">(</span>Settings<span class="token punctuation">.</span>ACTION_SHOW_ADMIN_SUPPORT_DETAILS<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token function">finish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-                <span class="token function">handleUnknownSources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 💥 💥 💥 重点方法 2 💥 💥 💥 </span>
+                <span class="token function">handleUnknownSources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 重点方法 2</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
@@ -1056,10 +1033,8 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token function">showDialogInner</span><span class="token punctuation">(</span>DLG_ANONYMOUS_SOURCE<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">return</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        <span class="token keyword">final</span> <span class="token keyword">int</span> appOpCode <span class="token operator">=</span> 
-            AppOpsManager<span class="token punctuation">.</span><span class="token function">permissionToOpCode</span><span class="token punctuation">(</span>Manifest<span class="token punctuation">.</span>permission<span class="token punctuation">.</span>REQUEST_INSTALL_PACKAGES<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">final</span> <span class="token keyword">int</span> appOpMode <span class="token operator">=</span> mAppOpsManager<span class="token punctuation">.</span><span class="token function">noteOpNoThrow</span><span class="token punctuation">(</span>appOpCode<span class="token punctuation">,</span>
-                                                     mOriginatingUid<span class="token punctuation">,</span> mOriginatingPackage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> <span class="token keyword">int</span> appOpCode <span class="token operator">=</span> AppOpsManager<span class="token punctuation">.</span><span class="token function">permissionToOpCode</span><span class="token punctuation">(</span>Manifest<span class="token punctuation">.</span>permission<span class="token punctuation">.</span>REQUEST_INSTALL_PACKAGES<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> <span class="token keyword">int</span> appOpMode <span class="token operator">=</span> mAppOpsManager<span class="token punctuation">.</span><span class="token function">noteOpNoThrow</span><span class="token punctuation">(</span>appOpCode<span class="token punctuation">,</span> mOriginatingUid<span class="token punctuation">,</span> mOriginatingPackage<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">switch</span> <span class="token punctuation">(</span>appOpMode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">case</span> AppOpsManager<span class="token punctuation">.</span>MODE_DEFAULT<span class="token operator">:</span>
                 <span class="token keyword">try</span> <span class="token punctuation">{</span>
@@ -1150,8 +1125,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
                 <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">AlertDialog<span class="token punctuation">.</span>Builder</span><span class="token punctuation">(</span><span class="token function">getActivity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
                         <span class="token punctuation">.</span><span class="token function">setTitle</span><span class="token punctuation">(</span>pm<span class="token punctuation">.</span><span class="token function">getApplicationLabel</span><span class="token punctuation">(</span>sourceInfo<span class="token punctuation">)</span><span class="token punctuation">)</span>
                         <span class="token punctuation">.</span><span class="token function">setIcon</span><span class="token punctuation">(</span>pm<span class="token punctuation">.</span><span class="token function">getApplicationIcon</span><span class="token punctuation">(</span>sourceInfo<span class="token punctuation">)</span><span class="token punctuation">)</span>
-                        <span class="token comment" spellcheck="true">// untrusted_external_source_warning：出于安全考虑，已禁止您的手机安装</span>
-                        <span class="token comment" spellcheck="true">// 来自此来源的未知应用，对应文章开头的操作图</span>
+                        <span class="token comment" spellcheck="true">// untrusted_external_source_warning：出于安全考虑，已禁止您的手机安装来自此来源的未知应用</span>
                         <span class="token punctuation">.</span><span class="token function">setMessage</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>untrusted_external_source_warning<span class="token punctuation">)</span>
                         <span class="token punctuation">.</span><span class="token function">setPositiveButton</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>external_sources_settings<span class="token punctuation">,</span>
                                 <span class="token punctuation">(</span>dialog<span class="token punctuation">,</span> which<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
@@ -1201,8 +1175,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
         <span class="token comment" spellcheck="true">// 检查这个包是否已安装，如果要替换，则显示替换对话框</span>
         <span class="token keyword">try</span> <span class="token punctuation">{</span>
             <span class="token comment" spellcheck="true">// 获取设备上的残存数据，并且标记为 “installed” 的，实际上已经被卸载的应用</span>
-            mAppInfo <span class="token operator">=</span> mPm<span class="token punctuation">.</span><span class="token function">getApplicationInfo</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">,</span>
-                    PackageManager<span class="token punctuation">.</span>MATCH_UNINSTALLED_PACKAGES<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            mAppInfo <span class="token operator">=</span> mPm<span class="token punctuation">.</span><span class="token function">getApplicationInfo</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">,</span> PackageManager<span class="token punctuation">.</span>MATCH_UNINSTALLED_PACKAGES<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>mAppInfo<span class="token punctuation">.</span>flags<span class="token operator">&amp;</span>ApplicationInfo<span class="token punctuation">.</span>FLAG_INSTALLED<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 如果应用是被卸载的，但是又是被标识成安装过的，则认为是新安装</span>
                 mAppInfo <span class="token operator">=</span> null<span class="token punctuation">;</span>
@@ -1218,10 +1191,10 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <span class="token punctuation">}</span>
 </code></pre>
 <p>我们可以看到，<font color="#0000CD"><strong>initiateInstall 主要做了三件事</strong></font>：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、检查设备是否是同名安装，如果是则后续是替换安装。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、检查设备上是否已经安装了这个安装包，如果是，后面是替换安装。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;3、调用 <code>startInstallConfirm()</code> ，这个方法是安装的核心代码。</p>
-<h2 id="3-6-startInstallConfirm"><a href="#3-6-startInstallConfirm" class="headerlink" title="3.6 startInstallConfirm"></a>3.6 startInstallConfirm</h2><p>下面我们就来看下 <code>startInstallConfirm()</code> 方法里面的具体实现：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;1、检查设备是否是同名安装，如果是则后续是替换安装。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;2、检查设备上是否已经安装了这个安装包，如果是，后面是替换安装。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;3、调用 <code>startInstallConfirm()</code> ，这个方法是安装的核心代码。</p>
+<h2 id="3-6-startInstallConfirm"><a href="#3-6-startInstallConfirm" class="headerlink" title="3.6 startInstallConfirm"></a>3.6 startInstallConfirm</h2><p>下面我们就来看看 <code>startInstallConfirm()</code> 方法里面的具体实现：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerActivity</span> <span class="token keyword">extends</span> <span class="token class-name">OverlayTouchActivity</span> <span class="token keyword">implements</span> <span class="token class-name">OnClickListener</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -1233,8 +1206,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
             <span class="token function">bindUi</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>install_confirm_perm<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
-        <span class="token punctuation">(</span><span class="token punctuation">(</span>TextView<span class="token punctuation">)</span> <span class="token function">findViewById</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>install_confirm_question<span class="token punctuation">)</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>install_confirm_question<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">(</span><span class="token punctuation">(</span>TextView<span class="token punctuation">)</span> <span class="token function">findViewById</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>install_confirm_question<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>install_confirm_question<span class="token punctuation">)</span><span class="token punctuation">;</span>
         TabHost tabHost <span class="token operator">=</span> <span class="token punctuation">(</span>TabHost<span class="token punctuation">)</span><span class="token function">findViewById</span><span class="token punctuation">(</span>android<span class="token punctuation">.</span>R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>tabhost<span class="token punctuation">)</span><span class="token punctuation">;</span>
         tabHost<span class="token punctuation">.</span><span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         ViewPager viewPager <span class="token operator">=</span> <span class="token punctuation">(</span>ViewPager<span class="token punctuation">)</span><span class="token function">findViewById</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>id<span class="token punctuation">.</span>pager<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1355,10 +1327,9 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <span class="token punctuation">}</span>
 </code></pre>
 <p>这个方法其实主要是根据不同的情况来设置相应的 <code>UI</code>，主要是将安装包分为<code>新安装</code>和<code>更新安装</code>，在更新安装里面又分为<code>系统应用</code>和<code>非系统应用</code>，然后根据不同的情况来显示不同的 <code>UI</code>，<code>UI</code> 这块主要是通过 <code>getPermissionsView</code> 方法来获取不同的权限 <code>View</code>。</p>
-<h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p><strong>PackageInstaller 初始化的过程：</strong></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、根据 <code>Uri</code> 的 <code>Scheme</code> 协议不同，跳转到不同的界面，<code>content</code> 协议跳转到 <code>InstallStart</code>，其他的跳转到 <code>PackageInstallerActivity</code>。本文应用场景中，如果是 <code>Android 7.0</code> 以及更高版本会跳转到 <code>InstallStart</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、<code>InstallStart</code> 将 <code>content</code> 协议的 <code>Uri 转换</code>为 <code>File 协议</code>，然后跳转到 <code>PackageInstallerActivity</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;3、<code>PackageInstallerActivity</code> 会分别对 <code>package 协议</code> 和 <code>file 协议</code> 的 <code>Uri</code> 进行处理，如果是 <code>file 协议</code>会解析 <code>APK</code> 文件得到包信息 <code>PackageInfo</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;4、<code>PackageInstallerActivity</code> 中会对<code>未知来源</code>进行处理，如果<code>允许安装未知来源</code>或者根据 <code>Intent</code> 判断得出该 <code>APK 不是未知来源</code>，就会<code>初始化安装确认界面</code>，如果管理员<code>限制来自未知源的安装</code>, 就弹出提示 <code>Dialog</code> 或者跳转到设置界面。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;📕 01. <a href="http://liuwangshu.cn/framework/pms/1-packageinstaller-initialize.html" target="_blank" rel="noopener">Android包管理机制（一）PackageInstaller的初始化</a><br>&nbsp;📕 02. <a href="https://www.cnblogs.com/ouyanliu/articles/7100682.html" target="_blank" rel="noopener">android 7.0 安装器安装过程分析</a><br>&nbsp;📕 03. <a href="https://www.jianshu.com/p/cbf8e73f41ed" target="_blank" rel="noopener">APK安装流程详解11——普通应用安装简介</a></p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/%E3%80%8AThinking%20in%20Android%E3%80%8B%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/10/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%883%EF%BC%89%E4%B9%8B%20PackageManager/">Framework 核心服务之 PMS 钻研（3）- PackageManager</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/19/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%E4%B9%8B%20PackageParser/">Framework 核心服务之 PMS 钻研（5）- PackageParser</a></p>
+<p><br></p>
+<h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;1、根据 <code>Uri</code> 的 <code>Scheme</code> 协议不同，跳转到不同的界面，<code>content</code> 协议跳转到 <code>InstallStart</code>，其他的跳转到 <code>PackageInstallerActivity</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;2、<code>InstallStart</code> 将 <code>content</code> 协议的 <code>Uri 转换</code>为 <code>File 协议</code>，然后跳转到 <code>PackageInstallerActivity</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;3、<code>PackageInstallerActivity</code> 会分别对 <code>package 协议</code> 和 <code>file 协议</code> 的 <code>Uri</code> 进行处理，如果是 <code>file 协议</code>会解析 <code>APK</code> 文件得到包信息 <code>PackageInfo</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;4、<code>PackageInstallerActivity</code> 中会对<code>未知来源</code>进行处理，如果<code>允许安装未知来源</code>或者根据 <code>Intent</code> 判断得出该 <code>APK 不是未知来源</code>，就会<code>初始化安装确认界面</code>，如果管理员<code>限制来自未知源的安装</code>, 就弹出提示 <code>Dialog</code> 或者跳转到设置界面。</p>
+<p><br></p>
 
             </div>
             <hr>
