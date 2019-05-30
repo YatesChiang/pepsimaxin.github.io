@@ -387,14 +387,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        3k
+                        2.8k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        13 分钟
+                        12 分钟
                     </div>
                     
                 
@@ -485,6 +485,7 @@
 </tr>
 </tbody>
 </table>
+<p><br></p>
 <h1 id="二、PackageManager"><a href="#二、PackageManager" class="headerlink" title="二、PackageManager"></a>二、PackageManager</h1><h2 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h2><p>PackageManager 是一个抽象类：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Class for retrieving various kinds of information related to the application
@@ -494,17 +495,13 @@
  */</span>
 <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">PackageManager</span> <span class="token punctuation">{</span>
 </code></pre>
-<p>从注释可以看出：<code>PackageManager</code> 这个类是检测当前已经安装在当前设备上的应用程序包的信息。你可以调用 Context 类的 <code>getPackageManager()</code>方法来获取 <code>PackageManager</code>。</p>
-<h2 id="2-2-安装原理"><a href="#2-2-安装原理" class="headerlink" title="2.2 安装原理"></a>2.2 安装原理</h2><p><strong>PackageManager 是一个实际上管理应用程序安装、卸载和升级的 API</strong>。</p>
+<p>从注释可以看出：<code>PackageManager</code> 这个类是检测当前已经安装在设备上的应用程序包的信息。你可以调用 <code>Context</code> 类的 <code>getPackageManager()</code> 方法来获取 <code>PackageManager</code>。</p>
+<h2 id="2-2-安装原理"><a href="#2-2-安装原理" class="headerlink" title="2.2 安装原理"></a>2.2 安装原理</h2><p><strong>PackageManager 是一个实际上管理应用程序<code>安装</code>、<code>卸载</code>和<code>升级</code>的 <code>API</code></strong>。</p>
 <p>当我们安装 APK 文件时，PackageManager 会解析 APK 包文件和显示确认信息。</p>
-<p>当我们点击 OK 按钮后，PackageManager 会调用一个叫 “InstallPackage” 的方法，这个方法有 4 个参数，也就是 uri、installFlags、observer、installPackagename。</p>
+<p>当我们点击 OK 按钮后，PackageManager 会调用一个叫 <code>InstallPackage</code> 的方法，这个方法有 4 个参数，也就是 <code>uri</code>、<code>installFlags</code>、<code>observer</code>、<code>installPackagename</code>。</p>
 <p>PackageManager 会启动一个叫 “package” 的 servcie 服务，现在所有模糊的东西会发生在这个 service 中。</p>
-<p>（<strong>从 Android 8.1 之后的源码中已经弃用这个方法，具体细节往下看！</strong>）</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-f195e3a3c47103fd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="安装原理图（Android 8.0）(流程图后期重新更新).png"></center>
-
-<p><br></p>
 <h2 id="2-3-实现功能"><a href="#2-3-实现功能" class="headerlink" title="2.3 实现功能"></a>2.3 实现功能</h2><p><strong>抽象类 PackageManager 提供了的功能，主要有以下几点：</strong></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、安装、卸载应用<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、查询 permission 相关信息<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;3、查询 Application 相关信息(application、activity、receiver、service、provider 及相应属性等)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;4、查询已安装应用<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;5、增加、删除 permission<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;6、清除用户数据、缓存、代码等</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;1、安装、卸载应用<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;2、查询 permission 相关信息<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;3、查询 Application 相关信息(application、activity、receiver、service、provider 及相应属性等)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;4、查询已安装应用<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;5、增加、删除 permission<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;6、清除用户数据、缓存、代码等</p>
 <h2 id="2-4-抽象方法"><a href="#2-4-抽象方法" class="headerlink" title="2.4 抽象方法"></a>2.4 抽象方法</h2><p><strong>我们来看几个比较重要的抽象方法：</strong></p>
 <blockquote>
 <p>getPackageInfo()</p>
@@ -622,7 +619,8 @@
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * packageURI：表示安装的路径，可以是 "file:" 或者 "content:" 的 URI
  * observer：  一个回调的观察者，有了这个观察者，就可以在软件包安装完成后得到安装结果的通知。
- *             如果安装完成会调用这个观察者 IPackageInstallObserver 的 packageInstalled(String，int)方法，observer这个入参不能为空。
+ *             如果安装完成会调用这个观察者 IPackageInstallObserver 的 packageInstalled(String，int)方法，
+               observer这个入参不能为空
  * flags：     标志位参数
  * nstallerPackageName：正在进行安装的安装包包名
  */</span>
@@ -715,6 +713,7 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>到这边就很清楚了，我们平时调用 Context 的 <code>getPackageManager()</code> 方法后，其实返回的是 <code>ApplicationPackageManager</code> 这个类。</p>
+<p><br></p>
 <h1 id="三、ApplicationPackageManager"><a href="#三、ApplicationPackageManager" class="headerlink" title="三、ApplicationPackageManager"></a>三、ApplicationPackageManager</h1><p>我们先来看下 ApplicationPackageManager 的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/android/app/ApplicationPackageManager.java</span>
 
@@ -735,7 +734,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="3-2-InstallPackage-弃用"><a href="#3-2-InstallPackage-弃用" class="headerlink" title="3.2 InstallPackage(弃用)"></a>3.2 InstallPackage(弃用)</h2><p>在讲解 <code>PackageManager</code> 的时候，我们提到过安装 <code>APK</code> 会调用 <code>InstallPackage</code> 方法（Android 8.1，9.0 已弃用），我们看下在 <code>ApplicationPackageManager</code> 中的具体实现：</p>
+<h2 id="3-2-InstallPackage-弃用"><a href="#3-2-InstallPackage-弃用" class="headerlink" title="3.2 InstallPackage(弃用)"></a>3.2 InstallPackage(弃用)</h2><p>在讲解 <code>PackageManager</code> 的时候，我们提到过安装 <code>APK</code> 会调用 <code>InstallPackage</code> 方法（Android 8.1，9.0 已弃用）。</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">installPackage</span><span class="token punctuation">(</span>Uri packageURI<span class="token punctuation">,</span> IPackageInstallObserver observer<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">,</span>
                                String installerPackageName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -743,8 +742,7 @@
             installerPackageName<span class="token punctuation">,</span> mContext<span class="token punctuation">.</span><span class="token function">getUserId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="3-3-installCommon-弃用"><a href="#3-3-installCommon-弃用" class="headerlink" title="3.3 installCommon(弃用)"></a>3.3 installCommon(弃用)</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 源码来自：Android 8.1，9.0 已弃用</span>
-<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">installCommon</span><span class="token punctuation">(</span>Uri packageURI<span class="token punctuation">,</span>
+<h2 id="3-3-installCommon-弃用"><a href="#3-3-installCommon-弃用" class="headerlink" title="3.3 installCommon(弃用)"></a>3.3 installCommon(弃用)</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">installCommon</span><span class="token punctuation">(</span>Uri packageURI<span class="token punctuation">,</span>
         PackageInstallObserver observer<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">,</span> String installerPackageName<span class="token punctuation">,</span>
         <span class="token keyword">int</span> userId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// scheme 判断，如果非 "file" 则抛异常，因为只支持 file 格式的 URI</span>
@@ -764,7 +762,7 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>可以发现，<code>installPackage()</code> 方法其内部本质是调用的 <code>IPackageManager</code> 的 <code>installPackageAsUser()</code> 方法，因为方法已经弃用，我们这边不再跟下去。</p>
-<h2 id="3-4-getPackageInstaller-8-1-9-0"><a href="#3-4-getPackageInstaller-8-1-9-0" class="headerlink" title="3.4 getPackageInstaller(8.1-9.0)"></a>3.4 getPackageInstaller(8.1-9.0)</h2><p>之前我们说过，从 8.1 开始调用 <code>getPackageInstaller</code> 方法，那么我们来看看源码：</p>
+<h2 id="3-4-getPackageInstaller"><a href="#3-4-getPackageInstaller" class="headerlink" title="3.4 getPackageInstaller"></a>3.4 getPackageInstaller</h2><p>之前我们说过，从 8.1 开始调用 <code>getPackageInstaller</code> 方法，那么我们来看看源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ApplicationPackageManager</span> <span class="token keyword">extends</span> <span class="token class-name">PackageManager</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -786,7 +784,8 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>到这边，一切都明朗了，<code>PackageManager</code> 中创建了 <code>PackageInstaller</code> 对象，关于 <code>PackageInstaller</code> 的具体内容，我们这边不再继续分析。</p>
-<p>具体内容，请查看下一篇博文：<a href="https://superandroid.pro/2019/01/15/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%E4%B9%8B%20PackageInstaller/">Framework 核心服务之 PMS 钻研（4）- PackageInstaller</a>。</p>
+<p>具体内容，请查阅博文：<a href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/">《PackageManagerService 钻研（4）- PackageInstaller》</a>。</p>
+<p><br></p>
 <h1 id="四、IPackageManager"><a href="#四、IPackageManager" class="headerlink" title="四、IPackageManager"></a>四、IPackageManager</h1><h2 id="4-1-ActivityThread"><a href="#4-1-ActivityThread" class="headerlink" title="4.1 ActivityThread"></a>4.1 ActivityThread</h2><p>在上面分析 <code>ContextImpl</code> 的 <code>getPackageManager()</code> 方法的时候，我们看到如下源码（回顾）：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/android/app/ContextImpl.java</span>
 
@@ -858,8 +857,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="4-3-IPackageManager"><a href="#4-3-IPackageManager" class="headerlink" title="4.3 IPackageManager"></a>4.3 IPackageManager</h2><p>再回顾下我们在第一篇文章中所说的　<code>IPackageManager</code>　源码：</p>
-<p><strong><font color="#0000FF">IPackageManager.java：</font></strong></p>
+<h2 id="4-3-IPackageManager"><a href="#4-3-IPackageManager" class="headerlink" title="4.3 IPackageManager"></a>4.3 IPackageManager</h2><p><strong><font color="#0000FF">IPackageManager.java：</font></strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IPackageManager</span> <span class="token keyword">extends</span> <span class="token class-name">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>IInterface</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">/** Local-side IPC implementation stub class. */</span>
     <span class="token comment" spellcheck="true">// 定义内部类 Stub，派生自 Binder，实现 IPackageManager 接口</span>
@@ -888,13 +886,9 @@
 <p>那对应的 <code>IPackageManager.Stub</code> 是什么？其实就是 <strong><font color="#FF0000">PackageManagerService.java</font></strong> 。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
 </code></pre>
-<p>如下图所示：</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-74ae1197e39297b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="原理图.png"></center>
-
-<h2 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4 小结"></a>4.4 小结</h2><p>结合上面的知识，再结合 PackageManager、ApplicationPackageManager 和 PackageManagerService ，我们作个小结：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ <strong>&nbsp;IPackageManager 负责通信</strong>：IPackageManager 接口类中定义了很多业务方法，但是由于安全等方面的考虑，Android 对外(即SDK)提供的仅仅是一个子集，该子集被封装在抽象类 PackageManager 中。客户端一般通过 Context 的 getPackageManager 函数返回一个类型为 PackageManager 的对象，该对象的实际类型是 PackageManager 的子类 ApplicationPackageManager 。ApplicationPackageManager 并没有直接参与 Binder 通信，而是通过 mPM 成员变量指向了一个 IPackageManager.Stub.Proxy 类型的对象。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ &nbsp;<strong>AIDL中 的 Binder 服务端是 PackageManagerService</strong>，因为 PackageManagerService 继承自 IPackageManager.Stub 。由于 IPackageManager.Stub 类从 Binder 派生，所以 PackageManagerService 将作为服务端参与 Binder 通信。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ &nbsp;<strong>AIDL中 的 Binder 客户端是 ApplicationPackageManager 中成员变量 mPM</strong>，因为mPM内部指向的是 IPackageManager.Stub.Proxy。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;📕 01. <a href="https://www.jianshu.com/p/c56376916d5e" target="_blank" rel="noopener">APK安装流程详解2——PackageManager简介</a><br>&nbsp;📕 02. <a href="https://www.jianshu.com/p/a301291ca845" target="_blank" rel="noopener">APK安装流程详解3——PackageManager与PackageManagerService</a></p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/%E3%80%8AThinking%20in%20Android%E3%80%8B%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/05/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%882%EF%BC%89%E4%B9%8B%20%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">Framework 核心服务之 PMS 钻研（2）- 构造函数</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/15/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%E4%B9%8B%20PackageInstaller/">Framework 核心服务之 PMS 钻研（4）- PackageInstaller</a></p>
+<h2 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4 小结"></a>4.4 小结</h2><p>结合上面的分析，再结合 PackageManager、ApplicationPackageManager 和 PackageManagerService ，我们作个小结：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒ &nbsp;<strong>IPackageManager 负责通信</strong>：IPackageManager 接口类中定义了很多业务方法，但是由于安全等方面的考虑，Android 对外(即SDK)提供的仅仅是一个子集，该子集被封装在抽象类 PackageManager 中。客户端一般通过 Context 的 getPackageManager 函数返回一个类型为 PackageManager 的对象，该对象的实际类型是 PackageManager 的子类 ApplicationPackageManager 。ApplicationPackageManager 并没有直接参与 Binder 通信，而是通过 mPM 成员变量指向了一个 IPackageManager.Stub.Proxy 类型的对象。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒ &nbsp;<strong>AIDL中 的 Binder 服务端是 PackageManagerService</strong>，因为 PackageManagerService 继承自 IPackageManager.Stub 。由于 IPackageManager.Stub 类从 Binder 派生，所以 PackageManagerService 将作为服务端参与 Binder 通信。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒ &nbsp;<strong>AIDL中 的 Binder 客户端是 ApplicationPackageManager 中成员变量 mPM</strong>，因为 mPM 内部指向的是 IPackageManager.Stub.Proxy。</p>
+<p><br></p>
 
             </div>
             <hr>
