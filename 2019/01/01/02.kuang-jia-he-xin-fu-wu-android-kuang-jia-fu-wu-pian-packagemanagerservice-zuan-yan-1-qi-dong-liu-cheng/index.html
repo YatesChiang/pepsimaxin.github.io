@@ -490,7 +490,6 @@
 </tbody>
 </table>
 <h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p><strong><font color="#0000CD">PackageManagerService</font></strong>是 <code>SystemServer</code> 启动后的<code>第一个核心服务</code>，也是 Android 系统中最常用的服务之一。它负责系统中 Package 的管理，应用程序的安装、卸载、信息查询等。</p>
-<p><br></p>
 <h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p><code>PackageManagerService</code> 作为系统的核心服务，由 <code>SystemServer</code> 创建，<code>SystemServer</code> 调用了 <code>PackageManagerService</code> 的 <code>main()</code> 方法创建 <code>PackageManagerService 实例</code>。</p>
 <h2 id="2-1-main"><a href="#2-1-main" class="headerlink" title="2.1 main"></a>2.1 main</h2><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// frameworks/base/services/java/com/android/server/SystemServer.java</span>
 
@@ -540,7 +539,6 @@
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h1 id="三、PackageManagerService"><a href="#三、PackageManagerService" class="headerlink" title="三、PackageManagerService"></a>三、PackageManagerService</h1><h2 id="3-1-main"><a href="#3-1-main" class="headerlink" title="3.1 main"></a>3.1 main</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java</span>
 
 <span class="token keyword">public</span> <span class="token keyword">static</span> PackageManagerService <span class="token function">main</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>

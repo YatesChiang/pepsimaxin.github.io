@@ -485,7 +485,6 @@
 </tr>
 </tbody>
 </table>
-<p><br></p>
 <h1 id="二、PackageManager"><a href="#二、PackageManager" class="headerlink" title="二、PackageManager"></a>二、PackageManager</h1><h2 id="2-1-简介"><a href="#2-1-简介" class="headerlink" title="2.1 简介"></a>2.1 简介</h2><p>PackageManager 是一个抽象类：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Class for retrieving various kinds of information related to the application
@@ -713,7 +712,6 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>到这边就很清楚了，我们平时调用 Context 的 <code>getPackageManager()</code> 方法后，其实返回的是 <code>ApplicationPackageManager</code> 这个类。</p>
-<p><br></p>
 <h1 id="三、ApplicationPackageManager"><a href="#三、ApplicationPackageManager" class="headerlink" title="三、ApplicationPackageManager"></a>三、ApplicationPackageManager</h1><p>我们先来看下 ApplicationPackageManager 的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/android/app/ApplicationPackageManager.java</span>
 
@@ -785,7 +783,6 @@
 </code></pre>
 <p>到这边，一切都明朗了，<code>PackageManager</code> 中创建了 <code>PackageInstaller</code> 对象，关于 <code>PackageInstaller</code> 的具体内容，我们这边不再继续分析。</p>
 <p>具体内容，请查阅博文：<a href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/">《PackageManagerService 钻研（4）- PackageInstaller》</a>。</p>
-<p><br></p>
 <h1 id="四、IPackageManager"><a href="#四、IPackageManager" class="headerlink" title="四、IPackageManager"></a>四、IPackageManager</h1><h2 id="4-1-ActivityThread"><a href="#4-1-ActivityThread" class="headerlink" title="4.1 ActivityThread"></a>4.1 ActivityThread</h2><p>在上面分析 <code>ContextImpl</code> 的 <code>getPackageManager()</code> 方法的时候，我们看到如下源码（回顾）：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/android/app/ContextImpl.java</span>
 
@@ -888,7 +885,6 @@
 </code></pre>
 <h2 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4 小结"></a>4.4 小结</h2><p>结合上面的分析，再结合 PackageManager、ApplicationPackageManager 和 PackageManagerService ，我们作个小结：</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒ &nbsp;<strong>IPackageManager 负责通信</strong>：IPackageManager 接口类中定义了很多业务方法，但是由于安全等方面的考虑，Android 对外(即SDK)提供的仅仅是一个子集，该子集被封装在抽象类 PackageManager 中。客户端一般通过 Context 的 getPackageManager 函数返回一个类型为 PackageManager 的对象，该对象的实际类型是 PackageManager 的子类 ApplicationPackageManager 。ApplicationPackageManager 并没有直接参与 Binder 通信，而是通过 mPM 成员变量指向了一个 IPackageManager.Stub.Proxy 类型的对象。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒ &nbsp;<strong>AIDL中 的 Binder 服务端是 PackageManagerService</strong>，因为 PackageManagerService 继承自 IPackageManager.Stub 。由于 IPackageManager.Stub 类从 Binder 派生，所以 PackageManagerService 将作为服务端参与 Binder 通信。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒ &nbsp;<strong>AIDL中 的 Binder 客户端是 ApplicationPackageManager 中成员变量 mPM</strong>，因为 mPM 内部指向的是 IPackageManager.Stub.Proxy。</p>
-<p><br></p>
 
             </div>
             <hr>

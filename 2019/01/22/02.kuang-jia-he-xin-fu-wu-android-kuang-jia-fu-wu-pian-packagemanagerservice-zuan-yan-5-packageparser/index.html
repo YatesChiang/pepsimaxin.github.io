@@ -473,9 +473,7 @@
 </tr>
 </tbody>
 </table>
-<p><br></p>
 <h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p>在分析 <code>PackageManagerService</code> 构造函数的时候，我们知道：Android 安装一个 APK 的时候首先会解析 APK，而解析 APK 则需要用到一个工具类，这个工具类就是我们这篇博文的主角 <code>PackageParser</code>（在我们之前研究的源码中，你已经见过它的身影了）！</p>
-<p><br></p>
 <h1 id="二、PackageParser"><a href="#二、PackageParser" class="headerlink" title="二、PackageParser"></a>二、PackageParser</h1><h2 id="2-1-官方说明"><a href="#2-1-官方说明" class="headerlink" title="2.1 官方说明"></a>2.1 官方说明</h2><p>首先我们看下官方对 PackageParser 的说明：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Parser for package files (APKs) on disk. This supports apps packaged either
@@ -561,7 +559,6 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
 <span class="token punctuation">}</span>
 </code></pre>
 <p>我们这边选取 <code>parseClusterPackage</code> 作为分析的分支，当你搞懂这个方法的具体逻辑，单个 APK 的解析原理就很简单了。</p>
-<p><br></p>
 <h1 id="三、parseClusterPackage"><a href="#三、parseClusterPackage" class="headerlink" title="三、parseClusterPackage"></a>三、parseClusterPackage</h1><p>我们来看看 <code>parseClusterPackage()</code> 的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> Package <span class="token function">parseClusterPackage</span><span class="token punctuation">(</span>File packageDir<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">)</span> <span class="token keyword">throws</span> PackageParserException <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">/*
@@ -877,7 +874,6 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h1 id="四、Package-数据结构"><a href="#四、Package-数据结构" class="headerlink" title="四、Package 数据结构"></a>四、Package 数据结构</h1><p>包被解析后，最终存储在 <code>Package</code> ，它是 <code>PackageParser</code> 的<code>内部类</code>，它的部分成员变量如下所示。</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Representation of a full package parsed from APK files on disk. A package
@@ -933,7 +929,6 @@ tmpPkg <span class="token operator">=</span> pp<span class="token punctuation">.
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 
             </div>
             <hr>

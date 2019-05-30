@@ -789,7 +789,6 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <span class="token punctuation">}</span>
 </code></pre>
 <h2 id="2-6-小结"><a href="#2-6-小结" class="headerlink" title="2.6 小结"></a>2.6 小结</h2><p><font color="#0000CD"><strong>绕了一圈又回到了 PackageInstallerActivity</strong></font>，这里可以看出 <code>InstallStaging</code> 主要起了转换的作用，将 <code>content</code> 协议的 <code>Uri</code> 转换为 <code>File</code> 协议，然后跳转到 <code>PackageInstallerActivity</code>，接下来的安装流程就和 Android 7.0 一样了。</p>
-<p><br></p>
 <h1 id="三、PackageInstallerActivity"><a href="#三、PackageInstallerActivity" class="headerlink" title="三、PackageInstallerActivity"></a>三、PackageInstallerActivity</h1><p>接下来，我们就要重点分析 <code>PackageInstallerActivity</code> ！从功能上来说，<font color="#FF0000"><strong>PackageInstallerActivity 才是应用安装器 PackageInstaller 真正的入口 Activity</strong></font>。</p>
 <p>我们看下官方对于这个类的说明：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
@@ -1327,9 +1326,7 @@ intent<span class="token punctuation">.</span><span class="token function">setDa
 <span class="token punctuation">}</span>
 </code></pre>
 <p>这个方法其实主要是根据不同的情况来设置相应的 <code>UI</code>，主要是将安装包分为<code>新安装</code>和<code>更新安装</code>，在更新安装里面又分为<code>系统应用</code>和<code>非系统应用</code>，然后根据不同的情况来显示不同的 <code>UI</code>，<code>UI</code> 这块主要是通过 <code>getPermissionsView</code> 方法来获取不同的权限 <code>View</code>。</p>
-<p><br></p>
 <h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;1、根据 <code>Uri</code> 的 <code>Scheme</code> 协议不同，跳转到不同的界面，<code>content</code> 协议跳转到 <code>InstallStart</code>，其他的跳转到 <code>PackageInstallerActivity</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;2、<code>InstallStart</code> 将 <code>content</code> 协议的 <code>Uri 转换</code>为 <code>File 协议</code>，然后跳转到 <code>PackageInstallerActivity</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;3、<code>PackageInstallerActivity</code> 会分别对 <code>package 协议</code> 和 <code>file 协议</code> 的 <code>Uri</code> 进行处理，如果是 <code>file 协议</code>会解析 <code>APK</code> 文件得到包信息 <code>PackageInfo</code>。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;4、<code>PackageInstallerActivity</code> 中会对<code>未知来源</code>进行处理，如果<code>允许安装未知来源</code>或者根据 <code>Intent</code> 判断得出该 <code>APK 不是未知来源</code>，就会<code>初始化安装确认界面</code>，如果管理员<code>限制来自未知源的安装</code>, 就弹出提示 <code>Dialog</code> 或者跳转到设置界面。</p>
-<p><br></p>
 
             </div>
             <hr>

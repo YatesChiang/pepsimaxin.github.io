@@ -387,7 +387,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.3k
+                        5.2k
                     </div>
                     
 
@@ -473,8 +473,7 @@
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列上一篇文章 <a href="https://superandroid.pro/2018/11/15/B_05.%20Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88PI%EF%BC%89/">Framework 核心服务之 PMS 钻研（5）- APK 安装（上）</a> 中，我们了解了 PackageInstaller 安装 APK 的流程，最后会将 APK 的信息交由 PMS 处理。那么 PMS 是如何处理的？这就是我们这篇文章需要分析的。<br><br></p>
+<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列上一篇文章 <a href="https://superandroid.pro/2018/11/15/B_05.%20Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88PI%EF%BC%89/">Framework 核心服务之 PMS 钻研（5）- APK 安装（上）</a> 中，我们了解了 PackageInstaller 安装 APK 的流程，最后会将 APK 的信息交由 PMS 处理。那么 PMS 是如何处理的？这就是我们这篇文章需要分析的。</p>
 <h1 id="二、PackageManagerService"><a href="#二、PackageManagerService" class="headerlink" title="二、PackageManagerService"></a>二、PackageManagerService</h1><h2 id="2-1-commitLocked"><a href="#2-1-commitLocked" class="headerlink" title="2.1 commitLocked"></a>2.1 commitLocked</h2><p>在前一篇文章末尾，我们研究过 <code>commitLocked</code> 方法，回顾下：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerSession</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageInstallerSession<span class="token punctuation">.</span>Stub</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -490,7 +489,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="2-2-installStage"><a href="#2-2-installStage" class="headerlink" title="2.2 installStage"></a>2.2 installStage</h2><p>接下来正式进入 PMS 源码的分析流程，看看 <code>installStage</code> 方法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
 
@@ -524,7 +522,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="2-3-PackageHandler"><a href="#2-3-PackageHandler" class="headerlink" title="2.3 PackageHandler"></a>2.3 PackageHandler</h2><p>因为 <code>PackageHandler</code> 继承 <code>Handler</code> ，所以我们来看下 <code>PackageHandler</code> 的 <code>HandlerMessage</code> 方法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
 
@@ -547,7 +544,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h3 id="2-3-1-INIT-COPY"><a href="#2-3-1-INIT-COPY" class="headerlink" title="2.3.1 INIT_COPY"></a>2.3.1 INIT_COPY</h3><p>接下来看下 INIT_COPY 消息的处理流程：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -600,7 +596,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h3 id="2-3-2-connectToService"><a href="#2-3-2-connectToService" class="headerlink" title="2.3.2 connectToService"></a>2.3.2 connectToService</h3><p>假设我们是第一次走流程，还没有绑定服务，则会调用 <code>connectToService()</code> 方法，看下流程：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
 
@@ -640,7 +635,7 @@
 <p>这边要重点提到一个<font color="#0000CD"> <strong>mDefContainerConn</strong></font> 变量，研究一下：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">final</span> <span class="token keyword">private</span> DefaultContainerConnection mDefContainerConn <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultContainerConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p><code>mDefContainerConn</code> 的类型是 <code>DefaultContainerConnection</code> ，那我们来看下 <code>DefaultContainerConnection</code> 这个类。<br><br></p>
+<p><code>mDefContainerConn</code> 的类型是 <code>DefaultContainerConnection</code> ，那我们来看下 <code>DefaultContainerConnection</code> 这个类。</p>
 <h3 id="2-3-3-DefaultContainerConnection"><a href="#2-3-3-DefaultContainerConnection" class="headerlink" title="2.3.3 DefaultContainerConnection"></a>2.3.3 DefaultContainerConnection</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
 
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -666,11 +661,11 @@
 <p>上文提及到 <code>mContext.bindServiceAsUser</code>() 方法，其实就是<code>&quot;绑定&quot;</code> <code>DefaultContainerService</code>。我们知道 bind 一个 Service ，其中负责通信的是 <code>ServiceConnection</code>，所以，本方法中负责通信的就是 <code>mDefContainerConn</code>。</p>
 <p>一旦绑定成功会执行 <code>mDefContainerConn</code> 的 <code>onServiceConnected</code> 方法。</p>
 <p>从源码中可以看到：当绑定成功后在 <code>onServiceConnected</code> 中将一个 <code>IBinder</code> 转换成了一个 <code>IMediaContainerService</code>。</p>
-<p>这个就是 <code>onServiceConnected</code> 回调函数中根据参数传进来的 <code>IMediaContainerService.Stub</code> 的对象引用创建的一个<code>远程代理对象</code>，后面 <code>PacakgeManagerService</code> 将通过该代理对象访问 <code>DefaultContainerService</code> 服务。<br><br></p>
+<p>这个就是 <code>onServiceConnected</code> 回调函数中根据参数传进来的 <code>IMediaContainerService.Stub</code> 的对象引用创建的一个<code>远程代理对象</code>，后面 <code>PacakgeManagerService</code> 将通过该代理对象访问 <code>DefaultContainerService</code> 服务。</p>
 <h3 id="2-3-4-小结"><a href="#2-3-4-小结" class="headerlink" title="2.3.4 小结"></a>2.3.4 小结</h3><p><strong>我们简单梳理一下以上代码所做的工作：</strong></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;（1）<code>mBound</code> 用于标识是否绑定了 <code>DefaultContainerService</code>，默认值为 <code>false</code>。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;（2）<code>DefaultContainerService</code> 是用于检查和复制可移动文件的服务，这是一个比较耗时的操作，因此 <code>DefaultContainerService</code> 没有和 <code>PackageManagerService</code> 运行在同一进程中，它运行在 <code>com.android.defcontainer</code> 进程，通过 <code>IMediaContainerService</code> 和 <code>PackageManagerService</code> 进行 <code>IPC</code> 通信。</p>
-<p>彼此之间的 IPC 通信如下图所示：<br><br></p>
+<p>彼此之间的 IPC 通信如下图所示：</p>
 <center><img src="https://upload-images.jianshu.io/upload_images/3517194-fc2af2fd9ed961c5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/680" alt="IPC 通信原理图.png"></center>
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;（3）<code>connectToService</code> 方法用来绑定 <code>DefaultContainerService</code>。</p>
@@ -682,8 +677,7 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
 <span class="token comment" spellcheck="true">// DefaultContainerConnection（未绑定服务 - 绑定服务）</span>
 mHandler<span class="token punctuation">.</span><span class="token function">sendMessage</span><span class="token punctuation">(</span>mHandler<span class="token punctuation">.</span><span class="token function">obtainMessage</span><span class="token punctuation">(</span>MCS_BOUND<span class="token punctuation">,</span> imcs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 带参数</span>
 </code></pre>
-<p><br></p>
-<h2 id="2-4-MCS-BOUND-分析"><a href="#2-4-MCS-BOUND-分析" class="headerlink" title="2.4 MCS_BOUND 分析"></a>2.4 MCS_BOUND 分析</h2><p><strong>接下来，我们重点讨论这两个方法！</strong><br><br></p>
+<h2 id="2-4-MCS-BOUND-分析"><a href="#2-4-MCS-BOUND-分析" class="headerlink" title="2.4 MCS_BOUND 分析"></a>2.4 MCS_BOUND 分析</h2><p><strong>接下来，我们重点讨论这两个方法！</strong></p>
 <h3 id="2-4-1-不带参数"><a href="#2-4-1-不带参数" class="headerlink" title="2.4.1 不带参数"></a>2.4.1 不带参数</h3><p>首先研究不带参数的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">PackageHandler</span> <span class="token keyword">extends</span> <span class="token class-name">Handler</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -728,7 +722,6 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h3 id="2-4-2-带参数"><a href="#2-4-2-带参数" class="headerlink" title="2.4.2 带参数"></a>2.4.2 带参数</h3><p>接下来研究不带参数的源码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">PackageHandler</span> <span class="token keyword">extends</span> <span class="token class-name">Handler</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -784,8 +777,8 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>上面的流程其实很简单，我们根据是否传入了 <code>ims</code> 这个参数，走两条流程，核心的方法就是最终的 <code>startCopy()</code>。<br><br></p>
-<h1 id="三、复制-APK"><a href="#三、复制-APK" class="headerlink" title="三、复制 APK"></a>三、复制 APK</h1><p>上面我们提过，复制 <code>APK</code> 的操作是调用 <code>HandlerParams</code> 的 <code>startCopy</code> 方法。<code>HandlerParams</code> 是 PMS 中的<code>抽象类</code>，它的实现类为 <code>PMS</code> 的内部类 <code>InstallParams</code>。<br><br></p>
+<p>上面的流程其实很简单，我们根据是否传入了 <code>ims</code> 这个参数，走两条流程，核心的方法就是最终的 <code>startCopy()</code>。</p>
+<h1 id="三、复制-APK"><a href="#三、复制-APK" class="headerlink" title="三、复制 APK"></a>三、复制 APK</h1><p>上面我们提过，复制 <code>APK</code> 的操作是调用 <code>HandlerParams</code> 的 <code>startCopy</code> 方法。<code>HandlerParams</code> 是 PMS 中的<code>抽象类</code>，它的实现类为 <code>PMS</code> 的内部类 <code>InstallParams</code>。</p>
 <h2 id="3-1-startCopy"><a href="#3-1-startCopy" class="headerlink" title="3.1 startCopy"></a>3.1 startCopy</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -892,7 +885,7 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>直接删除了安装请求队列 <code>mPendingInstalls</code> 里面下标为 0 的元素，即取消本次安装请求。<br><br></p>
+<p>直接删除了安装请求队列 <code>mPendingInstalls</code> 里面下标为 0 的元素，即取消本次安装请求。</p>
 <h2 id="3-2-handleStartCopy"><a href="#3-2-handleStartCopy" class="headerlink" title="3.2 handleStartCopy"></a>3.2 handleStartCopy</h2><p>我们发现 <code>handleStartCopy</code> 也是一个<code>抽象方法</code>，那么它在哪实现？前面我们说过：<code>HandlerParams</code> 是 <code>PMS</code> 中的<code>抽象类</code>，它的实现类为 <code>PMS</code> 的内部类 <code>InstallParams</code>。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -986,8 +979,7 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
-<h2 id="3-3-FileInstallArgs"><a href="#3-3-FileInstallArgs" class="headerlink" title="3.3 FileInstallArgs"></a>3.3 FileInstallArgs</h2><p>现在，我们知道 <code>InstallParams</code> 有三个子类，不同的 <code>InstallArgs</code> 子类会有着不同的处理，那我们现在以 <code>FileInstallArgs</code> 为例跟踪研究具体的流程：<br><br></p>
+<h2 id="3-3-FileInstallArgs"><a href="#3-3-FileInstallArgs" class="headerlink" title="3.3 FileInstallArgs"></a>3.3 FileInstallArgs</h2><p>现在，我们知道 <code>InstallParams</code> 有三个子类，不同的 <code>InstallArgs</code> 子类会有着不同的处理，那我们现在以 <code>FileInstallArgs</code> 为例跟踪研究具体的流程：</p>
 <h3 id="3-3-1-copyApk"><a href="#3-3-1-copyApk" class="headerlink" title="3.3.1 copyApk"></a>3.3.1 copyApk</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageManagerService</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageManager<span class="token punctuation">.</span>Stub</span> <span class="token keyword">implements</span> <span class="token class-name">PackageSender</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -1010,7 +1002,6 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h3 id="3-3-2-doCopyApk"><a href="#3-3-2-doCopyApk" class="headerlink" title="3.3.2 doCopyApk"></a>3.3.2 doCopyApk</h3><p>调用了 <code>doCopyApk</code> 方法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">FileInstallArgs</span> <span class="token keyword">extends</span> <span class="token class-name">InstallArgs</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> File codeFile<span class="token punctuation">;</span>
@@ -1051,7 +1042,6 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h1 id="四、安装-APK"><a href="#四、安装-APK" class="headerlink" title="四、安装 APK"></a>四、安装 APK</h1><h2 id="4-1-handleReturnCode"><a href="#4-1-handleReturnCode" class="headerlink" title="4.1 handleReturnCode"></a>4.1 handleReturnCode</h2><p>我们回到 APK 的复制调用链的头部方法：HandlerParams 的 startCopy 方法，在最后 调用了 handleReturnCode 方法，进行 APK 的安装。</p>
 <pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">HandlerParams</span> <span class="token punctuation">{</span>
         <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MAX_RETRIES <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
@@ -1359,8 +1349,6 @@ mHandler<span class="token punctuation">.</span><span class="token function">sen
 <p>最终调用 scanPackageLI 方法！</p>
 <h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>本文主要讲解了 PMS 是如何处理 APK 安装的流程，主要有几个步骤：</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;PackageInstaller 安装 APK 时会将 APK 的信息交由 PMS 处理，PMS 通过向 PackageHandler 发送消息来驱动 APK 的复制和安装工作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;PMS 发送 INIT_COPY 和 MCS_BOUND 类型的消息，控制 PackageHandler 来绑定 DefaultContainerService ，完成复制 APK 等工作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;复制 APK 完成后，会开始进行安装 APK 的流程，包括安装前的检查、安装 APK 和安装后的收尾工作。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;📕 01. <a href="http://liuwangshu.cn/framework/pms/3-pms-install.html" target="_blank" rel="noopener">Android包管理机制（三）PMS处理APK的安装 </a><br>&nbsp;📕 02. <a href="https://www.jianshu.com/p/c4333c7eb409" target="_blank" rel="noopener">APK安装流程详解12——PMS中的新安装流程上(拷贝)</a></p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/%E3%80%8AThinking%20in%20Android%E3%80%8B%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/23/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%886%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88%E4%B8%8A%EF%BC%89/">Framework 核心服务之 PMS 钻研（6）- APK 安装流程（上）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/31/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%888%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88%E4%B8%8B%EF%BC%89/">Framework 核心服务之 PMS 钻研（8）- APK 安装流程（下）</a></p>
 
             </div>
             <hr>

@@ -387,7 +387,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        2k
+                        1.8k
                     </div>
                     
 
@@ -485,10 +485,8 @@
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列上一篇文章 <a href="https://superandroid.pro/2018/11/12/B_04.%20Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%884%EF%BC%89%E4%B9%8B%20PackageInstaller/">Framework 核心服务之 PMS 钻研（4）- PackageInstaller</a> 中，我们知道了 PackageInstaller 是如何初始化的，</p>
-<p>本篇文章我们研究的重点是： <font color="#FF0000"><strong>PackageInstaller 是如何安装 APK 的</strong></font>。<br><br></p>
-<h1 id="二、PackageInstallerActivity"><a href="#二、PackageInstallerActivity" class="headerlink" title="二、PackageInstallerActivity"></a>二、PackageInstallerActivity</h1><p>在上一篇文章的末尾阶段，我们知道 <font color="#0000CD"><strong><code>PackageInstallerActivity</code> 调用 <code>startInstallConfirm</code> 方法<code>初始化安装确认界面</code></strong></font>后，这个安装确认界面就会呈现给用户，用户如果想要安装这个应用程序就会点击确定按钮，就会调用 <strong><code>PackageInstallerActivity</code></strong> 的 <font color="#0000CD"><strong><code>onClick()</code></strong></font> 方法。<br><br></p>
+<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列第四篇文章中 <a href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/">《PackageManagerService 钻研（4）- PackageInstaller》</a> 中，我们知道了 <code>PackageInstaller</code> 是如何初始化的，本篇文章我们研究的重点是： <font color="#FF0000"><strong>PackageInstaller 是如何安装 APK 的</strong></font>。</p>
+<h1 id="二、PackageInstallerActivity"><a href="#二、PackageInstallerActivity" class="headerlink" title="二、PackageInstallerActivity"></a>二、PackageInstallerActivity</h1><p>在之前的文章中，我们知道 <font color="#0000CD"><strong><code>PackageInstallerActivity</code> 调用 <code>startInstallConfirm</code> 方法<code>初始化安装确认界面</code></strong></font>后，这个安装确认界面就会呈现给用户，用户如果想要安装这个应用程序就会点击确定按钮，就会调用 <strong><code>PackageInstallerActivity</code></strong> 的 <font color="#0000CD"><strong><code>onClick()</code></strong></font> 方法。</p>
 <h2 id="2-1-onClick"><a href="#2-1-onClick" class="headerlink" title="2.1 onClick"></a>2.1 onClick</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerActivity</span> <span class="token keyword">extends</span> <span class="token class-name">OverlayTouchActivity</span> <span class="token keyword">implements</span> <span class="token class-name">OnClickListener</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -501,7 +499,7 @@
                         mInstaller<span class="token punctuation">.</span><span class="token function">setPermissionsResult</span><span class="token punctuation">(</span>mSessionId<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                         <span class="token function">finish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-                        <span class="token function">startInstall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 💥 💥 💥 开始安装 💥 💥 💥 </span>
+                        <span class="token function">startInstall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 开始安装</span>
                     <span class="token punctuation">}</span>
                 <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
                     mScrollView<span class="token punctuation">.</span><span class="token function">pageScroll</span><span class="token punctuation">(</span>View<span class="token punctuation">.</span>FOCUS_DOWN<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -519,7 +517,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><strong><code>onClick</code></strong> 方法中分别对<strong><code>&quot;确定&quot;</code></strong>和<strong><code>&quot;取消&quot;</code></strong>按钮做了处理，我们主要查看对”确定”按钮的处理，调用 <strong><code>startInstall</code></strong> 方法！<br><br></p>
+<p><strong><code>onClick</code></strong> 方法中分别对 <strong><code>&quot;确定&quot;</code></strong> 和 <strong><code>&quot;取消&quot;</code></strong> 按钮做了处理，我们主要查看对 <strong><code>&quot;确定&quot;</code></strong> 按钮的处理，调用 <strong><code>startInstall</code></strong> 方法！</p>
 <h2 id="2-2-startInstall"><a href="#2-2-startInstall" class="headerlink" title="2.2 startInstall"></a>2.2 startInstall</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerActivity</span> <span class="token keyword">extends</span> <span class="token class-name">OverlayTouchActivity</span> <span class="token keyword">implements</span> <span class="token class-name">OnClickListener</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -527,28 +525,21 @@
         Intent newIntent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Intent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
         <span class="token comment" spellcheck="true">// 带上安装包的 applicationInfo</span>
-        newIntent<span class="token punctuation">.</span><span class="token function">putExtra</span><span class="token punctuation">(</span>PackageUtil<span class="token punctuation">.</span>INTENT_ATTR_APPLICATION_INFO<span class="token punctuation">,</span>
-                                                    mPkgInfo<span class="token punctuation">.</span>applicationInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
+        newIntent<span class="token punctuation">.</span><span class="token function">putExtra</span><span class="token punctuation">(</span>PackageUtil<span class="token punctuation">.</span>INTENT_ATTR_APPLICATION_INFO<span class="token punctuation">,</span> mPkgInfo<span class="token punctuation">.</span>applicationInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>         
         <span class="token comment" spellcheck="true">// 带上安装包的 URI</span>
         newIntent<span class="token punctuation">.</span><span class="token function">setData</span><span class="token punctuation">(</span>mPackageURI<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
         <span class="token comment" spellcheck="true">// 设置目标类</span>
         newIntent<span class="token punctuation">.</span><span class="token function">setClass</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> InstallInstalling<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        String installerPackageName <span class="token operator">=</span> <span class="token function">getIntent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStringExtra</span><span class="token punctuation">(</span>
-                Intent<span class="token punctuation">.</span>EXTRA_INSTALLER_PACKAGE_NAME<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String installerPackageName <span class="token operator">=</span> <span class="token function">getIntent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStringExtra</span><span class="token punctuation">(</span>Intent<span class="token punctuation">.</span>EXTRA_INSTALLER_PACKAGE_NAME<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
         <span class="token comment" spellcheck="true">// 带上安装包的 mOriginatingURI</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mOriginatingURI <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             newIntent<span class="token punctuation">.</span><span class="token function">putExtra</span><span class="token punctuation">(</span>Intent<span class="token punctuation">.</span>EXTRA_ORIGINATING_URI<span class="token punctuation">,</span> mOriginatingURI<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-
         <span class="token comment" spellcheck="true">// 带上安装包的 mReferrerURI</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mReferrerURI <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             newIntent<span class="token punctuation">.</span><span class="token function">putExtra</span><span class="token punctuation">(</span>Intent<span class="token punctuation">.</span>EXTRA_REFERRER<span class="token punctuation">,</span> mReferrerURI<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
+        <span class="token punctuation">}</span>    
         <span class="token comment" spellcheck="true">// 带上安装包的 mOriginatingUid 这个 uid 不是安装应用的 uid</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mOriginatingUid <span class="token operator">!=</span> PackageInstaller<span class="token punctuation">.</span>SessionParams<span class="token punctuation">.</span>UID_UNKNOWN<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             newIntent<span class="token punctuation">.</span><span class="token function">putExtra</span><span class="token punctuation">(</span>Intent<span class="token punctuation">.</span>EXTRA_ORIGINATING_UID<span class="token punctuation">,</span> mOriginatingUid<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -566,13 +557,12 @@
 
         <span class="token comment" spellcheck="true">// startInstall 方法用于跳转到 InstallInstalling 这个 Activity</span>
         <span class="token function">startActivity</span><span class="token punctuation">(</span>newIntent<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
         <span class="token function">finish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 关闭当前的 PackageInstallerActivity</span>
     <span class="token punctuation">}</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>可以看到在 <strong><code>startInstall</code></strong> 方法中，主要是构造了一个 <strong><code>intent</code></strong>，并且将<strong><code>安装包信息</code></strong>封装到 intent 中，然后跳转到 <strong><code>InstallInstalling</code></strong> 类。<br><br></p>
+<p>可以看到在 <strong><code>startInstall</code></strong> 方法中，主要是构造了一个 <strong><code>intent</code></strong>，并且将<strong><code>安装包信息</code></strong>封装到 intent 中，然后跳转到 <strong><code>InstallInstalling</code></strong> 类。</p>
 <h1 id="三、InstallInstalling"><a href="#三、InstallInstalling" class="headerlink" title="三、InstallInstalling"></a>三、InstallInstalling</h1><p><strong><font color="#FF0000">InstallInstalling 的主要工作：</font></strong>用于向包管理器发送包的信息并处理包管理的回调。</p>
 <h2 id="3-1-onCreate"><a href="#3-1-onCreate" class="headerlink" title="3.1 onCreate"></a>3.1 onCreate</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InstallInstalling</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
 
@@ -666,7 +656,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="3-2-onResume"><a href="#3-2-onResume" class="headerlink" title="3.2 onResume"></a>3.2 onResume</h2><p>我们查看 <code>InstallInstalling</code> 的 <code>onResume</code> 方法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InstallInstalling</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
 
@@ -696,7 +685,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="3-3-InstallingAsyncTask"><a href="#3-3-InstallingAsyncTask" class="headerlink" title="3.3 InstallingAsyncTask"></a>3.3 InstallingAsyncTask</h2><p>既然启动了 <code>InstallingAsyncTask</code>，那我们就来看看相关的 <code>doInBackground</code> 和 <code>onPostExecute</code> 方法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InstallInstalling</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
 
@@ -797,7 +785,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>问题来了，commit 到哪去了？我们不妨来看一下 <code>PackageInstaller.Session</code> 的 <code>commit</code> 方法：<br><br></p>
+<p>问题来了，commit 到哪去了？我们不妨来看一下 <code>PackageInstaller.Session</code> 的 <code>commit</code> 方法：</p>
 <h2 id="3-4-commit"><a href="#3-4-commit" class="headerlink" title="3.4 commit"></a>3.4 commit</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstaller</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -818,7 +806,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>我们发现，<strong><code>mSession</code></strong> 的类型为 <strong><code>IPackageInstallerSession</code></strong> ，这说明要通过 <strong><code>IPackageInstallerSession</code></strong> 来进行进程间的通信，最终会调用 <strong><code>PackageInstallerSession</code></strong> 的 <strong><code>commit</code></strong> 方法，这样又回到框架层处理了。<br><br></p>
+<p>我们发现，<strong><code>mSession</code></strong> 的类型为 <strong><code>IPackageInstallerSession</code></strong> ，这说明要通过 <strong><code>IPackageInstallerSession</code></strong> 来进行进程间的通信，最终会调用 <strong><code>PackageInstallerSession</code></strong> 的 <strong><code>commit</code></strong> 方法，这样又回到框架层处理了。</p>
 <h1 id="四、PackageInstallerSession"><a href="#四、PackageInstallerSession" class="headerlink" title="四、PackageInstallerSession"></a>四、PackageInstallerSession</h1><h2 id="4-1-commit"><a href="#4-1-commit" class="headerlink" title="4.1 commit"></a>4.1 commit</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerSession</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageInstallerSession<span class="token punctuation">.</span>Stub</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -846,7 +834,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="4-2-Handler-Callback"><a href="#4-2-Handler-Callback" class="headerlink" title="4.2 Handler.Callback"></a>4.2 Handler.Callback</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerSession</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageInstallerSession<span class="token punctuation">.</span>Stub</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -881,7 +868,6 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h2 id="4-3-commitLocked"><a href="#4-3-commitLocked" class="headerlink" title="4.3 commitLocked"></a>4.3 commitLocked</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerSession</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageInstallerSession<span class="token punctuation">.</span>Stub</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -901,10 +887,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><br></p>
 <h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>本篇文章讲解了 PackageInstaller 安装 APK 的过程，简单来说就两步：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp; 1. 将 APK 的信息通过 IO流 的形式写入到 PackageInstaller.Session中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp; 2. 调用 PackageInstaller.Session 的 commit 方法，将 APK 的信息交由 PMS 处理。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;📕 01. <a href="https://blog.csdn.net/itachi85/article/details/81024903" target="_blank" rel="noopener">Android包管理机制（二）PackageInstaller安装APK（Android 8.0）</a></p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/%E3%80%8AThinking%20in%20Android%E3%80%8B%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/19/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%E4%B9%8B%20PackageParser/">Framework 核心服务之 PMS 钻研（5）- PackageParser</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/27/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%887%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88%E4%B8%AD%EF%BC%89/">Framework 核心服务之 PMS 钻研（7）- APK 安装流程（中）</a> </p>
 
             </div>
             <hr>
