@@ -387,14 +387,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.1k
+                        4.7k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        26 分钟
+                        24 分钟
                     </div>
                     
                 
@@ -485,14 +485,19 @@
 </tr>
 </tbody>
 </table>
-<h2 id="1-2-回顾"><a href="#1-2-回顾" class="headerlink" title="1.2 回顾"></a>1.2 回顾</h2><p>在 PackageManagerService 系列第一篇中，我们将 <strong>“构造函数”</strong> 分成了两部分研究，如下：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">🍁 &nbsp;构造函数（1） - 前期准备工作</font></strong>&nbsp;<strong><font color="#FF0000">（分析完）</font></strong><a href="https://superandroid.pro/2019/01/01/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%881%EF%BC%89%E4%B9%8B%20%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/">《Framework 核心服务之 PMS 钻研（1）- 启动流程》</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">🍁 &nbsp;构造函数（2） - 扫描 Package 和 扫尾工作</font></strong>&nbsp;<strong><font color="#FF0000">（本篇文章要讨论的内容）</font></strong><br><br></p>
-<hr>
-<h1 id="二、扫描-Package"><a href="#二、扫描-Package" class="headerlink" title="二、扫描 Package"></a>二、扫描 Package</h1><p>PMS 构造函数第二阶段（我们前面分析的 Settings 和 XML 解析作为构造函数的第一部分）的工作就是 <code>扫描系统中的 APK</code>了。由于需要逐个扫描文件，因此手机上装的程序越多，PMS 的工作量就越大，系统启动速度也就越慢，这就是为什么你的手机启动速度有快慢的原因<strong><font color="#0000FF">（所以优化开机启动速度，了解 PMS 也是很关键的）</font></strong>。</p>
+<h2 id="1-2-回顾"><a href="#1-2-回顾" class="headerlink" title="1.2 回顾"></a>1.2 回顾</h2><p>在 <code>PackageManagerService</code> 系列第一篇中，我们将 <strong>“构造函数”</strong> 分成了两部分研究，如下：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">✂ &nbsp;构造函数（1） - 前期准备工作</font></strong>&nbsp;<strong><font color="#FF0000">（已分析）</font></strong>&nbsp;&nbsp;请查阅：<a href="https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-1-qi-dong-liu-cheng/">《PackageManagerService 钻研（1）- 启动流程》</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">✂ &nbsp;构造函数（2） - 扫描 Package 和 扫尾工作</font></strong>&nbsp;<strong><font color="#FF0000">（本篇文章要讨论的内容）</font></strong></p>
+<p><br></p>
+<h1 id="二、扫描-Package"><a href="#二、扫描-Package" class="headerlink" title="二、扫描 Package"></a>二、扫描 Package</h1><p>PMS 构造函数第二阶段（我们前面分析的 Settings 和 XML 解析作为构造函数的第一部分）的工作就是 <code>扫描系统中的 APK</code>了。由于需要逐个扫描文件，因此手机上装的程序越多，PMS 的工作量就越大，系统启动速度也就越慢，这就是为什么你的手机启动速度有快慢的原因<strong><font color="#0000FF">（所以优化开机启动速度，了解 PMS 很关键！）</font></strong>。</p>
 <h2 id="2-1-第一阶段（剩余工作）"><a href="#2-1-第一阶段（剩余工作）" class="headerlink" title="2.1 第一阶段（剩余工作）"></a>2.1 第一阶段（剩余工作）</h2><p>接着前面的 PMS 构造函数继续分析源码：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>
-        <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span> <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    SystemConfig systemConfig <span class="token operator">=</span> SystemConfig<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    mAvailableFeatures <span class="token operator">=</span> systemConfig<span class="token punctuation">.</span><span class="token function">getAvailableFeatures</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    mProtectedPackages <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProtectedPackages</span><span class="token punctuation">(</span>mContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 前文我们对构造函数的分析到此，接下来分析第一阶段剩余部分源码</span>
 
     <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mInstallLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// writer </span>
@@ -501,9 +506,8 @@
 
         mFirstBoot <span class="token operator">=</span> <span class="token operator">!</span>mSettings<span class="token punctuation">.</span><span class="token function">readLPw</span><span class="token punctuation">(</span>sUserManager<span class="token punctuation">.</span><span class="token function">getUsers</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token keyword">final</span> <span class="token keyword">int</span> packageSettingCount <span class="token operator">=</span> mSettings<span class="token punctuation">.</span>mPackages<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
         <span class="token comment" spellcheck="true">// 清理那些代码路径不存在的异常 package</span>
+        <span class="token keyword">final</span> <span class="token keyword">int</span> packageSettingCount <span class="token operator">=</span> mSettings<span class="token punctuation">.</span>mPackages<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> packageSettingCount <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             PackageSetting ps <span class="token operator">=</span> mSettings<span class="token punctuation">.</span>mPackages<span class="token punctuation">.</span><span class="token function">valueAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isExternal</span><span class="token punctuation">(</span>ps<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>ps<span class="token punctuation">.</span>codePath <span class="token operator">==</span> null <span class="token operator">||</span> <span class="token operator">!</span>ps<span class="token punctuation">.</span>codePath<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -518,13 +522,11 @@
         <span class="token punctuation">}</span>
 
         <span class="token comment" spellcheck="true">// 设置模块来代替 framework-res.apk 中缺省的 ResolverActivity</span>
-        String customResolverActivity <span class="token operator">=</span> Resources<span class="token punctuation">.</span><span class="token function">getSystem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>
-                R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>config_customResolverActivity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String customResolverActivity <span class="token operator">=</span> Resources<span class="token punctuation">.</span><span class="token function">getSystem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>string<span class="token punctuation">.</span>config_customResolverActivity<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>TextUtils<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>customResolverActivity<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             customResolverActivity <span class="token operator">=</span> null<span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            mCustomResolverComponentName <span class="token operator">=</span> ComponentName<span class="token punctuation">.</span><span class="token function">unflattenFromString</span><span class="token punctuation">(</span>
-                    customResolverActivity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            mCustomResolverComponentName <span class="token operator">=</span> ComponentName<span class="token punctuation">.</span><span class="token function">unflattenFromString</span><span class="token punctuation">(</span>customResolverActivity<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
         <span class="token comment" spellcheck="true">// 记录扫描开始的时间</span>
@@ -539,8 +541,7 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <h2 id="2-2-扫描系统-Package"><a href="#2-2-扫描系统-Package" class="headerlink" title="2.2 扫描系统 Package"></a>2.2 扫描系统 Package</h2><p>接下来看 PMS 第二阶段工作的核心内容，即 <code>扫描 Package</code>，源码如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>
-        <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span> <span class="token keyword">boolean</span> factoryTest<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>　　　　<span class="token comment" spellcheck="true">// 第一阶段分析结束！</span>
 
@@ -550,8 +551,7 @@
     <span class="token keyword">final</span> VersionInfo ver <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getInternalVersion</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     mIsUpgrade <span class="token operator">=</span> <span class="token operator">!</span>Build<span class="token punctuation">.</span>FINGERPRINT<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>ver<span class="token punctuation">.</span>fingerprint<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>mIsUpgrade<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">logCriticalInfo</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>INFO<span class="token punctuation">,</span> <span class="token string">"Upgrading from "</span> <span class="token operator">+</span> 
-                        ver<span class="token punctuation">.</span>fingerprint <span class="token operator">+</span> <span class="token string">" to "</span> <span class="token operator">+</span> Build<span class="token punctuation">.</span>FINGERPRINT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">logCriticalInfo</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>INFO<span class="token punctuation">,</span> <span class="token string">"Upgrading from "</span> <span class="token operator">+</span> ver<span class="token punctuation">.</span>fingerprint <span class="token operator">+</span> <span class="token string">" to "</span> <span class="token operator">+</span> Build<span class="token punctuation">.</span>FINGERPRINT<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     mPromoteSystemApps <span class="token operator">=</span> mIsUpgrade <span class="token operator">&amp;&amp;</span> ver<span class="token punctuation">.</span>sdkVersion <span class="token operator">&lt;=</span> Build<span class="token punctuation">.</span>VERSION_CODES<span class="token punctuation">.</span>LOLLIPOP_MR1<span class="token punctuation">;</span>
@@ -564,8 +564,7 @@
         <span class="token keyword">while</span> <span class="token punctuation">(</span>pkgSettingIter<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             PackageSetting ps <span class="token operator">=</span> pkgSettingIter<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isSystemApp</span><span class="token punctuation">(</span>ps<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token comment" spellcheck="true">// 遍历 Settings::mPackages 集合，将系统 APP 加入到</span>
-                <span class="token comment" spellcheck="true">// PackageManagerService::mExistingSystemPackages</span>
+                <span class="token comment" spellcheck="true">// 遍历 Settings::mPackages 集合，将系统 APP 加入到 PackageManagerService::mExistingSystemPackages</span>
                 mExistingSystemPackages<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>ps<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
@@ -575,6 +574,7 @@
 
     <span class="token comment" spellcheck="true">// 定义扫描参数</span>
     <span class="token keyword">int</span> scanFlags <span class="token operator">=</span> SCAN_BOOTING <span class="token operator">|</span> SCAN_INITIAL<span class="token punctuation">;</span>
+
     <span class="token keyword">if</span> <span class="token punctuation">(</span>mIsUpgrade <span class="token operator">||</span> mFirstBoot<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         scanFlags <span class="token operator">=</span> scanFlags <span class="token operator">|</span> SCAN_FIRST_BOOT_OR_UPGRADE<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -660,16 +660,14 @@
 ｝
 </code></pre>
 <p>我们发现 PMS 扫描了很多目录，我们列举几个重点说明：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;<strong><code>/system/frameworks</code></strong> ：该目录中的文件都是系统库，例如：framework.jar、services.jar、framework-res.apk。不过 scanDirTracedLI 只扫描 APK 文件，所以 <code>framework-res.apk</code> 是该目录中唯一被扫描的文件。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;<strong><code>/system/app</code></strong> ：该目录下全是默认的系统应用。例如：Browser.apk、SettingsProvider.apk 等。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;<strong><code>/vendor/app</code></strong> ：该目录中的文件由厂商提供，即全是厂商定制的 APK 文件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;<strong><code>/system/frameworks</code></strong> ：该目录中的文件都是系统库，例如：framework.jar、services.jar、framework-res.apk。不过 scanDirTracedLI 只扫描 APK 文件，所以 <code>framework-res.apk</code> 是该目录中唯一被扫描的文件。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;<strong><code>/system/app</code></strong> ：该目录下全是默认的系统应用。例如：Browser.apk、SettingsProvider.apk 等。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp;<strong><code>/vendor/app</code></strong> ：该目录中的文件由厂商提供，即全是厂商定制的 APK 文件。</p>
 <h3 id="2-2-1-scanDirTracedLI"><a href="#2-2-1-scanDirTracedLI" class="headerlink" title="2.2.1 scanDirTracedLI"></a>2.2.1 scanDirTracedLI</h3><p>PMS 扫描目录统一调用 <code>scanDirTracedLI()</code> 方法（出现次数最多的也是最重要的函数），我们深入跟踪源码：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">scanDirTracedLI</span><span class="token punctuation">(</span>File scanDir<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> parseFlags<span class="token punctuation">,</span> 
-                                          <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> <span class="token keyword">long</span> currentTime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">scanDirTracedLI</span><span class="token punctuation">(</span>File scanDir<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> parseFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> <span class="token keyword">long</span> currentTime<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Trace<span class="token punctuation">.</span><span class="token function">traceBegin</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">try</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 跳转至 scanDirLI 方法</span>
-        <span class="token function">scanDirLI</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">scanDirLI</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 跳转至 scanDirLI 方法</span>
     <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
         Trace<span class="token punctuation">.</span><span class="token function">traceEnd</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -687,8 +685,8 @@
     <span class="token comment" spellcheck="true">// ParallelPackageParser 是 Android 9.0　新增的一个类，我们可以理解它其实就是一个队列，</span>
     <span class="token comment" spellcheck="true">// 收集系统 apk 文件，然后从这个队列里面一个个取出 apk ，调用 PackageParser　解析！</span>
     <span class="token keyword">try</span> <span class="token punctuation">(</span>ParallelPackageParser parallelPackageParser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ParallelPackageParser</span><span class="token punctuation">(</span>
-            mSeparateProcesses<span class="token punctuation">,</span> mOnlyCore<span class="token punctuation">,</span> mMetrics<span class="token punctuation">,</span> mCacheDir<span class="token punctuation">,</span>
-            mParallelPackageParserCallback<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+             mSeparateProcesses<span class="token punctuation">,</span> mOnlyCore<span class="token punctuation">,</span> mMetrics<span class="token punctuation">,</span> mCacheDir<span class="token punctuation">,</span>
+             mParallelPackageParserCallback<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// Submit files for parsing in parallel    -->    收集 apk</span>
         <span class="token keyword">int</span> fileCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
         <span class="token keyword">for</span> <span class="token punctuation">(</span>File file <span class="token operator">:</span> files<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -720,31 +718,21 @@
                          * Android 9.0 调用 scanPackageChildLI，
                          * Android 8.0 调用 scanPackageLI，
                          * Android 7.0 调用 scanPackageTracedLI，
-                         * 
-                         * 调用 scanPackageChildLI 函数扫描一个特定的 apk 文件，
-                         * 返回值是 PackageParser 的内部类 Package，
-                         * 该类的实例代表一个 APK 文件，所以它就是和 apk 文件对应的数据结构。
                          */</span>
-                        <span class="token function">scanPackageChildLI</span><span class="token punctuation">(</span>parseResult<span class="token punctuation">.</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span>
-                                currentTime<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                         <span class="token comment" spellcheck="true">// 调用函数扫描一个特定的 apk 文件，返回值是 PackageParser 的内部类 Package</span>
+                        <span class="token function">scanPackageChildLI</span><span class="token punctuation">(</span>parseResult<span class="token punctuation">.</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token punctuation">}</span>
                 <span class="token comment" spellcheck="true">// 扫描 APK 过程中发生异常</span>
                 <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">PackageManagerException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     errorCode <span class="token operator">=</span> e<span class="token punctuation">.</span>error<span class="token punctuation">;</span>
-                    Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Failed to scan "</span> <span class="token operator">+</span> parseResult<span class="token punctuation">.</span>scanFile <span class="token operator">+</span> <span class="token string">": "</span> 
-                                                              <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Failed to scan "</span> <span class="token operator">+</span> parseResult<span class="token punctuation">.</span>scanFile <span class="token operator">+</span> <span class="token string">": "</span> <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span>
             <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>throwable <span class="token keyword">instanceof</span> <span class="token class-name">PackageParser<span class="token punctuation">.</span>PackageParserException</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
             <span class="token punctuation">}</span>
 
             <span class="token comment" spellcheck="true">// Delete invalid userdata apps -- 如果解析失败，并且是非系统 apk</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>scanFlags <span class="token operator">&amp;</span> SCAN_AS_SYSTEM<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span>
-                    errorCode <span class="token operator">!=</span> PackageManager<span class="token punctuation">.</span>INSTALL_SUCCEEDED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>scanFlags <span class="token operator">&amp;</span> SCAN_AS_SYSTEM<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> errorCode <span class="token operator">!=</span> PackageManager<span class="token punctuation">.</span>INSTALL_SUCCEEDED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 非系统 Package 扫描失败，删除文件</span>
                 <span class="token function">removeCodePathLI</span><span class="token punctuation">(</span>parseResult<span class="token punctuation">.</span>scanFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
@@ -761,8 +749,7 @@
 <span class="token keyword">class</span> <span class="token class-name">ParallelPackageParser</span> <span class="token keyword">implements</span> <span class="token class-name">AutoCloseable</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
-    <span class="token keyword">private</span> <span class="token keyword">final</span> BlockingQueue<span class="token operator">&lt;</span>ParseResult<span class="token operator">></span> mQueue <span class="token operator">=</span> 
-                                             <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>QUEUE_CAPACITY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> BlockingQueue<span class="token operator">&lt;</span>ParseResult<span class="token operator">></span> mQueue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>QUEUE_CAPACITY<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token function">ParallelPackageParser</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> separateProcesses<span class="token punctuation">,</span> <span class="token keyword">boolean</span> onlyCoreApps<span class="token punctuation">,</span>
             DisplayMetrics metrics<span class="token punctuation">,</span> File cacheDir<span class="token punctuation">,</span> PackageParser<span class="token punctuation">.</span>Callback callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -828,7 +815,7 @@
         <span class="token annotation punctuation">@Override</span>
         <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> <span class="token string">"ParseResult{"</span> <span class="token operator">+</span>　<span class="token string">"pkg="</span> <span class="token operator">+</span> pkg <span class="token operator">+</span>　<span class="token string">", scanFile="</span> <span class="token operator">+</span> scanFile <span class="token operator">+</span>
-                    <span class="token string">", throwable="</span> <span class="token operator">+</span> throwable <span class="token operator">+</span>　<span class="token string">'}'</span><span class="token punctuation">;</span>
+                   <span class="token string">", throwable="</span> <span class="token operator">+</span> throwable <span class="token operator">+</span>　<span class="token string">'}'</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 
@@ -853,28 +840,16 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="2-2-3-scanPackageChildLI"><a href="#2-2-3-scanPackageChildLI" class="headerlink" title="2.2.3 scanPackageChildLI"></a>2.2.3 scanPackageChildLI</h3><p>源码中，如果 apk 文件没有问题，会走如下流程：</p>
+<h3 id="2-2-3-scanPackageChildLI"><a href="#2-2-3-scanPackageChildLI" class="headerlink" title="2.2.3 scanPackageChildLI"></a>2.2.3 scanPackageChildLI</h3><p>在上面的源码中，我们得知：如果 apk 文件没有问题，会走如下流程：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">try</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>errorCode <span class="token operator">==</span> PackageManager<span class="token punctuation">.</span>INSTALL_SUCCEEDED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">/*
-         * Android 9.0 调用 scanPackageChildLI，
-         * Android 8.0 调用 scanPackageLI，
-         * Android 7.0 调用 scanPackageTracedLI，
-         * 
-         * 调用 scanPackageChildLI 函数扫描一个特定的 apk 文件，
-         * 返回值是 PackageParser 的内部类 Package，
-         * 该类的实例代表一个 APK 文件，所以它就是和 apk 文件对应的数据结构。
-         *
-         * PackageParser.Package pkg;    // Parsed package
-         */</span>
         <span class="token function">scanPackageChildLI</span><span class="token punctuation">(</span>parseResult<span class="token punctuation">.</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span>　currentTime<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>接下来的重点就是分析 <code>scanPackageChildLI()</code> 方法！</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
- *  Scans a package and returns the newly parsed package. 
- *  扫描一个 apk 文件并返回 package！
+ *  Scans a package and returns the newly parsed package.  -->  扫描一个 apk 文件并返回 package！
  *  @throws PackageManagerException on a parse error.
  */</span>
 <span class="token keyword">private</span> PackageParser<span class="token punctuation">.</span>Package <span class="token function">scanPackageChildLI</span><span class="token punctuation">(</span>PackageParser<span class="token punctuation">.</span>Package pkg<span class="token punctuation">,</span>
@@ -890,15 +865,13 @@
     <span class="token punctuation">}</span>
 
     <span class="token comment" spellcheck="true">// Scan the parent</span>
-    PackageParser<span class="token punctuation">.</span>Package scannedPkg <span class="token operator">=</span> <span class="token function">addForInitLI</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span>
-            scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    PackageParser<span class="token punctuation">.</span>Package scannedPkg <span class="token operator">=</span> <span class="token function">addForInitLI</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// Scan the children</span>
     <span class="token keyword">final</span> <span class="token keyword">int</span> childCount <span class="token operator">=</span> <span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>childPackages <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">?</span> pkg<span class="token punctuation">.</span>childPackages<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> childCount<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         PackageParser<span class="token punctuation">.</span>Package childPackage <span class="token operator">=</span> pkg<span class="token punctuation">.</span>childPackages<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">addForInitLI</span><span class="token punctuation">(</span>childPackage<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span>
-                currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">addForInitLI</span><span class="token punctuation">(</span>childPackage<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>scanFlags <span class="token operator">&amp;</span> SCAN_CHECK_ONLY<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -913,8 +886,7 @@
         <span class="token annotation punctuation">@ParseFlags</span> <span class="token keyword">int</span> parseFlags<span class="token punctuation">,</span> <span class="token annotation punctuation">@ScanFlags</span> <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> <span class="token keyword">long</span> currentTime<span class="token punctuation">,</span>
         <span class="token annotation punctuation">@Nullable</span> UserHandle user<span class="token punctuation">)</span>　<span class="token keyword">throws</span> PackageManagerException <span class="token punctuation">{</span>
 
-    <span class="token keyword">final</span> <span class="token keyword">boolean</span> scanSystemPartition <span class="token operator">=</span> <span class="token punctuation">(</span>parseFlags <span class="token operator">&amp;</span> 
-                                         PackageParser<span class="token punctuation">.</span>PARSE_IS_SYSTEM_DIR<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token keyword">boolean</span> scanSystemPartition <span class="token operator">=</span> <span class="token punctuation">(</span>parseFlags <span class="token operator">&amp;</span> PackageParser<span class="token punctuation">.</span>PARSE_IS_SYSTEM_DIR<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token keyword">final</span> String renamedPkgName<span class="token punctuation">;</span>
     <span class="token keyword">final</span> PackageSetting disabledPkgSetting<span class="token punctuation">;</span>
     <span class="token keyword">final</span> <span class="token keyword">boolean</span> isSystemPkgUpdated<span class="token punctuation">;</span>
@@ -925,8 +897,7 @@
 
     <span class="token comment" spellcheck="true">/* 
      * 判断系统 APK 是否需要更新
-     * final ArrayMap&lt;String, PackageParser.Package> mPackages = 
-     *                                      new ArrayMap&lt;String, PackageParser.Package>();
+     * final ArrayMap&lt;String, PackageParser.Package> mPackages = new ArrayMap&lt;String, PackageParser.Package>();
      */</span>
     <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         renamedPkgName <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getRenamedPackageLPr</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>mRealPackage<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -934,8 +905,7 @@
         <span class="token keyword">if</span> <span class="token punctuation">(</span>realPkgName <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token function">ensurePackageRenamed</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> renamedPkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        <span class="token keyword">final</span> PackageSetting originalPkgSetting <span class="token operator">=</span> 
-                                           <span class="token function">getOriginalPackageLocked</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> renamedPkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> PackageSetting originalPkgSetting <span class="token operator">=</span> <span class="token function">getOriginalPackageLocked</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> renamedPkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> PackageSetting installedPkgSetting <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getPackageLPr</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">;</span>
         pkgSetting <span class="token operator">=</span> originalPkgSetting <span class="token operator">==</span> null <span class="token operator">?</span> installedPkgSetting <span class="token operator">:</span> originalPkgSetting<span class="token punctuation">;</span>
         pkgAlreadyExists <span class="token operator">=</span> pkgSetting <span class="token operator">!=</span> null<span class="token punctuation">;</span>
@@ -955,8 +925,7 @@
                 <span class="token keyword">final</span> <span class="token keyword">int</span> disabledChildCount <span class="token operator">=</span> disabledPkgSetting<span class="token punctuation">.</span>childPackageNames <span class="token operator">!=</span> null
                         <span class="token operator">?</span> disabledPkgSetting<span class="token punctuation">.</span>childPackageNames<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
                 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> disabledChildCount<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-　　　　                String disabledChildPackageName <span class="token operator">=</span>
-                            disabledPkgSetting<span class="token punctuation">.</span>childPackageNames<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+　　　　                String disabledChildPackageName <span class="token operator">=</span> disabledPkgSetting<span class="token punctuation">.</span>childPackageNames<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">boolean</span> disabledPackageAvailable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
                     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> scannedChildCount<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                         PackageParser<span class="token punctuation">.</span>Package childPkg <span class="token operator">=</span> pkg<span class="token punctuation">.</span>childPackages<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -995,8 +964,8 @@
 
         <span class="token comment" spellcheck="true">// 创建安装参数 InstallArgs</span>
         <span class="token keyword">final</span> InstallArgs args <span class="token operator">=</span> <span class="token function">createInstallArgsForExisting</span><span class="token punctuation">(</span>
-                <span class="token function">packageFlagsToInstallFlags</span><span class="token punctuation">(</span>pkgSetting<span class="token punctuation">)</span><span class="token punctuation">,</span> pkgSetting<span class="token punctuation">.</span>codePathString<span class="token punctuation">,</span>
-                pkgSetting<span class="token punctuation">.</span>resourcePathString<span class="token punctuation">,</span> <span class="token function">getAppDexInstructionSets</span><span class="token punctuation">(</span>pkgSetting<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token function">packageFlagsToInstallFlags</span><span class="token punctuation">(</span>pkgSetting<span class="token punctuation">)</span><span class="token punctuation">,</span> pkgSetting<span class="token punctuation">.</span>codePathString<span class="token punctuation">,</span>
+                  pkgSetting<span class="token punctuation">.</span>resourcePathString<span class="token punctuation">,</span> <span class="token function">getAppDexInstructionSets</span><span class="token punctuation">(</span>pkgSetting<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         args<span class="token punctuation">.</span><span class="token function">cleanUpResourcesLI</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             mSettings<span class="token punctuation">.</span><span class="token function">enableSystemPackageLPw</span><span class="token punctuation">(</span>pkgSetting<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1013,7 +982,7 @@
      * same name installed earlier.
      *
      * 当我们安装一个系统 apk 的时候，发现已经有了一个相同包名的 apk，
-     * 而且这个相同包名 apk 是在非系统的分区中
+     * 而且这个相同包名 apk 是在非系统的分区中。
      */</span>
 
     <span class="token keyword">boolean</span> shouldHideSystemApp <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
@@ -1029,20 +998,12 @@
                                 PackageParser<span class="token punctuation">.</span>SigningDetails<span class="token punctuation">.</span>CertCapabilities<span class="token punctuation">.</span>ROLLBACK<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token function">logCriticalInfo</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>WARN<span class="token punctuation">,</span> <span class="token string">"System package signature mismatch;"</span>
                                            <span class="token operator">+</span> <span class="token string">" name: "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">try</span> <span class="token punctuation">(</span>PackageFreezer freezer <span class="token operator">=</span> <span class="token function">freezePackage</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">,</span>
-                    <span class="token string">"scanPackageInternalLI"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">(</span>PackageFreezer freezer <span class="token operator">=</span> <span class="token function">freezePackage</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">,</span> <span class="token string">"scanPackageInternalLI"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 如果两个 apk 签名不匹配，则调用 deletePackageLI 方法清除 apk 文件及其数据</span>
                 <span class="token function">deletePackageLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
             pkgSetting <span class="token operator">=</span> null<span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>newPkgVersionGreater<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// The application on /system is newer than the application on /data.</span>
-            <span class="token comment" spellcheck="true">// Simply remove the application on /data [keeping application data]</span>
-            <span class="token comment" spellcheck="true">// and replace it with the version on /system.</span>
-            <span class="token function">logCriticalInfo</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>WARN<span class="token punctuation">,</span> <span class="token string">"System package enabled;"</span> <span class="token operator">+</span> <span class="token string">" name: "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>name
-                    <span class="token operator">+</span> <span class="token string">"; "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>versionCode <span class="token operator">+</span> <span class="token string">" --> "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span><span class="token function">getLongVersionCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-                    <span class="token operator">+</span> <span class="token string">"; "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>codePathString <span class="token operator">+</span> <span class="token string">" --> "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span>codePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
             <span class="token comment" spellcheck="true">// 更新系统 apk 程序</span>
             InstallArgs args <span class="token operator">=</span> <span class="token function">createInstallArgsForExisting</span><span class="token punctuation">(</span>
                     <span class="token function">packageFlagsToInstallFlags</span><span class="token punctuation">(</span>pkgSetting<span class="token punctuation">)</span><span class="token punctuation">,</span> pkgSetting<span class="token punctuation">.</span>codePathString<span class="token punctuation">,</span>
@@ -1051,24 +1012,15 @@
                 args<span class="token punctuation">.</span><span class="token function">cleanUpResourcesLI</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// The application on /system is older than the application on /data. Hide</span>
-            <span class="token comment" spellcheck="true">// the application on /system and the version on /data will be scanned later</span>
-            <span class="token comment" spellcheck="true">// and re-added like an update.</span>
             shouldHideSystemApp <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-            <span class="token function">logCriticalInfo</span><span class="token punctuation">(</span>Log<span class="token punctuation">.</span>INFO<span class="token punctuation">,</span>
-                    <span class="token string">"System package disabled;"</span>
-                    <span class="token operator">+</span> <span class="token string">" name: "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>name
-                    <span class="token operator">+</span> <span class="token string">"; old: "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>codePathString <span class="token operator">+</span> <span class="token string">" @ "</span> <span class="token operator">+</span> pkgSetting<span class="token punctuation">.</span>versionCode
-                    <span class="token operator">+</span> <span class="token string">"; new: "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span>codePath <span class="token operator">+</span> <span class="token string">" @ "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span>codePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 
-    <span class="token comment" spellcheck="true">// 🔥 🔥 🔥 🔥 🔥 🔥 重点方法 🔥 🔥 🔥 🔥 🔥 🔥</span>
+    <span class="token comment" spellcheck="true">// 重点方法</span>
     <span class="token keyword">final</span> PackageParser<span class="token punctuation">.</span>Package scannedPkg <span class="token operator">=</span> <span class="token function">scanPackageNewLI</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags
             <span class="token operator">|</span> SCAN_UPDATE_SIGNATURE<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token comment" spellcheck="true">// 如果新安装的系统 APK 会被旧的 APK 数据覆盖，</span>
-    <span class="token comment" spellcheck="true">// 所以需要隐藏隐藏系统应用程序，并重新扫描 /data/app 目录</span>
+    <span class="token comment" spellcheck="true">// 如果新安装的系统 APK 会被旧的 APK 数据覆盖，所以需要隐藏隐藏系统应用程序，并重新扫描 /data/app 目录</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>shouldHideSystemApp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             mSettings<span class="token punctuation">.</span><span class="token function">disableSystemPackageLPw</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1088,11 +1040,9 @@
     <span class="token keyword">if</span> <span class="token punctuation">(</span>realPkgName <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">ensurePackageRenamed</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> renamedPkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token keyword">final</span> PackageSetting originalPkgSetting <span class="token operator">=</span> 
-                                           <span class="token function">getOriginalPackageLocked</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> renamedPkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> PackageSetting originalPkgSetting <span class="token operator">=</span> <span class="token function">getOriginalPackageLocked</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> renamedPkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">final</span> PackageSetting pkgSetting <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getPackageLPr</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">final</span> PackageSetting disabledPkgSetting <span class="token operator">=</span>
-                         mSettings<span class="token punctuation">.</span><span class="token function">getDisabledSystemPkgLPr</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> PackageSetting disabledPkgSetting <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getDisabledSystemPkgLPr</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token keyword">if</span> <span class="token punctuation">(</span>mTransferedPackages<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Slog<span class="token punctuation">.</span><span class="token function">w</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Package "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span>packageName
@@ -1107,15 +1057,8 @@
 
         SharedUserSetting sharedUserSetting <span class="token operator">=</span> null<span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>mSharedUserId <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// SIDE EFFECTS; may potentially allocate a new shared user</span>
             sharedUserSetting <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getSharedUserLPw</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>mSharedUserId<span class="token punctuation">,</span> 
                            <span class="token number">0</span> <span class="token comment" spellcheck="true">/*pkgFlags*/</span><span class="token punctuation">,</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">/*pkgPrivateFlags*/</span><span class="token punctuation">,</span> <span class="token boolean">true</span> <span class="token comment" spellcheck="true">/*create*/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>DEBUG_PACKAGE_SCANNING<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>parseFlags <span class="token operator">&amp;</span> PackageParser<span class="token punctuation">.</span>PARSE_CHATTY<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span>
-                    Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Shared UserID "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span>mSharedUserId
-                            <span class="token operator">+</span> <span class="token string">" (uid="</span> <span class="token operator">+</span> sharedUserSetting<span class="token punctuation">.</span>userId <span class="token operator">+</span> <span class="token string">"):"</span>
-                            <span class="token operator">+</span> <span class="token string">" packages="</span> <span class="token operator">+</span> sharedUserSetting<span class="token punctuation">.</span>packages<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
 
         <span class="token keyword">boolean</span> scanSucceeded <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
@@ -1127,13 +1070,11 @@
             <span class="token keyword">final</span> ScanResult result <span class="token operator">=</span> <span class="token function">scanPackageOnlyLI</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> mFactoryTest<span class="token punctuation">,</span> currentTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>success<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 将 pkg 中的数据保存到对应的 PMS 变量中，用于以后的管理查询调用等</span>
-                <span class="token comment" spellcheck="true">// 🔥 🔥 🔥 🔥 🔥 🔥 重点方法 🔥 🔥 🔥 🔥 🔥 🔥</span>
-                <span class="token function">commitScanResultsLocked</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">commitScanResultsLocked</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 重点方法</span>
             <span class="token punctuation">}</span>
             scanSucceeded <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
               <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>scanSucceeded <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>scanFlags <span class="token operator">&amp;</span> SCAN_DELETE_DATA_ON_FAILURES<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                  <span class="token comment" spellcheck="true">// DELETE_DATA_ON_FAILURES is only used by frozen paths</span>
                   <span class="token function">destroyAppDataLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> UserHandle<span class="token punctuation">.</span>USER_ALL<span class="token punctuation">,</span>
                           StorageManager<span class="token punctuation">.</span>FLAG_STORAGE_DE <span class="token operator">|</span> StorageManager<span class="token punctuation">.</span>FLAG_STORAGE_CE<span class="token punctuation">)</span><span class="token punctuation">;</span>
                   <span class="token function">destroyAppProfilesLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> UserHandle<span class="token punctuation">.</span>USER_ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1156,9 +1097,7 @@
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> <span class="token keyword">int</span> userId <span class="token operator">=</span> user <span class="token operator">==</span> null <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> user<span class="token punctuation">.</span><span class="token function">getIdentifier</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// Modify state for the given package setting</span>
         <span class="token comment" spellcheck="true">// 将 pkg 中的数据保存到对应的 PMS 变量中，用于以后的管理查询调用等</span>
-        <span class="token comment" spellcheck="true">// 🔥 🔥 🔥 🔥 🔥 🔥 重点方法 🔥 🔥 🔥 🔥 🔥 🔥</span>
         <span class="token function">commitPackageSettings</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> oldPkg<span class="token punctuation">,</span> pkgSetting<span class="token punctuation">,</span> user<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span>
                 <span class="token punctuation">(</span>parseFlags <span class="token operator">&amp;</span> PackageParser<span class="token punctuation">.</span>PARSE_CHATTY<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span> <span class="token comment" spellcheck="true">/*chatty*/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>pkgSetting<span class="token punctuation">.</span><span class="token function">getInstantApp</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1167,11 +1106,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="2-2-6-commitPackageSettings"><a href="#2-2-6-commitPackageSettings" class="headerlink" title="2.2.6 commitPackageSettings"></a>2.2.6 commitPackageSettings</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
- * Adds a scanned package to the system. When this method is finished, the package will
- * be available for query, resolution, etc...
- */</span>
-<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">commitPackageSettings</span><span class="token punctuation">(</span>PackageParser<span class="token punctuation">.</span>Package pkg<span class="token punctuation">,</span>
+<h3 id="2-2-6-commitPackageSettings"><a href="#2-2-6-commitPackageSettings" class="headerlink" title="2.2.6 commitPackageSettings"></a>2.2.6 commitPackageSettings</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">commitPackageSettings</span><span class="token punctuation">(</span>PackageParser<span class="token punctuation">.</span>Package pkg<span class="token punctuation">,</span>
             <span class="token annotation punctuation">@Nullable</span> PackageParser<span class="token punctuation">.</span>Package oldPkg<span class="token punctuation">,</span> PackageSetting pkgSetting<span class="token punctuation">,</span> 
             UserHandle user<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token annotation punctuation">@ScanFlags</span> <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> <span class="token keyword">boolean</span> chatty<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">final</span> String pkgName <span class="token operator">=</span> pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">;</span>
@@ -1179,8 +1114,6 @@
     <span class="token comment" spellcheck="true">// mCustomResolverComponentName 是从系统资源中读出的，可以配置</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>mCustomResolverComponentName <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span>
                 mCustomResolverComponentName<span class="token punctuation">.</span><span class="token function">getPackageName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 这里的用途和下面判断 packageName 是否为 "android" 有联系，</span>
-        <span class="token comment" spellcheck="true">// 因为调用 setUpCustomResolverActivity(pkg) 后 mResolverReplaced 为true</span>
         <span class="token function">setUpCustomResolverActivity</span><span class="token punctuation">(</span>pkg<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
@@ -1188,8 +1121,6 @@
     <span class="token keyword">if</span> <span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"android"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>scanFlags <span class="token operator">&amp;</span> SCAN_CHECK_ONLY<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token comment" spellcheck="true">// Set up information for our fall-back user intent resolution activity.</span>
-                <span class="token comment" spellcheck="true">// 为我们回退的页面配置信息</span>
                 mPlatformPackage <span class="token operator">=</span> pkg<span class="token punctuation">;</span>
                 pkg<span class="token punctuation">.</span>mVersionCode <span class="token operator">=</span> mSdkVersion<span class="token punctuation">;</span>
                 pkg<span class="token punctuation">.</span>mVersionCodeMajor <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -1233,7 +1164,7 @@
 
         <span class="token comment" spellcheck="true">// 在此之前，四大组件的信息都是 Package 对象的私有变量，通过下面的代码，</span>
         <span class="token comment" spellcheck="true">// 将他们注册到 PackageManagerService 里面，</span>
-        <span class="token comment" spellcheck="true">// 这样 PackageManagerService 就有了所有的组件信息</span>
+        <span class="token comment" spellcheck="true">// 这样 PackageManagerService 就有了所有的组件信息。</span>
         <span class="token keyword">int</span> N <span class="token operator">=</span> pkg<span class="token punctuation">.</span>providers<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         StringBuilder r <span class="token operator">=</span> null<span class="token punctuation">;</span>
         <span class="token keyword">int</span> i<span class="token punctuation">;</span>
@@ -1355,7 +1286,8 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="2-3-扫描非系统-Package"><a href="#2-3-扫描非系统-Package" class="headerlink" title="2.3 扫描非系统 Package"></a>2.3 扫描非系统 Package</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/* 
+<h2 id="2-3-扫描非系统-Package"><a href="#2-3-扫描非系统-Package" class="headerlink" title="2.3 扫描非系统 Package"></a>2.3 扫描非系统 Package</h2><p>回到 <code>PackageManagerService</code> 构造函数中分析剩余源码！</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/* 
  * mOnlyCore 用于控制是否扫描非系统 Package
  */</span>
 <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>mOnlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1404,10 +1336,11 @@
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
 <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>mOnlyCore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// 扫描 /data/app 目录</span>
-    <span class="token function">scanDirTracedLI</span><span class="token punctuation">(</span>mAppInstallDir<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> scanFlags <span class="token operator">|</span> SCAN_REQUIRE_KNOWN<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">scanDirTracedLI</span><span class="token punctuation">(</span>sAppInstallDir<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> scanFlags <span class="token operator">|</span> SCAN_REQUIRE_KNOWN<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// 扫描 /data/app-private 目录</span>
     <span class="token function">scanDirTracedLI</span><span class="token punctuation">(</span>mDrmAppPrivateInstallDir<span class="token punctuation">,</span> mDefParseFlags
@@ -1547,14 +1480,10 @@
                 <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> dataScanTime<span class="token punctuation">)</span> <span class="token operator">/</span> dataPackagesCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>　　　　<span class="token comment" spellcheck="true">//　扫描非系统 apk　工作完成！</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>　　　　<span class="token comment" spellcheck="true">//　扫描非系统 apk 工作完成</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <h1 id="三、扫尾工作"><a href="#三、扫尾工作" class="headerlink" title="三、扫尾工作"></a>三、扫尾工作</h1><p>这部分任务比较简单，就是将第二阶段 APK 的信息再集中整理一次，可自行研究。</p>
-<hr>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p>&nbsp;📕 01. <a href="https://www.2cto.com/kf/201609/551752.html" target="_blank" rel="noopener">Android7.0 PackageManagerService (2) PKMS构造函数的主要工作</a><br>&nbsp;📕 02. <a href="https://www.jianshu.com/p/8e2831428110" target="_blank" rel="noopener">APK安装流程详解7——PackageManagerService的启动流程(上)</a></p>
-<hr>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/12/31/%E3%80%8AThinking%20in%20Android%E3%80%8B%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/01/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%881%EF%BC%89%E4%B9%8B%20%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/">Framework 核心服务之 PMS 钻研（1）- 启动流程</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/10/%E3%80%90%E6%A0%B8%E5%BF%83%E6%9C%8D%E5%8A%A1%E3%80%91Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%883%EF%BC%89%E4%B9%8B%20PackageManager/">Framework 核心服务之 PMS 钻研（3）- PackageManager</a></p>
 
             </div>
             <hr>
