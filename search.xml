@@ -316,6 +316,8 @@
       
         <tags>
             
+            <tag> 核心服务 </tag>
+            
             <tag> PackageManagerService </tag>
             
             <tag> APK 安装 </tag>
@@ -342,6 +344,8 @@
       
       
         <tags>
+            
+            <tag> 核心服务 </tag>
             
             <tag> PackageManagerService </tag>
             
@@ -370,6 +374,8 @@
       
         <tags>
             
+            <tag> 核心服务 </tag>
+            
             <tag> PackageManagerService </tag>
             
             <tag> APK 安装 </tag>
@@ -396,6 +402,8 @@
       
       
         <tags>
+            
+            <tag> 核心服务 </tag>
             
             <tag> PackageManagerService </tag>
             
@@ -424,6 +432,8 @@
       
         <tags>
             
+            <tag> 核心服务 </tag>
+            
             <tag> PackageManagerService </tag>
             
             <tag> PackageInstaller </tag>
@@ -450,6 +460,8 @@
       
       
         <tags>
+            
+            <tag> 核心服务 </tag>
             
             <tag> PackageManagerService </tag>
             
@@ -478,6 +490,8 @@
       
         <tags>
             
+            <tag> 核心服务 </tag>
+            
             <tag> PackageManagerService </tag>
             
             <tag> PMS 构造函数 </tag>
@@ -504,6 +518,8 @@
       
       
         <tags>
+            
+            <tag> 核心服务 </tag>
             
             <tag> PackageManagerService </tag>
             
