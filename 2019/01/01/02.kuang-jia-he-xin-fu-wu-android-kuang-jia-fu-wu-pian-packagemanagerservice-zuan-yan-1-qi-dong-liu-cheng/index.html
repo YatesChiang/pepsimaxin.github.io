@@ -383,7 +383,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        6.2k
+                        6.3k
                     </div>
                     
 
@@ -489,7 +489,9 @@
 </tr>
 </tbody>
 </table>
-<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p><strong><font color="#0000CD">PackageManagerService</font></strong>是 <code>SystemServer</code> 启动后的<code>第一个核心服务</code>，也是 Android 系统中最常用的服务之一。它负责系统中 Package 的管理，应用程序的安装、卸载、信息查询等。</p>
+<h2 id="1-2-简介"><a href="#1-2-简介" class="headerlink" title="1.2 简介"></a>1.2 简介</h2><p><strong><font color="#0000CD">PackageManagerService</font></strong>是 <code>SystemServer</code> 启动后的<code>第一个核心服务</code>，也是 Android 系统中最常用、最为核心的服务之一。它负责系统中 <code>Package 的管理</code>，常见的如：应用程序的<code>安装</code>、<code>卸载</code>、<code>信息查询</code>等。</p>
+<p><code>PKMS</code> 服务也是通过 <code>binder</code> 进行通信，<code>IPackageManager.aidl</code> 由工具转换后自动生成 <code>binder</code> 的服务端 <code>IPackageManager.Stub</code> 和客户端 <code>IPackageManager.Stub.Proxy</code>，具体关系如图：</p>
+<p><img src="/medias/featureimages/PackageManagerService_01.jpg" alt="PackageManagerService_Binder"></p>
 <h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p><code>PackageManagerService</code> 作为系统的核心服务，由 <code>SystemServer</code> 创建，<code>SystemServer</code> 调用了 <code>PackageManagerService</code> 的 <code>main()</code> 方法创建 <code>PackageManagerService 实例</code>。</p>
 <h2 id="2-1-main"><a href="#2-1-main" class="headerlink" title="2.1 main"></a>2.1 main</h2><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// frameworks/base/services/java/com/android/server/SystemServer.java</span>
 
@@ -517,7 +519,7 @@
     <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">startBootstrapServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
-        <span class="token comment" spellcheck="true">// 调用 PMS 的 main 函数，主要是创建 PMS 服务，并注册到 ServiceManager</span>
+        <span class="token comment" spellcheck="true">// 调用 PKMS 的 main 函数，主要是创建 PKMS 服务，并注册到 ServiceManager</span>
         mPackageManagerService <span class="token operator">=</span> PackageManagerService<span class="token punctuation">.</span><span class="token function">main</span><span class="token punctuation">(</span>mSystemContext<span class="token punctuation">,</span> installer<span class="token punctuation">,</span>
                     mFactoryTestMode <span class="token operator">!=</span> FactoryTest<span class="token punctuation">.</span>FACTORY_TEST_OFF<span class="token punctuation">,</span> mOnlyCore<span class="token punctuation">)</span><span class="token punctuation">;</span>
         mFirstBoot <span class="token operator">=</span> mPackageManagerService<span class="token punctuation">.</span><span class="token function">isFirstBoot</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -559,15 +561,15 @@
     <span class="token keyword">return</span> m<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>该方法主要<code>创建 PMS 对象</code>，并将其注册到 <code>ServiceManager</code> 中，内部是一个 <code>HashMap</code> 集合，存储了很多相关的 <code>Binder 服务</code>，缓存起来，我们在使用的时候，会通过 <code>getService(key)</code> 的方式去 <code>Map</code> 中获取。</p>
-<p><strong><font color="#FF0000">往下分析之前，我们先简单了解一下 PMS 构造函数的主要功能：</font></strong>扫描 Android 系统中几个目标文件夹中的 APK，从而建立合适的数据结构来管理各种信息，如：Package 信息、四大组件信息、权限信息等。</p>
-<p>抽象地来看，PMS 像一个加工厂，它解析实际的物理文件（APK文件）以生成符合自己要求的产品。（例如：PMS 将解析 APK 包中的 <code>AndroidManifest.xml</code>，并根据其中声明的 <code>Activity 标签</code>来创建与此对应的对象并加以保管。）</p>
-<p>从源码角度来看，PMS 的工作流程相对简单。但深入研究后，发现其很复杂！</p>
+<p>该方法主要<code>创建 PKMS 对象</code>，并将其注册到 <code>ServiceManager</code> 中，内部是一个 <code>HashMap</code> 集合，存储了很多相关的 <code>Binder 服务</code>，缓存起来，我们在使用的时候，会通过 <code>getService(key)</code> 的方式去 <code>Map</code> 中获取。</p>
+<p><strong><font color="#FF0000">往下分析之前，我们先简单了解一下 PKMS 构造函数的主要功能：</font></strong>扫描 Android 系统中几个目标文件夹中的 APK，从而建立合适的数据结构来管理各种信息，如：Package 信息、四大组件信息、权限信息等。</p>
+<p>抽象地来看，PKMS 像一个加工厂，它解析实际的物理文件（APK文件）以生成符合自己要求的产品。（例如：PKMS 将解析 APK 包中的 <code>AndroidManifest.xml</code>，并根据其中声明的 <code>Activity 标签</code>来创建与此对应的对象并加以保管。）</p>
+<p>从源码角度来看，PKMS 的工作流程相对简单。但深入研究后，发现其很复杂！</p>
 <blockquote>
 <p><strong><font color="#A020F0">复杂的是其中用于保存各种信息的<code>数据结构</code>和<code>它们之间的关系</code>，以及影响最终结果的<code>策略控制</code></font></strong>。</p>
 </blockquote>
-<p>如果你自行研究过 PMS，你会发现代码中存在大量不同的数据结构以及它们之间的关系会让人大为头疼。所以，在这篇文章中我们除了分析 PMS 的工作流程以外，会重点关注重要的数据结构以及它们的作用。</p>
-<p><strong><font color="#FF0000">接下来开始重点分析 PMS 的构造函数</font></strong>，如果放在一篇文章中去分析是不可能梳理清楚的！</p>
+<p>如果你自行研究过 PKMS，你会发现代码中存在大量不同的数据结构以及它们之间的关系会让人大为头疼。所以，在这篇文章中我们除了分析 PKMS 的工作流程以外，会重点关注重要的数据结构以及它们的作用。</p>
+<p><strong><font color="#FF0000">接下来开始重点分析 PKMS 的构造函数</font></strong>，如果放在一篇文章中去分析是不可能梳理清楚的！</p>
 <p>所以，我们分两部分研究，如下：</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">✂ &nbsp;构造函数（1） - 前期准备工作</font></strong>&nbsp;<strong><font color="#FF0000">（本篇文章要讨论的内容）</font></strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><font color="#551A8B">✂ &nbsp;构造函数（2） - 扫描 Package 和 扫尾工作</font></strong> </p>
 <p>回顾一下 <code>PackageManagerService</code> 的构造函数： </p>
@@ -678,9 +680,9 @@ PackageManagerService m <span class="token operator">=</span> <span class="token
 <p><strong><font color="#FF0000">Settings 的构造函数的主要工作：</font></strong>建立与某些系统配置文件、目录之间的关联。</p>
 <p>首先，它会创建指向 <code>/data/system/</code> 目录的 <code>File</code> 实例，这个目录下会保存很多系统文件。其次，就是创建 <code>/data/system/</code> 目录下的某些 <code>.xml 文件</code> 或其他文件的 <code>File</code> 实例。</p>
 <p>上面源码中涉及到 5 个文件：</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages.xml：</font> PMS 扫描完目标文件夹后，会创建 packages.xml。当系统进行程序安装、卸载和更新等操作时，均会更新该文件;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages.xml：</font> PKMS 扫描完目标文件夹后，会创建 packages.xml。当系统进行程序安装、卸载和更新等操作时，均会更新该文件;</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages-backup.xml：</font>packages.xml 文件的备份;</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages.list：</font>用于描述系统中存在的所有非系统自带的 APK 信息。当这些 APK 有变化时，PMS 就会更新该文件;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages.list：</font>用于描述系统中存在的所有非系统自带的 APK 信息。当这些 APK 有变化时，PKMS 就会更新该文件;</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages-stopped.xml：</font>记录被用户强行停止的应用的 Package 信息;</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#63B8FF">✒ packages-stopped-back.xml：</font>packages-stopped.xml 文件的备份。</p>
 <blockquote>
@@ -855,7 +857,7 @@ SharedUserSetting <span class="token function">addSharedUserLPw</span><span clas
 <span class="token punctuation">}</span>
 </code></pre>
 <p><strong><font color="#FF0000">至此对 Settings 的分析我们暂时告一段落。</font></strong></p>
-<h2 id="3-3-XML-文件扫描"><a href="#3-3-XML-文件扫描" class="headerlink" title="3.3 XML 文件扫描"></a>3.3 XML 文件扫描</h2><p>分析完 PMS 构造函数前期工作的第一阶段后，接下来就要继续回到构造函数中分析剩下的代码：</p>
+<h2 id="3-3-XML-文件扫描"><a href="#3-3-XML-文件扫描" class="headerlink" title="3.3 XML 文件扫描"></a>3.3 XML 文件扫描</h2><p>分析完 PKMS 构造函数前期工作的第一阶段后，接下来就要继续回到构造函数中分析剩下的代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java</span>
 
 <span class="token keyword">public</span> <span class="token function">PackageManagerService</span><span class="token punctuation">(</span>Context context<span class="token punctuation">,</span> Installer installer<span class="token punctuation">,</span>
@@ -1183,6 +1185,7 @@ sailfish:/system/etc/permissions $
 <span class="token punctuation">}</span>
 </code></pre>
 <p><strong><font color="#FF0000">readPermission 函数果然是将 XML 中的标签转换成对应的数据结构！！！</font></strong></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://gityuan.com/2016/11/06/packagemanager/" target="_blank" rel="noopener">《PackageManager启动篇》– Gityuan</a></p>
 
             </div>
             <hr>
