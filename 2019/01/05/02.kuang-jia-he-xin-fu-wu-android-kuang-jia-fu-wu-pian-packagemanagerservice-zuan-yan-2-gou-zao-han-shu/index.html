@@ -387,14 +387,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        4.7k
+                        4.8k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        24 分钟
+                        25 分钟
                     </div>
                     
                 
@@ -501,6 +501,13 @@
     <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mInstallLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// writer </span>
     <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 创建名为 "PackageManager" 的 handler 线程</span>
+        mHandlerThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServiceThread</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> Process<span class="token punctuation">.</span>THREAD_PRIORITY_BACKGROUND<span class="token punctuation">,</span> <span class="token boolean">true</span> <span class="token comment" spellcheck="true">/*allowIo*/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mHandlerThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mHandler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageHandler</span><span class="token punctuation">(</span>mHandlerThread<span class="token punctuation">.</span><span class="token function">getLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mProcessLoggingHandler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProcessLoggingHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Watchdog<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addThread</span><span class="token punctuation">(</span>mHandler<span class="token punctuation">,</span> WATCHDOG_TIMEOUT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mInstantAppRegistry <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InstantAppRegistry</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
         mFirstBoot <span class="token operator">=</span> <span class="token operator">!</span>mSettings<span class="token punctuation">.</span><span class="token function">readLPw</span><span class="token punctuation">(</span>sUserManager<span class="token punctuation">.</span><span class="token function">getUsers</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
