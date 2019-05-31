@@ -437,19 +437,19 @@
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"><font color="#B452CD">07. 系统核心服务之 PackageManagerService 钻研（5）- PackageParser</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"><font color="#B452CD">05. 系统核心服务之 PackageManagerService 钻研（5）- PackageParser</font></a></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"><font color="#B452CD">05. 系统核心服务之 PackageManagerService 钻研（6）- APK 安装流程（上）</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（6）- APK 安装流程（上）</font></a></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（7）- APK 安装流程（中）</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"><font color="#B452CD">07. 系统核心服务之 PackageManagerService 钻研（7）- APK 安装流程（中）</font></a></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（8）- APK 安装流程（下）</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"><font color="#B452CD">08. 系统核心服务之 PackageManagerService 钻研（8）- APK 安装流程（下）</font></a></td>
 </tr>
 </tbody>
 </table>
@@ -473,7 +473,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列上一篇文章 <a href="https://superandroid.pro/2018/11/15/B_05.%20Android%20%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1%E7%AF%87%20--%20%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%20PMS%20%E7%B3%BB%E5%88%97%EF%BC%885%EF%BC%89%E4%B9%8B%20APK%20%E5%AE%89%E8%A3%85%EF%BC%88PI%EF%BC%89/">Framework 核心服务之 PMS 钻研（5）- APK 安装（上）</a> 中，我们了解了 PackageInstaller 安装 APK 的流程，最后会将 APK 的信息交由 PMS 处理。那么 PMS 是如何处理的？这就是我们这篇文章需要分析的。</p>
+<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列上一篇文章 <a href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/">《PackageManagerService 钻研（6）- APK 安装（上）》</a> 中，我们了解了 PackageInstaller 安装 APK 的流程，最后会将 APK 的信息交由 PMS 处理。那么 PMS 是如何处理的？这就是我们本篇文章需要分析的。</p>
 <h1 id="二、PackageManagerService"><a href="#二、PackageManagerService" class="headerlink" title="二、PackageManagerService"></a>二、PackageManagerService</h1><h2 id="2-1-commitLocked"><a href="#2-1-commitLocked" class="headerlink" title="2.1 commitLocked"></a>2.1 commitLocked</h2><p>在前一篇文章末尾，我们研究过 <code>commitLocked</code> 方法，回顾下：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PackageInstallerSession</span> <span class="token keyword">extends</span> <span class="token class-name">IPackageInstallerSession<span class="token punctuation">.</span>Stub</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>

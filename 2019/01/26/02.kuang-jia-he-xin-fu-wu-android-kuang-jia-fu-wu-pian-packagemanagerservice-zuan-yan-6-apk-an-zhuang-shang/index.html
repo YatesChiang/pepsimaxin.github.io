@@ -437,19 +437,19 @@
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"><font color="#B452CD">07. 系统核心服务之 PackageManagerService 钻研（5）- PackageParser</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"><font color="#B452CD">05. 系统核心服务之 PackageManagerService 钻研（5）- PackageParser</font></a></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"><font color="#B452CD">05. 系统核心服务之 PackageManagerService 钻研（6）- APK 安装流程（上）</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（6）- APK 安装流程（上）</font></a></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（7）- APK 安装流程（中）</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"><font color="#B452CD">07. 系统核心服务之 PackageManagerService 钻研（7）- APK 安装流程（中）</font></a></td>
 </tr>
 <tr>
 <td style="text-align:center"></td>
-<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（8）- APK 安装流程（下）</font></a></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"><font color="#B452CD">08. 系统核心服务之 PackageManagerService 钻研（8）- APK 安装流程（下）</font></a></td>
 </tr>
 </tbody>
 </table>
@@ -673,7 +673,7 @@
 
             <span class="token comment" spellcheck="true">// 如果 sessionInfo 不为 Null 并且不是活动的，就创建并执行 InstallingAsyncTask</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>sessionInfo <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>sessionInfo<span class="token punctuation">.</span><span class="token function">isActive</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                mInstallingTask <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InstallingAsyncTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// 💥 💥 💥 重点方法 💥 💥 💥</span>
+                mInstallingTask <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InstallingAsyncTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// 重点方法</span>
                 mInstallingTask<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// we will receive a broadcast when the install is finished</span>
@@ -887,7 +887,7 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>本篇文章讲解了 PackageInstaller 安装 APK 的过程，简单来说就两步：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp; 1. 将 APK 的信息通过 IO流 的形式写入到 PackageInstaller.Session中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp; 2. 调用 PackageInstaller.Session 的 commit 方法，将 APK 的信息交由 PMS 处理。</p>
+<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>本篇文章讲解了 PackageInstaller 安装 APK 的过程，简单来说就两步：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp; 1. 将 APK 的信息通过 IO流 的形式写入到 PackageInstaller.Session中。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✒&nbsp; 2. 调用 PackageInstaller.Session 的 commit 方法，将 APK 的信息交由 PMS 处理。</p>
 
             </div>
             <hr>
