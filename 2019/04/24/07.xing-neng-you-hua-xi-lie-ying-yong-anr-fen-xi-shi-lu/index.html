@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="keywords" content="应用 ANR 分析实录, Thinking in Android">
     <meta name="description" content="分析 ANR 问题，有三大利器：Logcat，traces 和 StrictMode（不作讨论）。需要经过 日志获取、问题定位 和 场景还原 三个步骤。
-1. 日志获取如何获取日志，我们暂时不去详细分析，后面打算通过 Watchdog 机制">
+1. 日志获取如何获取日志，我们暂时不去详细分析，后面打算通过 “Watchdog 机">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -420,8 +420,8 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>分析 ANR 问题，有三大利器：<strong><font color="#ff0000">Logcat</font></strong>，<strong><font color="#ff0000">traces</font></strong> 和 <strong><font color="#ff0000">StrictMode</font></strong>（不作讨论）。需要经过 <strong><font color="#ff00ff">日志获取</font></strong>、<strong><font color="#ff00ff">问题定位</font></strong> 和 <strong><font color="#ff00ff">场景还原</font></strong> 三个步骤。</p>
-<h2 id="1-日志获取"><a href="#1-日志获取" class="headerlink" title="1. 日志获取"></a>1. 日志获取</h2><p>如何获取日志，我们暂时不去详细分析，后面打算通过 Watchdog 机制加以详解，这边我们以拿到的测试 Log 为准来进行分析。</p>
-<h2 id="2-问题定位"><a href="#2-问题定位" class="headerlink" title="2. 问题定位"></a>2. 问题定位</h2><p>我们现在以一份 ANR 日志为例，分析如何定位 ANR。</p>
+<h2 id="1-日志获取"><a href="#1-日志获取" class="headerlink" title="1. 日志获取"></a>1. 日志获取</h2><p>如何获取日志，我们暂时不去详细分析，后面打算通过 “Watchdog 机制” 加以详解，这边我们以拿到的测试 Log 为准来进行分析。</p>
+<h2 id="2-问题定位"><a href="#2-问题定位" class="headerlink" title="2. 问题定位"></a>2. 问题定位</h2><p>我们现在以一份 ANR 日志为例，分析如何定位 ANR 问题。</p>
 <p>1、通过在 <code>event log</code> 中检索 <code>am_anr</code> 关键字，就可以找到发生 ANR 的进程：</p>
 <pre class=" language-log"><code class="language-log">04-24 00:48:27 820 907 I am_anr: [0,29533,com.android.systemui,1082670605,Broadcast of Intent { act=android.intent.action.TIME_TICK flg=0x50000114 (has extras) }]
 </code></pre>
