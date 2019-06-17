@@ -529,7 +529,7 @@
     <span class="token punctuation">}</span>
 
     <span class="token keyword">if</span> <span class="token punctuation">(</span>argc <span class="token operator">></span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"subcontext"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">InitKernelLogging</span><span class="token punctuation">(</span>argv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">InitKernelLogging</span><span class="token punctuation">(</span>argv<span class="token punctuation">)</span><span class="token punctuation">;</span>                        <span class="token comment" spellcheck="true">// 屏蔽标准输入输出及定义 Kernel logger</span>
         <span class="token keyword">const</span> BuiltinFunctionMap function_map<span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token function">SubcontextMain</span><span class="token punctuation">(</span>argc<span class="token punctuation">,</span> argv<span class="token punctuation">,</span> <span class="token operator">&amp;</span>function_map<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -693,13 +693,13 @@
     <span class="token function">InitKernelLogging</span><span class="token punctuation">(</span>argv<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">LOG</span><span class="token punctuation">(</span>INFO<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token string">"init second stage started!"</span><span class="token punctuation">;</span>
 
-    <span class="token comment" spellcheck="true">// 最后调用 syscall，设置安全相关的值</span>
+    <span class="token comment" spellcheck="true">// 调用 syscall，设置安全相关的值</span>
     <span class="token function">keyctl_get_keyring_ID</span><span class="token punctuation">(</span>KEY_SPEC_SESSION_KEYRING<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// 这里的功能类似于“锁”</span>
     <span class="token function">close</span><span class="token punctuation">(</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"/dev/.booting"</span><span class="token punctuation">,</span> O_WRONLY <span class="token operator">|</span> O_CREAT <span class="token operator">|</span> O_CLOEXEC<span class="token punctuation">,</span> <span class="token number">0000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token function">property_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 初始化属性域 --> 定义于system/core/init/property_service.cpp</span>
+    <span class="token function">property_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>             <span class="token comment" spellcheck="true">// 初始化属性域 --> 定义于system/core/init/property_service.cpp</span>
 
     <span class="token function">process_kernel_dt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">process_kernel_cmdline</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 处理内核命令</span>
@@ -721,14 +721,14 @@
 </code></pre>
 <p>这部分代码主要的工作应该就是调用 <code>property_init()</code> 初始化属性域，然后设置各种属性。</p>
 <p>在 Android 平台中，为了让运行中的所有进程共享系统运行时所需要的各种设置值，系统开辟了属性存储区域，并提供了访问该区域的 API。</p>
-<p>我们查看 <code>property_init()</code> 源码：</p>
-<pre class=" language-java"><code class="language-java"><span class="token operator">/</span>system<span class="token operator">/</span>core<span class="token operator">/</span>init<span class="token operator">/</span>property_service<span class="token punctuation">.</span>cpp
+<p>我们跟踪下 <code>property_init()</code> ：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// system/core/init/property_service.cpp</span>
 
 <span class="token keyword">void</span> <span class="token function">property_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">mkdir</span><span class="token punctuation">(</span><span class="token string">"/dev/__properties__"</span><span class="token punctuation">,</span> S_IRWXU <span class="token operator">|</span> S_IXGRP <span class="token operator">|</span> S_IXOTH<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">CreateSerializedPropertyInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token comment" spellcheck="true">// 最终调用 _system_property_area_init() 函数初始化属性域</span>
+    <span class="token comment" spellcheck="true">// 调用 _system_property_area_init() 函数初始化属性域</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">__system_property_area_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">LOG</span><span class="token punctuation">(</span>ERROR<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token string">"Failed to initialize property area"</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -752,11 +752,11 @@
     <span class="token comment" spellcheck="true">/* 01. 初始化属性域 */</span>
 
     <span class="token comment" spellcheck="true">// 清除掉之前使用过的环境变量</span>
-    <span class="token comment" spellcheck="true">// Clean up our environment.</span>
     <span class="token function">unsetenv</span><span class="token punctuation">(</span><span class="token string">"INIT_SECOND_STAGE"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">unsetenv</span><span class="token punctuation">(</span><span class="token string">"INIT_STARTED_AT"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">unsetenv</span><span class="token punctuation">(</span><span class="token string">"INIT_SELINUX_TOOK"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">unsetenv</span><span class="token punctuation">(</span><span class="token string">"INIT_AVB_VERSION"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
@@ -774,12 +774,13 @@
     <span class="token comment" spellcheck="true">/* 01. 初始化属性域 */</span>
     <span class="token comment" spellcheck="true">/* 02. 清空环境变量 */</span>
 
-    <span class="token comment" spellcheck="true">// 再次完成 selinux 相关的工作</span>
-    <span class="token comment" spellcheck="true">// Now set up SELinux for second stage.</span>
+    <span class="token comment" spellcheck="true">// 再次完成第二阶段 selinux 相关的工作</span>
     <span class="token function">SelinuxSetupKernelLogging</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">SelabelInitialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">SelinuxRestoreContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>我们发现在 <code>init</code> 进程的<code>第一阶段</code>，也调用了 <code>selinux_initialize</code> 函数，那么两者有什么区别？</p>
 <p>init 进程<code>第一阶段</code>主要<code>加载 selinux 相关的策略</code>，而<code>第二阶段</code>调用 <code>SelabelInitialize()</code> 是为了<code>注册一些处理器</code>。</p>
@@ -802,6 +803,7 @@
     <span class="token keyword">if</span> <span class="token punctuation">(</span>epoll_fd <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">PLOG</span><span class="token punctuation">(</span>ERROR<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token string">"epoll_create1 failed"</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
@@ -821,10 +823,10 @@
     <span class="token comment" spellcheck="true">/* 03. 完成 SELinux 相关工作 */</span>
     <span class="token comment" spellcheck="true">/* 04. 创建 epoll 句柄 */</span>
 
-    <span class="token function">signal_handler_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 装载子进程信号处理器</span>
+    <span class="token function">signal_handler_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 装载子进程信号处理器</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><code>init</code> 是一个<code>守护进程</code>，为了防止 init 的子进程成为<code>僵尸进程</code>(zombie process)，需要 init 在子进程在结束时获取子进程的结束码，通过结束码将程序表中的子进程移除，防止成为僵尸进程的子进程占用程序表的空间（程序表的空间达到上限时，系统就不能再启动新的进程了，会引起严重的系统问题）。</p>
+<p><code>init</code> 是一个<code>守护进程</code>，为了防止 init 的子进程成为<code>僵尸进程</code>（zombie process），需要 init 在子进程结束时获取子进程的结束码，通过结束码将程序表中的子进程移除，防止成为僵尸进程的子进程占用程序表的空间（程序表的空间达到上限时，系统就不能再启动新的进程了，会引起严重的系统问题）。</p>
 <p>在 linux 当中，<code>父进程</code>是通过捕捉 <code>SIGCHLD</code> 信号来得知子进程运行结束的情况，此处 init 进程调用 <code>signal_handler_init()</code> 的目的就是<code>捕获子进程结束的信号</code>。</p>
 <h2 id="3-6-启动属性服务"><a href="#3-6-启动属性服务" class="headerlink" title="3.6 启动属性服务"></a>3.6 启动属性服务</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token operator">*</span> argv<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">/* ------------ 第一阶段 ------------ BEGIN------------ */</span>
@@ -843,11 +845,18 @@
     <span class="token comment" spellcheck="true">/* 04. 创建 epoll 句柄 */</span>
     <span class="token comment" spellcheck="true">/* 05. 装载子进程信号处理器 */</span>
 
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">IsRebootCapable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// If init does not have the CAP_SYS_BOOT capability, it is running in a container.</span>
+        <span class="token comment" spellcheck="true">// In that case, receiving SIGTERM will cause the system to shut down.</span>
+        <span class="token function">InstallSigtermHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
     <span class="token comment" spellcheck="true">// 进程调用 property_load_boot_defaults 进行默认属性配置相关的工作</span>
     <span class="token function">property_load_boot_defaults</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">export_oem_lock_status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 最终就是决定 "ro.boot.flash.locked" 的值</span>
+    <span class="token function">export_oem_lock_status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 最终决定 "ro.boot.flash.locked" 的值</span>
     <span class="token function">start_property_service</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 启动属性服务</span>
     <span class="token function">set_usb_controller</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
@@ -869,7 +878,7 @@
     <span class="token comment" spellcheck="true">/* 05. 装载子进程信号处理器 */</span>
     <span class="token comment" spellcheck="true">/* 06. 启动属性服务*/</span>
 
-    <span class="token comment" spellcheck="true">/* 07. 匹配命令和函数之间对应关系 */</span>
+    <span class="token comment" spellcheck="true">// 匹配命令和函数之间对应关系</span>
     <span class="token comment" spellcheck="true">// system/core/init/builtins.cpp，定义 Action 中的 function_map 为 BuiltinFuntionMap</span>
     <span class="token keyword">const</span> BuiltinFunctionMap function_map<span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">// 在 Action 中保存 function_map 对象，记录了命令与函数之间的对应关系</span>
@@ -905,6 +914,11 @@
     ServiceList<span class="token operator">&amp;</span> sm <span class="token operator">=</span> ServiceList<span class="token operator">:</span><span class="token operator">:</span><span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token function">LoadBootScripts</span><span class="token punctuation">(</span>am<span class="token punctuation">,</span> sm<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 解析 init.rc</span>
+
+    <span class="token comment" spellcheck="true">// Turning this on and letting the INFO logging be discarded adds 0.2s to</span>
+    <span class="token comment" spellcheck="true">// Nexus 9 boot time, so it's disabled by default.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token function">DumpState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
@@ -915,8 +929,9 @@
     std<span class="token operator">:</span><span class="token operator">:</span>string bootscript <span class="token operator">=</span> <span class="token function">GetProperty</span><span class="token punctuation">(</span><span class="token string">"ro.boot.init_rc"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// 如果没有 bootscript，则解析 init.rc 文件</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>bootscript<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    　           <span class="token comment" spellcheck="true">// 8.0　引入</span>
-        parser<span class="token punctuation">.</span><span class="token function">ParseConfig</span><span class="token punctuation">(</span><span class="token string">"/init.rc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 开始实际的解析过程</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>bootscript<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 开始实际的解析过程</span>
+        parser<span class="token punctuation">.</span><span class="token function">ParseConfig</span><span class="token punctuation">(</span><span class="token string">"/init.rc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>parser<span class="token punctuation">.</span><span class="token function">ParseConfig</span><span class="token punctuation">(</span><span class="token string">"/system/etc/init"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             late_import_paths<span class="token punctuation">.</span><span class="token function">emplace_back</span><span class="token punctuation">(</span><span class="token string">"/system/etc/init"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
@@ -934,44 +949,49 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>如果没有定义 bootScript，那么 init 进程还是会解析 <code>init.rc</code> 文件。init.rc 文件是在 init 进程启动后执行的启动脚本，文件中记录着 init 进程需执行的操作。</p>
+<p>如果没有定义 <code>bootScript</code>，那么 <code>init</code> 进程会解析 <code>init.rc</code> 文件。init.rc 文件是在 init 进程启动后执行的启动脚本，文件中记录着 init 进程需执行的操作。</p>
 <p>此处解析函数传入的参数为“/init.rc”，解析的是运行时与 init 进程同在根目录下的 init.rc 文件。该文件在编译前，定义于<code>system/core/rootdir/init.rc</code>中。</p>
-<p><strong>继续往下分析 main 函数之前；我们先了解一下 init.rc 是什么，然后分析下 parser 解析 init.rc 过程；最后我们再继续跟源码！</strong></p>
-<h2 id="4-3-init-rc-配置文件"><a href="#4-3-init-rc-配置文件" class="headerlink" title="4.3 init.rc 配置文件"></a>4.3 init.rc 配置文件</h2><p>init.rc 是一个配置文件，内部由 Android 初始化语言编写（Android Init Language）编写的脚本，主要包含五种类型语句： <font color="#0000CD">Action、Command、Service、Option</font> 和 <font color="#0000CD">Import</font>，在分析代码的过程中我们会详细介绍。</p>
-<p>init.rc 的配置代码在：<code>system/core/rootdir/init.rc</code> 中。</p>
-<p>init.rc 文件大致分为两大部分：</p>
+<p><strong>继续往下分析 main 函数之前；我们先了解一下 init.rc 是什么，然后分析下 parser 如何解析 init.rc；最后我们再继续跟源码！</strong></p>
+<h2 id="4-3-init-rc-配置文件"><a href="#4-3-init-rc-配置文件" class="headerlink" title="4.3 init.rc 配置文件"></a>4.3 init.rc 配置文件</h2><p><code>init.rc</code> 是一个配置文件，内部由 Android 初始化语言（Android Init Language）编写的脚本，主要包含五种类型语句： <strong><font color="#0000CD">Action、Command、Service、Option</font> 和 <font color="#0000CD">Import</font></strong>，在分析代码的过程中我们会详细介绍。</p>
+<p><code>init.rc</code> 的配置代码在：<code>system/core/rootdir/init.rc</code> 中。</p>
+<p><code>init.rc</code> 文件大致分为两大部分：</p>
 <blockquote>
 <p>一部分是以 <font color="#FF0000">“on”</font> 关键字开头的 <font color="#FF0000">动作列表</font>（action list）：</p>
 </blockquote>
-<pre><code>on early-init                                         // Action类型语句
+<pre><code>on early-init                                         // Action 类型语句
     # Set init and its forked children&#39;s oom_adj.     // #：注释符号
     write /proc/1/oom_score_adj -1000
+    # Disable sysrq from keyboard
+    write /proc/sys/kernel/sysrq 0
+
     ... ...
 
-    # app mem cgroups, used by activity manager, lmkd and zygote
-    mkdir /dev/memcg/apps/ 0755 system system
-    ... ...
+    # Mount cgroup mount point for cpu accounting
+    mount cgroup none /acct nodev noexec nosuid cpuacct
+    mkdir /acct/uid
 
     start ueventd
-</code></pre><p>Action 类型语句格式：</p>
+</code></pre><p><strong>Action 类型语句格式：</strong></p>
 <pre><code>on &lt;trigger&gt; [&amp;&amp; &lt;trigger&gt;]*     // 设置触发器
    &lt;command&gt;
    &lt;command&gt;                     // 动作触发之后要执行的命令
    ...
 </code></pre><blockquote>
-<p>另一部分是以 <font color="#FF0000">“service”</font> 关键字开头的 <font color="#FF0000">服务列表</font>（service list）：  如 <strong><font color="#FF0000">Zygote</font></strong></p>
+<p>另一部分是以 <font color="#FF0000">“service”</font> 关键字开头的 <font color="#FF0000">服务列表</font>（service list）：</p>
 </blockquote>
 <pre><code>service ueventd /sbin/ueventd    // Service类型语句
     class core
     critical
     seclabel u:r:ueventd:s0
     shutdown critical
-</code></pre><p>Service 类型语句格式：</p>
+</code></pre><p><strong>Service 类型语句格式：</strong></p>
 <pre><code>service &lt;name&gt; &lt;pathname&gt; [ &lt;argument&gt; ]*   // &lt;service的名字&gt;&lt;执行程序路径&gt;&lt;传递参数&gt;
-   &lt;option&gt;                                 // option是service的修饰词，影响什么时候、如何启动services
+   &lt;option&gt;                                 // option 是 service 的修饰词，影响什么时候、如何启动 services
    &lt;option&gt;
    ...
-</code></pre><p>借助系统环境变量或 Linux 命令，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🏹 动作列表用于<code>创建所需目录，以及为某些特定文件指定权限</code>；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🏹 服务列表用来<code>记录 init 进程需要启动的一些子进程</code>，如上面代码所示，service 关键字后的第一个字符串表示服务（子进程）的名称，第二个字符串表示服务的执行路径。</p>
+</code></pre><p>借助系统环境变量或 Linux 命令：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、动作列表用于<code>创建所需目录，以及为某些特定文件指定权限</code>；</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、服务列表用来<code>记录 init 进程需要启动的一些子进程</code>。</p>
 <h2 id="4-4-Parser"><a href="#4-4-Parser" class="headerlink" title="4.4 Parser"></a>4.4 Parser</h2><p>回到 LoadBootScripts()　函数中，实际解析 init.rc 的源码如下（回顾）：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">LoadBootScripts</span><span class="token punctuation">(</span>ActionManager<span class="token operator">&amp;</span> action_manager<span class="token punctuation">,</span> ServiceList<span class="token operator">&amp;</span> service_list<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// 创建解析器 parser</span>
