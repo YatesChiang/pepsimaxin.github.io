@@ -546,7 +546,7 @@
             jint debug_flags<span class="token punctuation">,</span> jobjectArray rlimits<span class="token punctuation">,</span> jlong permittedCapabilities<span class="token punctuation">,</span>
             jlong effectiveCapabilities<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
-    <span class="token comment" spellcheck="true">// 进行实际的“分裂”工作</span>
+    <span class="token comment" spellcheck="true">// 传入一堆参数，进行实际的“分裂”工作，fork 出一个新的进程</span>
     pid_t pid <span class="token operator">=</span> <span class="token function">ForkAndSpecializeCommon</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gids<span class="token punctuation">,</span>
                                         debug_flags<span class="token punctuation">,</span> rlimits<span class="token punctuation">,</span>
                                         permittedCapabilities<span class="token punctuation">,</span> effectiveCapabilities<span class="token punctuation">,</span>
@@ -573,7 +573,9 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>上述代码中，实际的“分裂”工作，由函数 <code>ForAndSpecializeCommon</code> 完成。</p>
-<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// Utility routine to fork zygote and specialize the child process.</span>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/jni/com_android_internal_os_Zygote.cpp</span>
+
+<span class="token comment" spellcheck="true">// Utility routine to fork zygote and specialize the child process.</span>
 <span class="token keyword">static</span> pid_t <span class="token function">ForkAndSpecializeCommon</span><span class="token punctuation">(</span>JNIEnv<span class="token operator">*</span> env<span class="token punctuation">,</span> uid_t uid<span class="token punctuation">,</span> gid_t gid<span class="token punctuation">,</span> jintArray javaGids<span class="token punctuation">,</span>
                                      jint debug_flags<span class="token punctuation">,</span> jobjectArray javaRlimits<span class="token punctuation">,</span>
                                      jlong permittedCapabilities<span class="token punctuation">,</span> jlong effectiveCapabilities<span class="token punctuation">,</span>
@@ -583,11 +585,8 @@
                                      jintArray fdsToIgnore<span class="token punctuation">,</span>
                                      jstring instructionSet<span class="token punctuation">,</span> jstring dataDir<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">SetSignalHandlers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>             <span class="token comment" spellcheck="true">// 注册信号监听器</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
     pid_t pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
     <span class="token keyword">return</span> pid<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
