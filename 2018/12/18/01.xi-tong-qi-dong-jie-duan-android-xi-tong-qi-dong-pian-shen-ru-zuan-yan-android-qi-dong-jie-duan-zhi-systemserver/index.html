@@ -387,7 +387,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5k
+                        4.9k
                     </div>
                     
 
@@ -494,7 +494,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="1-2-概述"><a href="#1-2-概述" class="headerlink" title="1.2 概述"></a>1.2 概述</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 是什么？它是 Android Java 的两大支柱之一。另外一个支柱是专门负责孵化 Java 进程的 Zygote（Zygote 进程是整个 Android 系统的根进程）。这两个支柱倒了任何一个，都会导致 Android Java 的崩溃（所有由 Zygote 孵化的 Java 进程都会被销毁，而 SystemServer 就是由 Zygote 孵化而来）。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若 Android Java 真的崩溃了，那么 Linux 系统中的进程 init 会重新启动“两大支柱”以重建 Android Java。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 和系统服务有着重要的关系，Android 系统中几乎所有的核心服务都是在这个进程中，如：ActivityManagerService、PackageManagerService 和 WindowManagerService 等。当我们的应用需要使用各种系统服务的时候，其实也是通过与 SystemServer 进程通讯获取各种服务对象的句柄，进而执行相应的操作。</p>
+<h2 id="1-2-概述"><a href="#1-2-概述" class="headerlink" title="1.2 概述"></a>1.2 概述</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 服务进程是 Android 系统 Java 层框架的核心，它维护着 Android 系统的核心服务，比如：ActivityManagerService、WindowManagerService、PackageManagerService等，是 Android 系统中一个非常重要的进程。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Init 进程、Zygote 进程和 SystemServer 进程都非常重要，因为其中任何一个系统死机都会出现重启。在 Android 系统中，应用程序出现问题，对系统影响不大，因为应用程序出现问题不会引起系统重启，而 Init、Zygote、SystemServer三个进程对系统的影响是非常大的。</p>
 <h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 是由 Zygote 孵化而来的一个进程，通过 ps 命令，我们发现其进程名为：system_server。</p>
 <h2 id="2-1-启动进程"><a href="#2-1-启动进程" class="headerlink" title="2.1 启动进程"></a>2.1 启动进程</h2><p>在分析 zygote 进程时，我们知道当 zygote 进程进入到 java 世界后，在 ZygoteInit.java 中，将调用 startSystemServer 函数启动 SystemServer 进程：</p>
 <pre class=" language-java"><code class="language-java">    <span class="token keyword">if</span> <span class="token punctuation">(</span>startSystemServer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
