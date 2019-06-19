@@ -394,7 +394,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        23 分钟
+                        22 分钟
                     </div>
                     
                 
@@ -495,7 +495,7 @@
 </tbody>
 </table>
 <h2 id="1-2-概述"><a href="#1-2-概述" class="headerlink" title="1.2 概述"></a>1.2 概述</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 服务进程是 Android 系统 Java 层框架的核心，它维护着 Android 系统的核心服务，比如：ActivityManagerService、WindowManagerService、PackageManagerService等，是 Android 系统中一个非常重要的进程。</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Init 进程、Zygote 进程和 SystemServer 进程都非常重要，因为其中任何一个系统死机都会出现重启。在 Android 系统中，应用程序出现问题，对系统影响不大，因为应用程序出现问题不会引起系统重启，而 Init、Zygote、SystemServer三个进程对系统的影响是非常大的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 Android 系统中，应用程序出现问题，对系统影响不大，而 Init、Zygote、SystemServer 三大进程对系统的影响则非常大，因为其中任何一个 crash，都会造成系统崩溃，出现重启。</p>
 <h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 是由 Zygote 孵化而来的一个进程，通过 ps 命令，我们发现其进程名为：system_server。</p>
 <h2 id="2-1-启动进程"><a href="#2-1-启动进程" class="headerlink" title="2.1 启动进程"></a>2.1 启动进程</h2><p>在分析 zygote 进程时，我们知道当 zygote 进程进入到 java 世界后，在 ZygoteInit.java 中，将调用 startSystemServer 函数启动 SystemServer 进程：</p>
 <pre class=" language-java"><code class="language-java">    <span class="token keyword">if</span> <span class="token punctuation">(</span>startSystemServer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
