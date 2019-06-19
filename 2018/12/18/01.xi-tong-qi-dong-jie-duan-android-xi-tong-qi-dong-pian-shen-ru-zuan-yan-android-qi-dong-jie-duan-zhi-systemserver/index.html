@@ -387,7 +387,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5k
+                        5.1k
                     </div>
                     
 
@@ -557,7 +557,7 @@
         <span class="token function">ALOGI</span><span class="token punctuation">(</span><span class="token string">"System server process %d has been created"</span><span class="token punctuation">,</span> pid<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
         <span class="token comment" spellcheck="true">// 这里 SystemServer 进程已经创建出来，pid > 0 说明在父进程中</span>
-        <span class="token comment" spellcheck="true">// 将子进程 SystemServer 的pid存在 zygote 进程的全局变量中</span>
+        <span class="token comment" spellcheck="true">// 将子进程 SystemServer 的 pid 存在 zygote 进程的全局变量中</span>
         gSystemServerPid <span class="token operator">=</span> pid<span class="token punctuation">;</span>
 
         <span class="token keyword">int</span> status<span class="token punctuation">;</span>
@@ -593,7 +593,9 @@
 <p>从上面的代码可以看出，<code>ForkAndSpecializeCommon 最终是通过 fork 的方式，分裂出子进程</code>。</p>
 <p>这里需要关注一下的是，在 zygote 进程 fork 之前，调用 SetSignalHandlers 函数注册了一个<code>子进程信号监听器</code>。</p>
 <h2 id="2-2-SetSignalHandlers"><a href="#2-2-SetSignalHandlers" class="headerlink" title="2.2 SetSignalHandlers"></a>2.2 SetSignalHandlers</h2><p>我们看看 SetSignalHandlers 进行了哪些操作：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">SetSignalHandlers</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/jni/com_android_internal_os_Zygote.cpp</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">SetSignalHandlers</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     struct sigaction sig_chld <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
     sig_chld<span class="token punctuation">.</span>sa_handler <span class="token operator">=</span> SigChldHandler<span class="token punctuation">;</span>
 
@@ -610,28 +612,54 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>从上面的代码可以看出，SetSignalHandlers 函数将注册一个信号处理器：SigChldHandler，来监听子进程的死亡。当子进程死亡后，就会产生一个信号，Zygote 进程收到该信号之后就会调用 SigChldHandler() 进行处理。需要注意的是，zygote 的信号监听器，关注的是 zygote 所有的子进程，而不只是 SystemServer 进程（每次创建一个新的进程时，zygote 都会注册对应的监听器）。</p>
-<p>那就继续分析一下 SigChldHandler：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">SigChldHandler</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token comment" spellcheck="true">/*signal_number*/</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<p>那就继续看看 SigChldHandler() 信号处理函数的实现。</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/jni/com_android_internal_os_Zygote.cpp</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">SigChldHandler</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token comment" spellcheck="true">/*signal_number*/</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     pid_t pid<span class="token punctuation">;</span>
     <span class="token keyword">int</span> status<span class="token punctuation">;</span>
 
     <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>pid <span class="token operator">=</span> <span class="token function">waitpid</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>status<span class="token punctuation">,</span> WNOHANG<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 通过 status 判断子进程结束的原因，并打印相应的 log</span>
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
-        <span class="token comment" spellcheck="true">// If the just-crashed process is the system_server, bring down zygote</span>
-        <span class="token comment" spellcheck="true">// so that it is restarted by init and system server will be restarted</span>
-        <span class="token comment" spellcheck="true">// from there.</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> gSystemServerPid<span class="token punctuation">)</span> <span class="token punctuation">{</span>       <span class="token comment" spellcheck="true">// 上文已经介绍过，gSystemServerPid 中记录了 SystemServer 的 pid</span>
             <span class="token function">ALOGE</span><span class="token punctuation">(</span><span class="token string">"Exit zygote because system server (%d) has terminated"</span><span class="token punctuation">,</span> pid<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token function">kill</span><span class="token punctuation">(</span><span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> SIGKILL<span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 如果结束的子进程为 SystemServer，Zygote 也将结束自己</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
 <span class="token punctuation">}</span>
 </code></pre>
-<p>发现没？所有 zygote 的子进程中，zygote 只关心了 SystemServer 的死活。当其它子进程 crash 时，zygote 只打印了 log 信息。</p>
+<p>发现没？所有 zygote 的子进程中，zygote 只关心了 SystemServer 的死活，它们是“生死共存亡的”，当其它子进程 crash 时，zygote 只打印了 log 信息。</p>
+<blockquote>
+<p>我们之前在分析 init 的 main 方法的最后，关注到如下代码：</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token operator">*</span> argv<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// By default, sleep until something happens.</span>
+        <span class="token keyword">int</span> epoll_timeout_ms <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>do_shutdown <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>shutting_down<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            do_shutdown <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">HandlePowerctlMessage</span><span class="token punctuation">(</span>shutdown_command<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                shutting_down <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>waiting_for_prop <span class="token operator">||</span> Service<span class="token operator">:</span><span class="token operator">:</span><span class="token function">is_exec_service_running</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            am<span class="token punctuation">.</span><span class="token function">ExecuteOneCommand</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span>waiting_for_prop <span class="token operator">||</span> Service<span class="token operator">:</span><span class="token operator">:</span><span class="token function">is_exec_service_running</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>shutting_down<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 重启死掉的 service，如果是 Zygote 死掉了，就重启 Zygote</span>
+                auto next_process_restart_time <span class="token operator">=</span> <span class="token function">RestartProcesses</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>在Init 的 main() 函数中，如果 Zygote 停止工作，Init 进程就调用 RestartProcesses() 函数来重启 Zygote。</p>
+<p>所以，Init 进程，Zygote 进程，SystemServer 进程紧密相连，任何一个都不能出问题！</p>
 <h2 id="2-3-SystemServer-工作流程"><a href="#2-3-SystemServer-工作流程" class="headerlink" title="2.3 SystemServer 工作流程"></a>2.3 SystemServer 工作流程</h2><p>在分析 zygote 进程时，我们知道当 ZygoteInit 的 startSystemServer 通过 fork 创建出 SystemServer 进程后，SystemServer 进程调用 handleSystemServerProcess 函数，开始执行自己的工作。</p>
 <h3 id="2-3-1-handleSystemServerProcess"><a href="#2-3-1-handleSystemServerProcess" class="headerlink" title="2.3.1 handleSystemServerProcess"></a>2.3.1 handleSystemServerProcess</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/* For child process */</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
