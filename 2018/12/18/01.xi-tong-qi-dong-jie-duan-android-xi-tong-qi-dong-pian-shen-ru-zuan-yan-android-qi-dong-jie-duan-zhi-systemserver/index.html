@@ -394,7 +394,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        22 分钟
+                        23 分钟
                     </div>
                     
                 
@@ -497,9 +497,11 @@
 <h2 id="1-2-概述"><a href="#1-2-概述" class="headerlink" title="1.2 概述"></a>1.2 概述</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 服务进程是 Android 系统 Java 层框架的核心，它维护着 Android 系统的核心服务，比如：ActivityManagerService、WindowManagerService、PackageManagerService等，是 Android 系统中一个非常重要的进程。</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在 Android 系统中，应用程序出现问题，对系统影响不大，而 Init、Zygote、SystemServer 三大进程对系统的影响则非常大，因为其中任何一个 crash，都会造成系统崩溃，出现重启。</p>
 <h1 id="二、SystemServer"><a href="#二、SystemServer" class="headerlink" title="二、SystemServer"></a>二、SystemServer</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SystemServer 是由 Zygote 孵化而来的一个进程，通过 ps 命令，我们发现其进程名为：system_server。</p>
-<h2 id="2-1-启动进程"><a href="#2-1-启动进程" class="headerlink" title="2.1 启动进程"></a>2.1 启动进程</h2><p>在分析 zygote 进程时，我们知道当 zygote 进程进入到 java 世界后，在 ZygoteInit.java 中，将调用 startSystemServer 函数启动 SystemServer 进程：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">if</span> <span class="token punctuation">(</span>startSystemServer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        Runnable r <span class="token operator">=</span> <span class="token function">forkSystemServer</span><span class="token punctuation">(</span>abiList<span class="token punctuation">,</span> socketName<span class="token punctuation">,</span> zygoteServer<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// fork 出 system_server</span>
+<h2 id="2-1-启动进程"><a href="#2-1-启动进程" class="headerlink" title="2.1 启动进程"></a>2.1 启动进程</h2><p>在分析 zygote 进程时，我们知道当 zygote 进程进入到 java 世界后，在 ZygoteInit.java 中，将调用 forkSystemServer 方法启动 SystemServer 进程。</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/com/android/internal/os/ZygoteInit.java</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>startSystemServer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Runnable r <span class="token operator">=</span> <span class="token function">forkSystemServer</span><span class="token punctuation">(</span>abiList<span class="token punctuation">,</span> socketName<span class="token punctuation">,</span> zygoteServer<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// fork 出 system_server 进程</span>
 
         <span class="token keyword">if</span> <span class="token punctuation">(</span>r <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             r<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -517,11 +519,15 @@
             parsedArgs<span class="token punctuation">.</span>effectiveCapabilities<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>跟踪 forkSystemServer()：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">forkSystemServer</span><span class="token punctuation">(</span><span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> gid<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> gids<span class="token punctuation">,</span> <span class="token keyword">int</span> debugFlags<span class="token punctuation">,</span>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/java/com/android/internal/os/Zygote.java</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">forkSystemServer</span><span class="token punctuation">(</span><span class="token keyword">int</span> uid<span class="token punctuation">,</span> <span class="token keyword">int</span> gid<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> gids<span class="token punctuation">,</span> <span class="token keyword">int</span> debugFlags<span class="token punctuation">,</span>
             <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span> rlimits<span class="token punctuation">,</span> <span class="token keyword">long</span> permittedCapabilities<span class="token punctuation">,</span> <span class="token keyword">long</span> effectiveCapabilities<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         VM_HOOKS<span class="token punctuation">.</span><span class="token function">preFork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">// Resets nice priority for zygote process.</span>
         <span class="token function">resetNicePriority</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 调用 nativeForkSystemServer 方法进一步处理，它是一个 native 方法</span>
         <span class="token keyword">int</span> pid <span class="token operator">=</span> <span class="token function">nativeForkSystemServer</span><span class="token punctuation">(</span>
                   uid<span class="token punctuation">,</span> gid<span class="token punctuation">,</span> gids<span class="token punctuation">,</span> debugFlags<span class="token punctuation">,</span> rlimits<span class="token punctuation">,</span> permittedCapabilities<span class="token punctuation">,</span> effectiveCapabilities<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">// Enable tracing as soon as we enter the system_server.</span>
@@ -532,8 +538,10 @@
         <span class="token keyword">return</span> pid<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>容易看出，该函数通过调用 native 方法，完成实际的创建操作。该 Native 方法定义于 frameworks/base/core/jni/com_android_internal_os_Zygote.cpp 中。 我们来看看对应的 native 函数。</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> jint <span class="token function">com_android_internal_os_Zygote_nativeForkSystemServer</span><span class="token punctuation">(</span>
+<p>我们来看看对应的 native 方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// frameworks/base/core/jni/com_android_internal_os_Zygote.cpp</span>
+
+<span class="token keyword">static</span> jint <span class="token function">com_android_internal_os_Zygote_nativeForkSystemServer</span><span class="token punctuation">(</span>
             JNIEnv<span class="token operator">*</span> env<span class="token punctuation">,</span> jclass<span class="token punctuation">,</span> uid_t uid<span class="token punctuation">,</span> gid_t gid<span class="token punctuation">,</span> jintArray gids<span class="token punctuation">,</span>
             jint debug_flags<span class="token punctuation">,</span> jobjectArray rlimits<span class="token punctuation">,</span> jlong permittedCapabilities<span class="token punctuation">,</span>
             jlong effectiveCapabilities<span class="token punctuation">)</span> <span class="token punctuation">{</span>
