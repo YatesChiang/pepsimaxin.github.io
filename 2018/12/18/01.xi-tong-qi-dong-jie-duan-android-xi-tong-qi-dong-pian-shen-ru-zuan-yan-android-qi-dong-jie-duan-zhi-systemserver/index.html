@@ -387,7 +387,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        4.9k
+                        5k
                     </div>
                     
 
@@ -597,7 +597,7 @@
     struct sigaction sig_chld <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
     sig_chld<span class="token punctuation">.</span>sa_handler <span class="token operator">=</span> SigChldHandler<span class="token punctuation">;</span>
 
-    <span class="token comment" spellcheck="true">// 该信号监听器关注子进程结束，对应的处理函数为SigChldHandler</span>
+    <span class="token comment" spellcheck="true">// 该信号监听器关注子进程结束，对应的处理函数为 SigChldHandler</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">sigaction</span><span class="token punctuation">(</span>SIGCHLD<span class="token punctuation">,</span> <span class="token operator">&amp;</span>sig_chld<span class="token punctuation">,</span> NULL<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
       <span class="token function">ALOGW</span><span class="token punctuation">(</span><span class="token string">"Error setting SIGCHLD handler: %s"</span><span class="token punctuation">,</span> <span class="token function">strerror</span><span class="token punctuation">(</span>errno<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -609,7 +609,7 @@
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>从上面的代码可以看出，SetSignalHandlers 函数将注册一个信号处理器，来监听子进程的死亡。当子进程死亡后，利用 SigChldHandler 进行操作。需要注意的是，zygote 的信号监听器，关注的是 zygote 所有的子进程，而不只是 SystemServer 进程（每次创建一个新的进程时，zygote 都会注册对应的监听器）。</p>
+<p>从上面的代码可以看出，SetSignalHandlers 函数将注册一个信号处理器：SigChldHandler，来监听子进程的死亡。当子进程死亡后，就会产生一个信号，Zygote 进程收到该信号之后就会调用 SigChldHandler() 进行处理。需要注意的是，zygote 的信号监听器，关注的是 zygote 所有的子进程，而不只是 SystemServer 进程（每次创建一个新的进程时，zygote 都会注册对应的监听器）。</p>
 <p>那就继续分析一下 SigChldHandler：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">SigChldHandler</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token comment" spellcheck="true">/*signal_number*/</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     pid_t pid<span class="token punctuation">;</span>
