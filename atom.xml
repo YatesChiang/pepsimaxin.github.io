@@ -111,6 +111,34 @@
   </entry>
   
   <entry>
+    <title>探讨 Activity 的启动过程</title>
+    <link href="https://superandroid.pro/2019/06/19/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-guo-cheng/"/>
+    <id>https://superandroid.pro/2019/06/19/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-guo-cheng/</id>
+    <published>2019-06-19T01:08:00.000Z</published>
+    <updated>2019-06-20T05:34:48.148Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;一、开篇&quot;&gt;&lt;a href=&quot;#一、开篇&quot; class=&quot;headerlink&quot; title=&quot;一、开篇&quot;&gt;&lt;/a&gt;一、开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-核心源码&quot;&gt;&lt;a href=&quot;#1-1-核心源码&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="常用组件" scheme="https://superandroid.pro/categories/%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6/"/>
+    
+    
+      <category term="Activity" scheme="https://superandroid.pro/tags/Activity/"/>
+    
+      <category term="ActivityManagerService" scheme="https://superandroid.pro/tags/ActivityManagerService/"/>
+    
+  </entry>
+  
+  <entry>
     <title>深入钻研 Android 核心机制 之 自动背光</title>
     <link href="https://superandroid.pro/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/"/>
     <id>https://superandroid.pro/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/</id>
@@ -581,35 +609,6 @@
       <category term="Launcher" scheme="https://superandroid.pro/tags/Launcher/"/>
     
       <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入钻研 Android 启动阶段 之 systemserver</title>
-    <link href="https://superandroid.pro/2018/12/18/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-systemserver/"/>
-    <id>https://superandroid.pro/2018/12/18/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-systemserver/</id>
-    <published>2018-12-18T01:08:00.000Z</published>
-    <updated>2019-06-19T05:18:54.145Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;center&gt;✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏&lt;/center&gt;&lt;br&gt;&lt;center&gt;&lt;strong&gt;&lt;font color=&quot;#1874CD&quot;&gt;&lt;font
-        
-      
-    
-    </summary>
-    
-      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
-    
-    
-      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
-    
-      <category term="SystemServer" scheme="https://superandroid.pro/tags/SystemServer/"/>
     
   </entry>
   
