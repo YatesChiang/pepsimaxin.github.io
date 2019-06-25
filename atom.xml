@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superandroid.pro/"/>
-  <updated>2019-06-25T02:07:17.676Z</updated>
+  <updated>2019-06-25T07:02:41.115Z</updated>
   <id>https://superandroid.pro/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/"/>
     <id>https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/</id>
     <published>2019-12-31T01:08:00.000Z</published>
-    <updated>2019-06-25T02:07:17.676Z</updated>
+    <updated>2019-06-25T07:02:41.115Z</updated>
     
     <summary type="html">
     
@@ -139,11 +139,11 @@
   </entry>
   
   <entry>
-    <title>深入钻研 Android 核心机制 之 &quot;自动背光&quot;</title>
+    <title>Android 核心机制 之 &quot;自动背光&quot;</title>
     <link href="https://superandroid.pro/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/"/>
     <id>https://superandroid.pro/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/</id>
     <published>2019-05-24T01:08:00.000Z</published>
-    <updated>2019-06-25T02:10:43.747Z</updated>
+    <updated>2019-06-25T07:00:40.311Z</updated>
     
     <summary type="html">
     
@@ -170,11 +170,11 @@
   </entry>
   
   <entry>
-    <title>深入钻研 Android 核心机制 之 &quot;事件分发&quot;</title>
+    <title>Android 核心机制 之 &quot;事件分发&quot;</title>
     <link href="https://superandroid.pro/2019/05/06/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/"/>
     <id>https://superandroid.pro/2019/05/06/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/</id>
     <published>2019-05-06T01:08:00.000Z</published>
-    <updated>2019-05-27T06:46:07.367Z</updated>
+    <updated>2019-06-25T07:00:02.270Z</updated>
     
     <summary type="html">
     
@@ -584,11 +584,11 @@
   </entry>
   
   <entry>
-    <title>深入钻研 Android 启动阶段 之 Launcher 启动和加载</title>
+    <title>Android 启动阶段 之 Launcher 启动和加载</title>
     <link href="https://superandroid.pro/2018/12/26/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-launcher/"/>
     <id>https://superandroid.pro/2018/12/26/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-launcher/</id>
     <published>2018-12-26T01:08:00.000Z</published>
-    <updated>2019-06-25T02:52:42.657Z</updated>
+    <updated>2019-06-25T07:03:23.631Z</updated>
     
     <summary type="html">
     
