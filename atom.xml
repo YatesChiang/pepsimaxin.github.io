@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superandroid.pro/"/>
-  <updated>2019-06-27T02:27:04.691Z</updated>
+  <updated>2019-06-27T02:29:25.045Z</updated>
   <id>https://superandroid.pro/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/"/>
     <id>https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/</id>
     <published>2019-12-31T01:08:00.000Z</published>
-    <updated>2019-06-27T02:27:04.691Z</updated>
+    <updated>2019-06-27T02:29:25.045Z</updated>
     
     <summary type="html">
     
@@ -85,7 +85,7 @@
     <link href="https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
     <id>https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/</id>
     <published>2019-12-29T01:08:00.000Z</published>
-    <updated>2019-06-27T02:25:08.805Z</updated>
+    <updated>2019-06-27T02:29:17.964Z</updated>
     
     <summary type="html">
     
@@ -111,11 +111,11 @@
   </entry>
   
   <entry>
-    <title>Activity 的启动流程（原理）</title>
+    <title>Activity 启动流程（原理）</title>
     <link href="https://superandroid.pro/2019/06/27/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-liu-cheng/"/>
     <id>https://superandroid.pro/2019/06/27/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-liu-cheng/</id>
     <published>2019-06-27T01:08:00.000Z</published>
-    <updated>2019-06-27T02:05:51.282Z</updated>
+    <updated>2019-06-27T02:29:33.390Z</updated>
     
     <summary type="html">
     
