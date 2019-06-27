@@ -1,0 +1,1073 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="PackageManagerService 钻研（8）- APK 安装（下）, Thinking in Android">
+    <meta name="description" content="
+✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏PackageManagerService 系列文章如下（基于 Android 9.0 源码）✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>PackageManagerService 钻研（8）- APK 安装（下） | Thinking in Android</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color-header-marco nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <!--<div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Thinking in Android</span>
+                </a>
+            </div>-->
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>目录</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/四大组件/" class="waves-effect waves-light">
+            
+            <i class="fa fa-cube"></i>
+            
+            <span>组件</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/系统启动/" class="waves-effect waves-light">
+            
+            <i class="fa fa-spinner"></i>
+            
+            <span>开机</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/框架服务/" class="waves-effect waves-light">
+            
+            <i class="fa fa-superpowers"></i>
+            
+            <span>框架</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/核心机制/" class="waves-effect waves-light">
+            
+            <i class="fa fa-link"></i>
+            
+            <span>机制</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/性能优化/" class="waves-effect waves-light">
+            
+            <i class="fa fa-yelp"></i>
+            
+            <span>优化</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/设计模式/" class="waves-effect waves-light">
+            
+            <i class="fa fa-envira"></i>
+            
+            <span>模式</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/算法专栏/" class="waves-effect waves-light">
+            
+            <i class="fa fa-modx"></i>
+            
+            <span>算法</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/技术储备/" class="waves-effect waves-light">
+            
+            <i class="fa fa-linode"></i>
+            
+            <span>拓展</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>作者</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories/技术细节/" class="waves-effect waves-light">
+            
+            <i class="fa fa-file-text"></i>
+            
+            <span>FAQ</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="检索博文"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Thinking in Android</div>
+        <div class="logo-desc">
+            
+            Victory belongs to the most persevering.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                目录
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/四大组件/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-cube"></i>
+                
+                组件
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/系统启动/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-spinner"></i>
+                
+                开机
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/框架服务/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-superpowers"></i>
+                
+                框架
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/核心机制/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-link"></i>
+                
+                机制
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/性能优化/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-yelp"></i>
+                
+                优化
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/设计模式/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-envira"></i>
+                
+                模式
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/算法专栏/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-modx"></i>
+                
+                算法
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/技术储备/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-linode"></i>
+                
+                拓展
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                作者
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories/技术细节/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-file-text"></i>
+                
+                FAQ
+            </a>
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/PackageManagerService.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        PackageManagerService 钻研（8）- APK 安装（下）
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="container content">
+
+    
+    <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/PackageManagerService/" target="_blank">
+                                <span class="chip bg-color">PackageManagerService</span>
+                            </a>
+                        
+                            <a href="/tags/APK-安装/" target="_blank">
+                                <span class="chip bg-color">APK 安装</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/框架服务/" class="post-category" target="_blank">
+                                框架服务
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>&nbsp;发布日期 :&nbsp;
+                    2019-03-10
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
+                        2.2k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
+                        10 分钟
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>&nbsp;阅读次数 :&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+		<br>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><br></p>
+<center>✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏</center><br><strong><center><font color="#3A5FCD" size="4">PackageManagerService 系列文章如下（基于 Android 9.0 源码）</font><center></center></center></strong><br><center>✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏</center>
+
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&nbsp;</th>
+<th style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-1-qi-dong-liu-cheng/"><font color="#B452CD">01. 系统核心服务之 PackageManagerService 钻研（1）- 启动流程</font></a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/"><font color="#B452CD">02. 系统核心服务之 PackageManagerService 钻研（2）- 构造函数</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/"><font color="#B452CD">03. 系统核心服务之 PackageManagerService 钻研（3）- PackageManager</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong><font color="#EE2C2C" size="3">PackageManagerService</font></strong></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/"><font color="#B452CD">04. 系统核心服务之 PackageManagerService 钻研（4）- PackageInstaller</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"><font color="#B452CD">05. 系统核心服务之 PackageManagerService 钻研（5）- PackageParser</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"><font color="#B452CD">06. 系统核心服务之 PackageManagerService 钻研（6）- APK 安装流程（上）</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"><font color="#B452CD">07. 系统核心服务之 PackageManagerService 钻研（7）- APK 安装流程（中）</font></a></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"><font color="#B452CD">08. 系统核心服务之 PackageManagerService 钻研（8）- APK 安装流程（下）</font></a></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr>
+<h1 id="一、开篇"><a href="#一、开篇" class="headerlink" title="一、开篇"></a>一、开篇</h1><h2 id="1-1-核心源码"><a href="#1-1-核心源码" class="headerlink" title="1.1 核心源码"></a>1.1 核心源码</h2><table>
+<thead>
+<tr>
+<th>关键类</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><font color="#D15FEE">PackageInstallerSession.java</font></td>
+<td>/frameworks/base/services/core/java/com/android/server/pm/PackageInstallerSession.java</td>
+</tr>
+<tr>
+<td><font color="#D15FEE">PackageManagerService.java</font></td>
+<td>/frameworks/base/services/core/java/com/android/server/pm/PackageManagerService.java</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-2-前言"><a href="#1-2-前言" class="headerlink" title="1.2 前言"></a>1.2 前言</h2><p>在本系列上一篇文章 <a href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/">《PackageManagerService 钻研（7）- APK 安装（中）》</a> 中，我们了解了 PackageInstaller 安装 APK 的流程，最后会将 APK 的信息交由 PMS 处理。那么 PMS 是如何处理的？这就是我们这篇文章需要分析的。</p>
+<h1 id="一、安装-APK"><a href="#一、安装-APK" class="headerlink" title="一、安装 APK"></a>一、安装 APK</h1><h2 id="1-1-handleReturnCode"><a href="#1-1-handleReturnCode" class="headerlink" title="1.1 handleReturnCode"></a>1.1 handleReturnCode</h2><p>我们回到 APK 的复制调用链的头部方法：HandlerParams 的 startCopy 方法，在最后 调用了 handleReturnCode 方法，进行 APK 的安装。</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">HandlerParams</span> <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> MAX_RETRIES <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> mRetries <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">startCopy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">boolean</span> res<span class="token punctuation">;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">++</span>mRetries <span class="token operator">></span> MAX_RETRIES<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token function">handleStartCopy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       
+                    res <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">RemoteException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+            <span class="token comment" spellcheck="true">// 处理复制 APK 后的安装 APK 逻辑</span>
+            <span class="token function">handleReturnCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 💥 💥 💥 💥 💥 💥 </span>
+            <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">handleReturnCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>handleReturnCode 也是一个抽象方法，那么在哪里实现？同样，它的实现在 InstallParams 中。</p>
+<pre class=" language-java"><code class="language-java">        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">void</span> <span class="token function">handleReturnCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// If mArgs is null, then MCS couldn't be reached. When it</span>
+            <span class="token comment" spellcheck="true">// reconnects, it will try again to install. At that point, this</span>
+            <span class="token comment" spellcheck="true">// will succeed.</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>mArgs <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// "装载代码"的入口是 processPendingInstall(InstallArgs,int) 方法</span>
+                <span class="token function">processPendingInstall</span><span class="token punctuation">(</span>mArgs<span class="token punctuation">,</span> mRet<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+</code></pre>
+<p>我们发现调用了 processPendingInstall 方法，继续跟！</p>
+<h2 id="1-2-processPendingInstall"><a href="#1-2-processPendingInstall" class="headerlink" title="1.2 processPendingInstall"></a>1.2 processPendingInstall</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">processPendingInstall</span><span class="token punctuation">(</span><span class="token keyword">final</span> InstallArgs args<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> currentStatus<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mHandler<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                mHandler<span class="token punctuation">.</span><span class="token function">removeCallbacks</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                PackageInstalledInfo res <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageInstalledInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span><span class="token function">setReturnCode</span><span class="token punctuation">(</span>currentStatus<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span>uid <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span>pkg <span class="token operator">=</span> null<span class="token punctuation">;</span>
+                res<span class="token punctuation">.</span>removedInfo <span class="token operator">=</span> null<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>res<span class="token punctuation">.</span>returnCode <span class="token operator">==</span> PackageManager<span class="token punctuation">.</span>INSTALL_SUCCEEDED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token operator">/</span><span class="token operator">*</span><span class="token operator">*</span>
+                     <span class="token operator">*</span> 安装前处理
+                     <span class="token operator">*</span> 用于检查 APK 的状态的，在安装前确保安装环境的可靠，如果不可靠会清除复制的 APK 文件
+                    args<span class="token punctuation">.</span><span class="token function">doPreInstall</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>returnCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mInstallLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token function">installPackageTracedLI</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 💥 💥 💥 💥 💥 💥 </span>
+                    <span class="token punctuation">}</span>
+                    <span class="token operator">/</span><span class="token operator">*</span><span class="token operator">*</span>
+                     <span class="token operator">*</span> 安装后收尾
+                     <span class="token operator">*</span> 用于处理安装后的收尾操作，如果安装不成功，删除掉安装相关的目录与文件
+                    args<span class="token punctuation">.</span><span class="token function">doPostInstall</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>returnCode<span class="token punctuation">,</span> res<span class="token punctuation">.</span>uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<h2 id="1-3-installPackageTracedLI"><a href="#1-3-installPackageTracedLI" class="headerlink" title="1.3 installPackageTracedLI"></a>1.3 installPackageTracedLI</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">installPackageTracedLI</span><span class="token punctuation">(</span>InstallArgs args<span class="token punctuation">,</span> PackageInstalledInfo res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            Trace<span class="token punctuation">.</span><span class="token function">traceBegin</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">,</span> <span class="token string">"installPackage"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">installPackageLI</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            Trace<span class="token punctuation">.</span><span class="token function">traceEnd</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<h2 id="1-4-installPackageLI"><a href="#1-4-installPackageLI" class="headerlink" title="1.4 installPackageLI"></a>1.4 installPackageLI</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">installPackageLI</span><span class="token punctuation">(</span>InstallArgs args<span class="token punctuation">,</span> PackageInstalledInfo res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        PackageParser pp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setSeparateProcesses</span><span class="token punctuation">(</span>mSeparateProcesses<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setDisplayMetrics</span><span class="token punctuation">(</span>mMetrics<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setCallback</span><span class="token punctuation">(</span>mPackageParserCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Trace<span class="token punctuation">.</span><span class="token function">traceBegin</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">,</span> <span class="token string">"parsePackage"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> PackageParser<span class="token punctuation">.</span>Package pkg<span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 解析 APK</span>
+            pkg <span class="token operator">=</span> pp<span class="token punctuation">.</span><span class="token function">parsePackage</span><span class="token punctuation">(</span>tmpPackageFile<span class="token punctuation">,</span> parseFlags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">PackageParserException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span><span class="token string">"Failed parse during installPackageLI"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            Trace<span class="token punctuation">.</span><span class="token function">traceEnd</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token comment" spellcheck="true">// Get rid of all references to package scan path via parser.</span>
+        pp <span class="token operator">=</span> null<span class="token punctuation">;</span>
+        String oldCodePath <span class="token operator">=</span> null<span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> systemApp <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 检查 APK 是否存在</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>installFlags <span class="token operator">&amp;</span> PackageManager<span class="token punctuation">.</span>INSTALL_REPLACE_EXISTING<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 获取没被改名前的包名</span>
+                String oldName <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getRenamedPackageLPr</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>mOriginalPackages <span class="token operator">!=</span> null
+                        <span class="token operator">&amp;&amp;</span> pkg<span class="token punctuation">.</span>mOriginalPackages<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>oldName<span class="token punctuation">)</span>
+                        <span class="token operator">&amp;&amp;</span> mPackages<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span>oldName<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    pkg<span class="token punctuation">.</span><span class="token function">setPackageName</span><span class="token punctuation">(</span>oldName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    pkgName <span class="token operator">=</span> pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">;</span>
+                    <span class="token comment" spellcheck="true">// 设置标志位表示是替换安装</span>
+                    replace <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>DEBUG_INSTALL<span class="token punctuation">)</span> Slog<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Replacing existing renamed package: oldName="</span>
+                            <span class="token operator">+</span> oldName <span class="token operator">+</span> <span class="token string">" pkgName="</span> <span class="token operator">+</span> pkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+
+            PackageSetting ps <span class="token operator">=</span> mSettings<span class="token punctuation">.</span>mPackages<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 查看 Settings 中是否存有要安装的 APK 的信息，如果有就获取签名信息</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ps <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>DEBUG_INSTALL<span class="token punctuation">)</span> Slog<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Existing package: "</span> <span class="token operator">+</span> ps<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                PackageSetting signatureCheckPs <span class="token operator">=</span> ps<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>applicationInfo<span class="token punctuation">.</span><span class="token function">isStaticSharedLibrary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    SharedLibraryEntry libraryEntry <span class="token operator">=</span> <span class="token function">getLatestSharedLibraVersionLPr</span><span class="token punctuation">(</span>pkg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>libraryEntry <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        signatureCheckPs <span class="token operator">=</span> mSettings<span class="token punctuation">.</span><span class="token function">getPackageLPr</span><span class="token punctuation">(</span>libraryEntry<span class="token punctuation">.</span>apk<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span>
+
+                <span class="token comment" spellcheck="true">// 检查签名的正确性</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">shouldCheckUpgradeKeySetLP</span><span class="token punctuation">(</span>signatureCheckPs<span class="token punctuation">,</span> scanFlags<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">checkUpgradeKeySetLP</span><span class="token punctuation">(</span>signatureCheckPs<span class="token punctuation">,</span> pkg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span>INSTALL_FAILED_UPDATE_INCOMPATIBLE<span class="token punctuation">,</span> <span class="token string">"Package "</span>
+                                <span class="token operator">+</span> pkg<span class="token punctuation">.</span>packageName <span class="token operator">+</span> <span class="token string">" upgrade keys do not match the "</span>
+                                <span class="token operator">+</span> <span class="token string">"previously installed version"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">return</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token keyword">int</span> N <span class="token operator">=</span> pkg<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> N<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 遍历每个权限，对权限进行处理</span>
+                PackageParser<span class="token punctuation">.</span>Permission perm <span class="token operator">=</span> pkg<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                BasePermission bp <span class="token operator">=</span> mSettings<span class="token punctuation">.</span>mPermissions<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>perm<span class="token punctuation">.</span>info<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>systemApp <span class="token operator">||</span> sPmsExt<span class="token punctuation">.</span><span class="token function">isOperatorApp</span><span class="token punctuation">(</span>mPackages<span class="token punctuation">,</span> mSettings<span class="token punctuation">.</span>mPackages<span class="token punctuation">,</span> pkgName<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>onExternal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 系统APP不能在SD卡上替换安装</span>
+                res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span>INSTALL_FAILED_INVALID_INSTALL_LOCATION<span class="token punctuation">,</span>
+                        <span class="token string">"Cannot install updates to system apps on sdcard"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>instantApp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 系统 APP 不能被 Instant App 替换</span>
+                res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span>INSTALL_FAILED_INSTANT_APP_INVALID<span class="token punctuation">,</span>
+                        <span class="token string">"Cannot update a system app with an instant app"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token comment" spellcheck="true">// 重命名临时文件</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>args<span class="token punctuation">.</span><span class="token function">doRename</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>returnCode<span class="token punctuation">,</span> pkg<span class="token punctuation">,</span> oldCodePath<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span>INSTALL_FAILED_INSUFFICIENT_STORAGE<span class="token punctuation">,</span> <span class="token string">"Failed rename"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>instantApp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">startIntentFilterVerifications</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span>user<span class="token punctuation">.</span><span class="token function">getIdentifier</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> replace<span class="token punctuation">,</span> pkg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>DEBUG_DOMAIN_VERIFICATION<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                Slog<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Not verifying instant app install for app links: "</span> <span class="token operator">+</span> pkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">(</span>PackageFreezer freezer <span class="token operator">=</span> <span class="token function">freezePackageForInstall</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">,</span> installFlags<span class="token punctuation">,</span>
+                <span class="token string">"installPackageLI"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>replace<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 替换安装</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>applicationInfo<span class="token punctuation">.</span><span class="token function">isStaticSharedLibrary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    PackageParser<span class="token punctuation">.</span>Package existingPkg <span class="token operator">=</span> mPackages<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>pkg<span class="token punctuation">.</span>packageName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>existingPkg <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> existingPkg<span class="token punctuation">.</span>mVersionCode <span class="token operator">!=</span> pkg<span class="token punctuation">.</span>mVersionCode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span>INSTALL_FAILED_DUPLICATE_PACKAGE<span class="token punctuation">,</span> <span class="token string">"Packages declaring "</span>
+                                <span class="token operator">+</span> <span class="token string">"static-shared libs cannot be updated"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">return</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">}</span>
+                <span class="token punctuation">}</span>
+                <span class="token function">replacePackageLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags <span class="token operator">|</span> SCAN_REPLACING<span class="token punctuation">,</span> args<span class="token punctuation">.</span>user<span class="token punctuation">,</span>
+                        installerPackageName<span class="token punctuation">,</span> res<span class="token punctuation">,</span> args<span class="token punctuation">.</span>installReason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 安装新的 APK</span>
+                <span class="token function">installNewPackageLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags <span class="token operator">|</span> SCAN_DELETE_DATA_ON_FAILURES<span class="token punctuation">,</span>
+                        args<span class="token punctuation">.</span>user<span class="token punctuation">,</span> installerPackageName<span class="token punctuation">,</span> volumeUuid<span class="token punctuation">,</span> res<span class="token punctuation">,</span> args<span class="token punctuation">.</span>installReason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">// 更新应用程序所属的用户</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>mPackages<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">final</span> PackageSetting ps <span class="token operator">=</span> mSettings<span class="token punctuation">.</span>mPackages<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ps <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                res<span class="token punctuation">.</span>newUsers <span class="token operator">=</span> ps<span class="token punctuation">.</span><span class="token function">queryInstalledUsers</span><span class="token punctuation">(</span>sUserManager<span class="token punctuation">.</span><span class="token function">getUserIds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                ps<span class="token punctuation">.</span><span class="token function">setUpdateAvailable</span><span class="token punctuation">(</span><span class="token boolean">false</span> <span class="token comment" spellcheck="true">/*updateAvailable*/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>installPackageLI 方法的代码很长，这里截取主要的部分，主要做了几件事：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、创建 PackageParser 解析 APK 。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、检查 APK 是否存在，如果存在就获取此前没被改名前的包名，赋值给 PackageParser.Package 类型的 pkg ，将标志位 replace 置为 true 表示是替换安装。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;3、如果 Settings 中保存有要安装的 APK 的信息，说明此前安装过该 APK ，则需要校验 APK 的签名信息，确保安全的进行替换。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;4、将临时文件重新命名，比如前面提到的 /data/app/vmdl18300388.tmp/base.apk ，重命名为 /data/app/包名-1/base.apk 。这个新命名的包名会带上一个数字后缀 1，每次升级一个已有的 App ，这个数字会不断的累加。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;5、系统 APP 的更新安装会有两个限制，一个是系统 APP 不能在 SD 卡上替换安装，另一个是系统 APP 不能被 Instant App 替换。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;6、根据 replace 来做区分，如果是替换安装就会调用 replacePackageLIF 方法，其方法内部还会对系统 APP 和非系统 APP 进行区分处理，如果是新安装 APK 会调用 installNewPackageLIF 方法。</p>
+<h2 id="1-5-installNewPackageLIF"><a href="#1-5-installNewPackageLIF" class="headerlink" title="1.5 installNewPackageLIF"></a>1.5 installNewPackageLIF</h2><p>我们以安装新 APK 为例，查看 installNewPackageLIF 的源码：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/*
+     * Install a non-existing package.
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">installNewPackageLIF</span><span class="token punctuation">(</span>PackageParser<span class="token punctuation">.</span>Package pkg<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> policyFlags<span class="token punctuation">,</span>
+            <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> UserHandle user<span class="token punctuation">,</span> String installerPackageName<span class="token punctuation">,</span> String volumeUuid<span class="token punctuation">,</span>
+            PackageInstalledInfo res<span class="token punctuation">,</span> <span class="token keyword">int</span> installReason<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Trace<span class="token punctuation">.</span><span class="token function">traceBegin</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">,</span> <span class="token string">"installNewPackage"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 扫描 APK</span>
+            PackageParser<span class="token punctuation">.</span>Package newPackage <span class="token operator">=</span> <span class="token function">scanPackageTracedLI</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> policyFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span>
+                    System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">// 更新 Settings 信息</span>
+            <span class="token function">updateSettingsLI</span><span class="token punctuation">(</span>newPackage<span class="token punctuation">,</span> installerPackageName<span class="token punctuation">,</span> null<span class="token punctuation">,</span> res<span class="token punctuation">,</span> user<span class="token punctuation">,</span> installReason<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>res<span class="token punctuation">.</span>returnCode <span class="token operator">==</span> PackageManager<span class="token punctuation">.</span>INSTALL_SUCCEEDED<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 安装成功后，为新安装的应用程序准备数据</span>
+                <span class="token function">prepareAppDataAfterInstallLIF</span><span class="token punctuation">(</span>newPackage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 安装失败则删除 APK</span>
+                <span class="token function">deletePackageLIF</span><span class="token punctuation">(</span>pkgName<span class="token punctuation">,</span> UserHandle<span class="token punctuation">.</span>ALL<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> null<span class="token punctuation">,</span>
+                        PackageManager<span class="token punctuation">.</span>DELETE_KEEP_DATA<span class="token punctuation">,</span> res<span class="token punctuation">.</span>removedInfo<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">PackageManagerException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            res<span class="token punctuation">.</span><span class="token function">setError</span><span class="token punctuation">(</span><span class="token string">"Package couldn't be installed in "</span> <span class="token operator">+</span> pkg<span class="token punctuation">.</span>codePath<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        Trace<span class="token punctuation">.</span><span class="token function">traceEnd</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>installNewPackageLIF 主要做了以下 3 件事：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;1、扫描 APK，将 APK 的信息存储在 PackageParser.Package 类型的 newPackage 中，一个 Package 的信息包含了 1 个 base APK 以及 0 个或者多个 split APK 。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;2、更新该 APK 对应的 Settings 信息，Settings 用于保存所有包的动态设置。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;3、如果安装成功就为新安装的应用程序准备数据，安装失败就删除APK。</p>
+<h2 id="1-6-scanPackageTracedLI"><a href="#1-6-scanPackageTracedLI" class="headerlink" title="1.6 scanPackageTracedLI"></a>1.6 scanPackageTracedLI</h2><p>调用 scanPackageTracedLI() 进行安装 ：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> PackageParser<span class="token punctuation">.</span>Package <span class="token function">scanPackageTracedLI</span><span class="token punctuation">(</span>File scanFile<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> parseFlags<span class="token punctuation">,</span>
+            <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> <span class="token keyword">long</span> currentTime<span class="token punctuation">,</span> UserHandle user<span class="token punctuation">)</span> <span class="token keyword">throws</span> PackageManagerException <span class="token punctuation">{</span>
+        Trace<span class="token punctuation">.</span><span class="token function">traceBegin</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">,</span> <span class="token string">"scanPackage ["</span> <span class="token operator">+</span> scanFile<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token function">scanPackageLI</span><span class="token punctuation">(</span>scanFile<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            Trace<span class="token punctuation">.</span><span class="token function">traceEnd</span><span class="token punctuation">(</span>TRACE_TAG_PACKAGE_MANAGER<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<h2 id="1-7-scanPackageLI-01"><a href="#1-7-scanPackageLI-01" class="headerlink" title="1.7 scanPackageLI - 01"></a>1.7 scanPackageLI - 01</h2><p>scanPackageTracedLI() 调用了 scanPackageLI() 方法：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
+     *  Scans a package and returns the newly parsed package.
+     *  Returns {@code null} in case of errors and the error code is stored in mLastScanError
+     */</span>
+    <span class="token keyword">private</span> PackageParser<span class="token punctuation">.</span>Package <span class="token function">scanPackageLI</span><span class="token punctuation">(</span>File scanFile<span class="token punctuation">,</span> <span class="token keyword">int</span> parseFlags<span class="token punctuation">,</span> <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span>
+            <span class="token keyword">long</span> currentTime<span class="token punctuation">,</span> UserHandle user<span class="token punctuation">)</span> <span class="token keyword">throws</span> PackageManagerException <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>DEBUG_INSTALL<span class="token punctuation">)</span> Slog<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span>TAG<span class="token punctuation">,</span> <span class="token string">"Parsing: "</span> <span class="token operator">+</span> scanFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        PackageParser pp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PackageParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setSeparateProcesses</span><span class="token punctuation">(</span>mSeparateProcesses<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setOnlyCoreApps</span><span class="token punctuation">(</span>mOnlyCore<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setDisplayMetrics</span><span class="token punctuation">(</span>mMetrics<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        pp<span class="token punctuation">.</span><span class="token function">setCallback</span><span class="token punctuation">(</span>mPackageParserCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+        <span class="token keyword">return</span> <span class="token function">scanPackageLI</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> scanFile<span class="token punctuation">,</span> parseFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span> currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<h2 id="1-8-scanPackageLI-02"><a href="#1-8-scanPackageLI-02" class="headerlink" title="1.8 scanPackageLI - 02"></a>1.8 scanPackageLI - 02</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> PackageParser<span class="token punctuation">.</span>Package <span class="token function">scanPackageLI</span><span class="token punctuation">(</span>PackageParser<span class="token punctuation">.</span>Package pkg<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> policyFlags<span class="token punctuation">,</span>
+            <span class="token keyword">int</span> scanFlags<span class="token punctuation">,</span> <span class="token keyword">long</span> currentTime<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> UserHandle user<span class="token punctuation">)</span>
+                    <span class="token keyword">throws</span> PackageManagerException <span class="token punctuation">{</span>
+        <span class="token keyword">boolean</span> success <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// scanPackageDirtyLI 实际安装 package 的方法</span>
+            <span class="token keyword">final</span> PackageParser<span class="token punctuation">.</span>Package res <span class="token operator">=</span> <span class="token function">scanPackageDirtyLI</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> policyFlags<span class="token punctuation">,</span> scanFlags<span class="token punctuation">,</span>
+                    currentTime<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            success <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>success <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>scanFlags <span class="token operator">&amp;</span> SCAN_DELETE_DATA_ON_FAILURES<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// DELETE_DATA_ON_FAILURES is only used by frozen paths</span>
+                <span class="token function">destroyAppDataLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> UserHandle<span class="token punctuation">.</span>USER_ALL<span class="token punctuation">,</span>
+                        StorageManager<span class="token punctuation">.</span>FLAG_STORAGE_DE <span class="token operator">|</span> StorageManager<span class="token punctuation">.</span>FLAG_STORAGE_CE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">destroyAppProfilesLIF</span><span class="token punctuation">(</span>pkg<span class="token punctuation">,</span> UserHandle<span class="token punctuation">.</span>USER_ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>最终调用 scanPackageLI 方法！</p>
+<h1 id="二、总结"><a href="#二、总结" class="headerlink" title="二、总结"></a>二、总结</h1><p>本文主要讲解了 PMS 是如何处理 APK 安装的流程，主要有几个步骤：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;PackageInstaller 安装 APK 时会将 APK 的信息交由 PMS 处理，PMS 通过向 PackageHandler 发送消息来驱动 APK 的复制和安装工作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;PMS 发送 INIT_COPY 和 MCS_BOUND 类型的消息，控制 PackageHandler 来绑定 DefaultContainerService ，完成复制 APK 等工作。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;复制 APK 完成后，会开始进行安装 APK 的流程，包括安装前的检查、安装 APK 和安装后的收尾工作。</p>
+
+            </div>
+            <hr>
+
+            
+
+            <!--<link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>-->
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="https://superandroid.pro" class="b-link-green">Thinking in Android</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2019/03/10/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/" class="b-link-green">PackageManagerService 钻研（8）- APK 安装（下）</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <!--
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/03/18/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhu-zhi-jni/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/JNI.jpg" class="responsive-img" alt="Android 核心技术 之 JNI">
+                        
+                        <span class="card-title">Android 核心技术 之 JNI</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">1. 开篇1.1 核心源码
+
+
+关键类
+路径
+
+
+
+
+MediaScanner.java
+frameworks/base/media/java/android/media/MediaScanner.java
+
+
+android_media_</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-03-18
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/核心技术/" class="post-category" target="_blank">
+                                    核心技术
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/JNI/" target="_blank">
+                        <span class="chip bg-color">JNI</span>
+                    </a>
+                    
+                    <a href="/tags/核心技术/" target="_blank">
+                        <span class="chip bg-color">核心技术</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/02/20/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/">
+                    <div class="card-image">
+                        
+                        <img src="/medias/featureimages/PackageManagerService.jpg" class="responsive-img" alt="PackageManagerService 钻研（7）- APK 安装（中）">
+                        
+                        <span class="card-title">PackageManagerService 钻研（7）- APK 安装（中）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏PackageManagerService 系列文章如下（基于 Android 9.0 源码）✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-02-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/框架服务/" class="post-category" target="_blank">
+                                    框架服务
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/PackageManagerService/" target="_blank">
+                        <span class="chip bg-color">PackageManagerService</span>
+                    </a>
+                    
+                    <a href="/tags/APK-安装/" target="_blank">
+                        <span class="chip bg-color">APK 安装</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>-->
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Thinking in Android<br />'
+            + '作者: Marco<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    
+
+</main>
+
+
+<footer class="page-footer bg-color-foot-marco">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+		    &copy; 2018 - 2019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In-depth analysis of Android system source code &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;&nbsp;Marco<br>
+            
+			
+                
+                <span id="busuanzi_container_site_pv">
+                    Total visits to this site: <span id="busuanzi_value_site_pv"></span> ,&nbsp;
+                </span>
+				<span id="busuanzi_container_site_uv">
+                    Total visitor: <span id="busuanzi_value_site_uv"></span> .
+                </span>
+			
+		</div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/pepsimaxin/pepsimaxin.github.io" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:pepsimaxin@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=516749232" class="tooltipped" data-tooltip="QQ联系我: 516749232" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+<!--
+    <a href="https://blog.csdn.net/pepsimaxin" class="tooltipped" data-tooltip="访问我的CSDN" data-position="top" data-delay="50">
+        <i class="fa fa-chain-broken"></i>
+    </a>
+-->
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<!--<div class="progress-bar"></div>-->
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;检索博文</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的技术关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<!--<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>-->
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
