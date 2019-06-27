@@ -5,11 +5,8 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="探讨 Activity 的启动模式, Thinking in Android">
-    <meta name="description" content="LaunchMode可以在 AndroidManifest.xml 中通过给  标签指定 android:launchMode 属性来选择启动模式。
-
-standard
-
-standard 是活动默认的启动模式，在不进行显式指定的情况下，所">
+    <meta name="description" content="1. LaunchMode我们可以在 AndroidManifest.xml 中通过给 &amp;lt;activity&amp;gt; 标签指定 android:launchMode 属性来选择启动模式。
+1.1 standard：默认启动模式stand">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -341,6 +338,10 @@ standard 是活动默认的启动模式，在不进行显式指定的情况下�
                                 <span class="chip bg-color">Activity</span>
                             </a>
                         
+                            <a href="/tags/LaunchMode/" target="_blank">
+                                <span class="chip bg-color">LaunchMode</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -368,7 +369,7 @@ standard 是活动默认的启动模式，在不进行显式指定的情况下�
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        936
+                        978
                     </div>
                     
 
@@ -392,38 +393,23 @@ standard 是活动默认的启动模式，在不进行显式指定的情况下�
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="LaunchMode"><a href="#LaunchMode" class="headerlink" title="LaunchMode"></a>LaunchMode</h1><p>可以在 AndroidManifest.xml 中通过给 <activity> 标签指定 <strong><font color="#0000FF">android:launchMode</font></strong> 属性来选择启动模式。</activity></p>
-<blockquote>
-<p><strong>standard</strong></p>
-</blockquote>
-<p>standard 是活动默认的启动模式，在不进行显式指定的情况下，所有活动都会自动使用这种启动模式。我们知道 Android 是使用返回栈来管理活动的，在 standard 模式下，每当启动一个新的活动，它就会在返回栈中入栈，并处于栈顶的位置。</p>
+                <h1 id="1-LaunchMode"><a href="#1-LaunchMode" class="headerlink" title="1. LaunchMode"></a>1. LaunchMode</h1><p>我们可以在 <code>AndroidManifest.xml</code> 中通过给 <code>&lt;activity&gt;</code> 标签指定 <strong><font color="#0000FF">android:launchMode</font></strong> 属性来选择启动模式。</p>
+<h2 id="1-1-standard：默认启动模式"><a href="#1-1-standard：默认启动模式" class="headerlink" title="1.1 standard：默认启动模式"></a>1.1 standard：默认启动模式</h2><p>standard 是<code>活动默认的启动模式</code>，在不进行显式指定的情况下，所有活动都会自动使用这种启动模式。我们知道 Android 是使用返回栈来管理活动的，在 standard 模式下，每当启动一个新的活动，它就会在返回栈中入栈，并处于栈顶的位置。</p>
 <p>对于使用 standard 模式的活动，系统不会在乎这个活动是否已经在返回栈中存在，每次启动都会创建该活动的一个新实例。</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-3bb5f57fa0e5d7a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3994917-5cc3d0d8dd2be549.png"></center>
-
-<blockquote>
-<p><strong>singleTop</strong></p>
-</blockquote>
-<p>有没有觉得 standard 模式似乎不太合理，活动明明已经在栈顶了，为什么再次启动的时候还要创建一次新的活动实例呢？当然，这只是系统默认的一种启动模式而已，我们完全可以根据自己的要求进行修改，比如说我们可以使用 singleTop 模式。</p>
+<p><img src="/medias/Codes/LaunchMode_01.png" alt="--&gt; 默认启动模式：standard &lt;--"></p>
+<h2 id="1-2-singleTop：栈顶复用模式"><a href="#1-2-singleTop：栈顶复用模式" class="headerlink" title="1.2 singleTop：栈顶复用模式"></a>1.2 singleTop：栈顶复用模式</h2><p>有没有觉得 standard 模式似乎不太合理，活动明明已经在栈顶了，为什么再次启动的时候还要创建一次新的活动实例呢？当然，这只是系统默认的一种启动模式而已，我们完全可以根据自己的要求进行修改，比如说我们可以使用 <code>singleTop</code> 模式。</p>
 <p>当活动的启动模式指定为 singleTop，在启动活动时如果发现返回栈的栈顶已经是该活动，则认为可以直接使用它，直接调用 <strong><font color="#FF0000">onNewIntent()</font></strong> 方法来实现重用，不会再创建新的活动实例。</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-16bb62b6b0e00580.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3994917-051def7f0abafef5.png"></center>
-
+<p><img src="/medias/Codes/LaunchMode_02.png" alt="--&gt; 栈顶复用模式：singleTop &lt;--"></p>
+<h2 id="2-3-singleTask：栈内复用模式"><a href="#2-3-singleTask：栈内复用模式" class="headerlink" title="2.3 singleTask：栈内复用模式"></a>2.3 singleTask：栈内复用模式</h2><p>使用 singleTop 模式可以很好的解决重复创建栈顶活动的问题，但是这就存在一个问题了，如果活动处于栈顶，那么不会再重新创建一个新的实例，但如果不处于栈顶，则会重新创建。</p>
+<p>所以我们自然而然要考虑一个问题，有没有什么方法可以让某个活动在整个应用程序的上下文中只存在一个实例呢？当然有，我们可以借助 <code>singleTask</code> 模式来实现。</p>
+<p>当活动的启动模式指定为 singleTask，每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接调用 <strong><font color="#FF0000">onNewIntent()</font></strong> 方法来实现重用实例，<strong><font color="#ff0000">活动置于栈顶，并把在这个活动之上的所有活动统统出栈</font></strong>，如果没有发现就会创建一个新的活动实例。</p>
+<p><img src="/medias/Codes/LaunchMode_03.png" alt="--&gt; 栈内复用模式：singleTask &lt;--"></p>
+<h2 id="2-4-singleInstance：全局唯一模式"><a href="#2-4-singleInstance：全局唯一模式" class="headerlink" title="2.4 singleInstance：全局唯一模式"></a>2.4 singleInstance：全局唯一模式</h2><p><code>singleInstance</code> 模式应该算是 4 个启动模式中最特殊也最复杂的一个了。不同于以上 3 种启动模式，指定为 singleInstance 模式的活动会在一个新栈中创建该 Activity 的实例，<strong><font color="#ff0000">并让多个应用共享该栈中的 Activity 实例</font></strong>。</p>
+<p><img src="/medias/Codes/LaunchMode_04.png" alt="--&gt; 全局唯一模式：singleInstance &lt;--"></p>
+<h1 id="2-Intent-标签"><a href="#2-Intent-标签" class="headerlink" title="2. Intent 标签"></a>2. Intent 标签</h1><p>在 Android 中，我们除了在清单文件 AndroidManifest.xml 中配置 launchMode，当然可以用 Intent 标签说事儿。</p>
+<p>启动 Activity ，我们需要传递一个 Intent，完全可以通过设置 <strong><font color="#0000FF">Intent.setFlags(int flags)</font></strong> 来设置 Activity 的启动模式。</p>
 <blockquote>
-<p><strong>singleTask</strong></p>
-</blockquote>
-<p>使用 singleTop 模式可以很好的解决重复创建栈顶活动的问题，但是这就存在一个问题了，如果活动处于栈顶，那么不会再重新创建一个新的实例，但如果不处于栈顶，则会重新创建。</p>
-<p>所以我们自然而然要考虑一个问题，有没有什么方法可以让某个活动在整个应用程序的上下文中只存在一个实例呢？当然有，我们可以借助 singleTask 模式来实现。</p>
-<p>当活动的启动模式指定为 singleTask，每次启动该活动时系统首先会在返回栈中检查是否存在该活动的实例，如果发现已经存在则直接调用 <strong><font color="#FF0000">onNewIntent()</font></strong> 方法来实现重用实例，并把在这个活动之上的所有活动统统出栈，如果没有发现就会创建一个新的活动实例。</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-473f55d3138f4e87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3994917-2811e48d580c4b0e.png"></center>
-
-<blockquote>
-<p><strong>singleInstance</strong></p>
-</blockquote>
-<p>singleInstance 模式应该算是 4 个启动模式中最特殊也最复杂的一个了。不同于以上 3 种启动模式，指定为 singleInstance 模式的活动会在一个新栈中创建该 Activity 的实例，并让多个应用共享该栈中的该 Activity 实例。</p>
-<p><center><img src="https://upload-images.jianshu.io/upload_images/3517194-701cfc5a5c45a355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3994917-2811e48d580c4b0e.png"></center><br><br></p>
-<h1 id="Intent-标签"><a href="#Intent-标签" class="headerlink" title="Intent 标签"></a>Intent 标签</h1><p>在 Android 中，我们除了在清单文件 AndroidManifest.xml 中配置 launchMode，当然可以用 Intent 标签说事儿。</p>
-<p>启动 Activity ，我们需要传递一个 Intent，完全可以通过设置 <strong><font color="#0000FF">Intent.setFlags(int flags)</font></strong> 来设置启动的 Activity 的启动模式。</p>
-<blockquote>
-<p>需要注意的是：通过代码来设置 Activity 的启动模式的方式，优先级比清单文件设置更高。</p>
+<p><strong><font color="#ff0000">需要注意的是：</font></strong>通过代码来设置 Activity 的启动模式的方式，优先级比清单文件设置更高。</p>
 </blockquote>
 <table>
 <thead>
@@ -443,13 +429,15 @@ standard 是活动默认的启动模式，在不进行显式指定的情况下�
 </tr>
 <tr>
 <td><font color="#0000FF">FLAG_ACTIVITY_SINGLE_TOP</font></td>
-<td>同于在 launcherMode 属性设置为 singleTop。</td>
+<td>等同于 launcherMode 属性设置为 singleTop。</td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<h1 id="面试题范例"><a href="#面试题范例" class="headerlink" title="面试题范例"></a>面试题范例</h1><blockquote>
-<p>1、设置为 singleTask 的启动模式，当 Activity 的实例已经存在时，再启动它，它的哪个回调函数会被执行？我们可以在哪个回调中处理新的 Intent 协带的参数？<br>2、设置为 singleTop 的启动模式，当 Activity 的实例已经存在于 Task 的栈顶，我们可以在哪个回调中处理新的 Intent 协带的参数？</p>
+<h1 id="3-面试题范例"><a href="#3-面试题范例" class="headerlink" title="3. 面试题范例"></a>3. 面试题范例</h1><blockquote>
+<p>1、设置为 singleTask 的启动模式，当 Activity 的实例已经存在时，再启动它，它的哪个回调函数会被执行？我们可以在哪个回调中处理新的 Intent 协带的参数？</p>
+</blockquote>
+<blockquote>
+<p>2、设置为 singleTop 的启动模式，当 Activity 的实例已经存在于 Task 的栈顶，我们可以在哪个回调中处理新的 Intent 协带的参数？</p>
 </blockquote>
 
             </div>
