@@ -85,7 +85,7 @@
     <link href="https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
     <id>https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/</id>
     <published>2019-12-29T01:08:00.000Z</published>
-    <updated>2019-06-27T02:30:25.469Z</updated>
+    <updated>2019-06-27T02:45:00.443Z</updated>
     
     <summary type="html">
     
@@ -112,8 +112,8 @@
   
   <entry>
     <title>Activity 启动流程（原理）</title>
-    <link href="https://superandroid.pro/2019/06/27/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-liu-cheng/"/>
-    <id>https://superandroid.pro/2019/06/27/08.chang-yong-zu-jian-xi-lie-tan-tao-activity-de-qi-dong-liu-cheng/</id>
+    <link href="https://superandroid.pro/2019/06/27/2019.06.27-chang-yong-zu-jian-xi-lie-activity-qi-dong-liu-cheng-yuan-li/"/>
+    <id>https://superandroid.pro/2019/06/27/2019.06.27-chang-yong-zu-jian-xi-lie-activity-qi-dong-liu-cheng-yuan-li/</id>
     <published>2019-06-27T01:08:00.000Z</published>
     <updated>2019-06-27T02:29:33.390Z</updated>
     
@@ -140,8 +140,8 @@
   
   <entry>
     <title>谈谈 ANR 之 Service 超时</title>
-    <link href="https://superandroid.pro/2019/06/12/07.xing-neng-you-hua-xi-lie-tan-tan-ying-yong-anr-zhi-service-chao-shi/"/>
-    <id>https://superandroid.pro/2019/06/12/07.xing-neng-you-hua-xi-lie-tan-tan-ying-yong-anr-zhi-service-chao-shi/</id>
+    <link href="https://superandroid.pro/2019/06/12/2019.06.12-xing-neng-you-hua-xi-lie-tan-tan-anr-zhi-service-chao-shi/"/>
+    <id>https://superandroid.pro/2019/06/12/2019.06.12-xing-neng-you-hua-xi-lie-tan-tan-anr-zhi-service-chao-shi/</id>
     <published>2019-06-12T01:08:00.000Z</published>
     <updated>2019-06-27T02:01:46.225Z</updated>
     
@@ -170,8 +170,8 @@
   
   <entry>
     <title>“内存泄漏” 的前世今生</title>
-    <link href="https://superandroid.pro/2019/06/06/07.xing-neng-you-hua-xi-lie-dai-ni-ling-lue-android-nei-cun-xie-lou-de-qian-shi-jin-sheng/"/>
-    <id>https://superandroid.pro/2019/06/06/07.xing-neng-you-hua-xi-lie-dai-ni-ling-lue-android-nei-cun-xie-lou-de-qian-shi-jin-sheng/</id>
+    <link href="https://superandroid.pro/2019/06/06/2019.06.06-xing-neng-you-hua-xi-lie-nei-cun-xie-lou-de-qian-shi-jin-sheng/"/>
+    <id>https://superandroid.pro/2019/06/06/2019.06.06-xing-neng-you-hua-xi-lie-nei-cun-xie-lou-de-qian-shi-jin-sheng/</id>
     <published>2019-06-06T01:08:00.000Z</published>
     <updated>2019-06-27T02:00:12.327Z</updated>
     
@@ -198,8 +198,8 @@
   
   <entry>
     <title>关于 &quot;自动背光&quot; 的原理</title>
-    <link href="https://superandroid.pro/2019/05/31/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/"/>
-    <id>https://superandroid.pro/2019/05/31/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/</id>
+    <link href="https://superandroid.pro/2019/05/31/2019.05.31-he-xin-ji-zhi-xi-lie-guan-yu-zi-dong-bei-guang-de-yuan-li/"/>
+    <id>https://superandroid.pro/2019/05/31/2019.05.31-he-xin-ji-zhi-xi-lie-guan-yu-zi-dong-bei-guang-de-yuan-li/</id>
     <published>2019-05-31T01:08:00.000Z</published>
     <updated>2019-06-27T02:25:01.224Z</updated>
     
@@ -229,8 +229,8 @@
   
   <entry>
     <title>“进程被杀”的前因后果</title>
-    <link href="https://superandroid.pro/2019/05/20/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-yuan-li-zhi-jin-cheng-bei-sha/"/>
-    <id>https://superandroid.pro/2019/05/20/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-yuan-li-zhi-jin-cheng-bei-sha/</id>
+    <link href="https://superandroid.pro/2019/05/20/2019.05.20-he-xin-ji-zhi-xi-lie-jin-cheng-bei-sha-de-qian-yin-hou-guo/"/>
+    <id>https://superandroid.pro/2019/05/20/2019.05.20-he-xin-ji-zhi-xi-lie-jin-cheng-bei-sha-de-qian-yin-hou-guo/</id>
     <published>2019-05-20T01:08:00.000Z</published>
     <updated>2019-06-27T01:56:55.270Z</updated>
     
@@ -255,8 +255,8 @@
   
   <entry>
     <title>聊聊 LowMemoryKiller 机制</title>
-    <link href="https://superandroid.pro/2019/05/01/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhu-zhi-lowmemorykiller/"/>
-    <id>https://superandroid.pro/2019/05/01/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhu-zhi-lowmemorykiller/</id>
+    <link href="https://superandroid.pro/2019/05/01/2019.05.01-he-xin-ji-zhi-xi-lie-liao-liao-lowmemorykiller-ji-zhi/"/>
+    <id>https://superandroid.pro/2019/05/01/2019.05.01-he-xin-ji-zhi-xi-lie-liao-liao-lowmemorykiller-ji-zhi/</id>
     <published>2019-05-01T01:08:00.000Z</published>
     <updated>2019-06-27T02:36:18.236Z</updated>
     
@@ -281,8 +281,8 @@
   
   <entry>
     <title>关于 Handler 机制（原理）</title>
-    <link href="https://superandroid.pro/2019/04/20/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhi-zhi-handler-yuan-li-pian/"/>
-    <id>https://superandroid.pro/2019/04/20/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhi-zhi-handler-yuan-li-pian/</id>
+    <link href="https://superandroid.pro/2019/04/20/2019.04.20-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yuan-li/"/>
+    <id>https://superandroid.pro/2019/04/20/2019.04.20-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yuan-li/</id>
     <published>2019-04-20T01:08:00.000Z</published>
     <updated>2019-06-27T01:52:05.730Z</updated>
     
@@ -307,8 +307,8 @@
   
   <entry>
     <title>关于 Handler 机制（用法）</title>
-    <link href="https://superandroid.pro/2019/04/12/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhi-zhi-handler-yong-fa-pian/"/>
-    <id>https://superandroid.pro/2019/04/12/04.he-xin-ji-zhi-xi-lie-shen-ru-yan-jiu-android-he-xin-ji-zhi-zhi-handler-yong-fa-pian/</id>
+    <link href="https://superandroid.pro/2019/04/12/2019.04.12-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yong-fa/"/>
+    <id>https://superandroid.pro/2019/04/12/2019.04.12-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yong-fa/</id>
     <published>2019-04-12T01:08:00.000Z</published>
     <updated>2019-06-27T01:52:20.202Z</updated>
     
@@ -335,8 +335,8 @@
   
   <entry>
     <title>聊聊 “事件分发” 机制</title>
-    <link href="https://superandroid.pro/2019/04/01/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/"/>
-    <id>https://superandroid.pro/2019/04/01/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/</id>
+    <link href="https://superandroid.pro/2019/04/01/2019.04.01-he-xin-ji-zhi-xi-lie-liao-liao-shi-jian-fen-fa-ji-zhi/"/>
+    <id>https://superandroid.pro/2019/04/01/2019.04.01-he-xin-ji-zhi-xi-lie-liao-liao-shi-jian-fen-fa-ji-zhi/</id>
     <published>2019-04-01T01:08:00.000Z</published>
     <updated>2019-06-27T01:49:37.707Z</updated>
     
@@ -365,8 +365,8 @@
   
   <entry>
     <title>Android 核心技术 之 JNI</title>
-    <link href="https://superandroid.pro/2019/03/18/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhu-zhi-jni/"/>
-    <id>https://superandroid.pro/2019/03/18/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhu-zhi-jni/</id>
+    <link href="https://superandroid.pro/2019/03/18/2019.03.18-he-xin-ji-zhi-xi-lie-android-he-xin-ji-zhu-zhi-jni/"/>
+    <id>https://superandroid.pro/2019/03/18/2019.03.18-he-xin-ji-zhi-xi-lie-android-he-xin-ji-zhu-zhi-jni/</id>
     <published>2019-03-18T01:08:00.000Z</published>
     <updated>2019-06-27T01:46:22.183Z</updated>
     
@@ -393,8 +393,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（8）- APK 安装（下）</title>
-    <link href="https://superandroid.pro/2019/03/10/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"/>
-    <id>https://superandroid.pro/2019/03/10/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/</id>
+    <link href="https://superandroid.pro/2019/03/10/2019.03.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"/>
+    <id>https://superandroid.pro/2019/03/10/2019.03.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/</id>
     <published>2019-03-10T01:08:00.000Z</published>
     <updated>2019-06-26T09:58:13.000Z</updated>
     
@@ -422,8 +422,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（7）- APK 安装（中）</title>
-    <link href="https://superandroid.pro/2019/02/20/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"/>
-    <id>https://superandroid.pro/2019/02/20/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/</id>
+    <link href="https://superandroid.pro/2019/02/20/2019.02.20-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"/>
+    <id>https://superandroid.pro/2019/02/20/2019.02.20-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/</id>
     <published>2019-02-20T01:08:00.000Z</published>
     <updated>2019-06-26T09:59:27.416Z</updated>
     
@@ -451,8 +451,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（6）- APK 安装（上）</title>
-    <link href="https://superandroid.pro/2019/02/10/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"/>
-    <id>https://superandroid.pro/2019/02/10/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/</id>
+    <link href="https://superandroid.pro/2019/02/10/2019.02.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"/>
+    <id>https://superandroid.pro/2019/02/10/2019.02.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/</id>
     <published>2019-02-10T01:08:00.000Z</published>
     <updated>2019-06-26T09:59:59.584Z</updated>
     
@@ -480,8 +480,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（5）- PackageParser</title>
-    <link href="https://superandroid.pro/2019/02/02/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"/>
-    <id>https://superandroid.pro/2019/02/02/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/</id>
+    <link href="https://superandroid.pro/2019/02/02/2019.02.02-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"/>
+    <id>https://superandroid.pro/2019/02/02/2019.02.02-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/</id>
     <published>2019-02-02T01:08:00.000Z</published>
     <updated>2019-06-26T10:02:24.912Z</updated>
     
@@ -509,8 +509,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（4）- PackageInstaller</title>
-    <link href="https://superandroid.pro/2019/01/25/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/"/>
-    <id>https://superandroid.pro/2019/01/25/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/</id>
+    <link href="https://superandroid.pro/2019/01/25/2019.01.25-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/"/>
+    <id>https://superandroid.pro/2019/01/25/2019.01.25-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/</id>
     <published>2019-01-25T01:08:00.000Z</published>
     <updated>2019-06-26T10:01:38.056Z</updated>
     
@@ -538,8 +538,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（3）- PackageManager</title>
-    <link href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/"/>
-    <id>https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/</id>
+    <link href="https://superandroid.pro/2019/01/16/2019.01.16-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/"/>
+    <id>https://superandroid.pro/2019/01/16/2019.01.16-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/</id>
     <published>2019-01-16T01:08:00.000Z</published>
     <updated>2019-06-26T10:01:14.172Z</updated>
     
@@ -567,8 +567,8 @@
   
   <entry>
     <title>PackageManagerService 钻研（2）- 构造函数</title>
-    <link href="https://superandroid.pro/2019/01/08/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/"/>
-    <id>https://superandroid.pro/2019/01/08/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/</id>
+    <link href="https://superandroid.pro/2019/01/08/2019.01.08-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/"/>
+    <id>https://superandroid.pro/2019/01/08/2019.01.08-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/</id>
     <published>2019-01-08T01:08:00.000Z</published>
     <updated>2019-06-26T10:00:48.761Z</updated>
     
