@@ -369,7 +369,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        6.7k
+                        6.8k
                     </div>
                     
 
@@ -629,8 +629,9 @@ context <span class="token operator">=</span> <span class="token function">getAp
 <p>因为非静态内部类默认会持有外部类的引用，而该非静态内部类又创建了一个静态的实例，该实例的生命周期和应用的一样长，这就导致了该静态实例一直会持有该 Activity 的引用，导致 Activity 的内存资源不能正常回收。</p>
 <p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
 <p>将该内部类设为静态内部类或将该内部类抽取出来封装成一个单例，如果需要使用 Context，请按照上面推荐的使用 Application 的 Context。<strong><font color="#ff0000">当然，Application 的 context 不是万能的，所以也不能随便乱用，对于有些地方则必须使用 Activity 的 Context</font></strong>。</p>
-<h2 id="2-6-Handler"><a href="#2-6-Handler" class="headerlink" title="2.6 Handler"></a>2.6 Handler</h2><p>Handler 的使用造成的内存泄漏问题应该说是<strong><font color="#FF0000"> 最为常见 </font></strong>了，很多时候我们为了避免 ANR 而不在主线程进行耗时操作，在处理网络任务或者封装一些请求回调等api都借助Handler来处理，但 Handler 不是万能的，对于 Handler 的使用代码编写不规范即有可能造成内存泄漏。另外，我们知道 Handler、Message 和 MessageQueue 都是相互关联在一起的，万一 Handler 发送的 Message 尚未被处理，则该 Message 及发送它的 Handler 对象将被线程 MessageQueue 一直持有。</p>
+<h2 id="2-6-Handler"><a href="#2-6-Handler" class="headerlink" title="2.6 Handler"></a>2.6 Handler</h2><p>Handler 的使用造成的内存泄漏问题应该说是<strong><font color="#FF0000"> 最为常见 </font></strong>了，很多时候我们为了避免 ANR 而不在主线程进行耗时操作，在处理网络任务或者封装一些请求回调等 API 都借助 Handler 来处理，但 Handler 不是万能的，对于 Handler 的使用代码编写不规范即有可能造成内存泄漏。另外，我们知道 Handler、Message 和 MessageQueue 都是相互关联在一起的，万一 Handler 发送的 Message 尚未被处理，则该 Message 及发送它的 Handler 对象将被线程 MessageQueue 一直持有。</p>
 <p>由于 Handler 属于 TLS(Thread Local Storage) 变量, 生命周期和 Activity 是不一致的。因此这种实现方式一般很难保证跟 View 或者 Activity 的生命周期保持一致，故很容易导致无法正确释放。</p>
+<p>我们看下面的例子：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SampleActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
 
     <span class="token keyword">private</span> <span class="token keyword">final</span> Handler mLeakyHandler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -656,7 +657,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
 <span class="token punctuation">}</span>
 </code></pre>
 <p>在该 SampleActivity 中声明了一个延迟 <strong>10分钟</strong> 执行的消息 Message，mLeakyHandler 将其 push 进了消息队列 MessageQueue 里。当该 Activity 被 finish() 掉时，延迟执行任务的 Message 还会继续存在于主线程中，它持有该 Activity 的 Handler 引用，所以此时 finish() 掉的 Activity 就不会被回收了从而造成内存泄漏（因 Handler 为非静态内部类，它会持有外部类的引用，在这里就是指 SampleActivity）。</p>
-<p><strong><font color="#FFFFFF">正确的做法为：</font></strong></p>
+<p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
 <p>在 Activity 中避免使用非静态内部类，比如上面我们将 Handler 声明为静态的，则其存活期跟 Activity 的生命周期就无关了。同时通过弱引用的方式引入 Activity，避免直接将 Activity 作为 context 传进去，见下面代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SampleActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
 
@@ -695,8 +696,8 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>从上面的代码中我们可以看出如何避免Handler内存泄漏，推荐使用 “静态内部类 + WeakReference” 这种方式，每次使用前注意判空。</p>
-<p>Java对引用的分类有Strong reference、SoftReference、WeakReference、PhatomReference四种。</p>
+<p>从上面的代码中我们可以看出如何避免 Handler 内存泄漏，推荐使用 <code>静态内部类 + WeakReference</code> 这种方式，每次使用前注意判空。</p>
+<p>Java 对引用的分类有 <code>Strong reference</code>、<code>SoftReference</code>、<code>WeakReference</code>、<code>PhatomReference</code>四种。</p>
 <table>
 <thead>
 <tr>
@@ -711,30 +712,30 @@ context <span class="token operator">=</span> <span class="token function">getAp
 <td>强</td>
 <td>从来不会</td>
 <td>对象的一般状态</td>
-<td>JVM停止运行时终止</td>
+<td>JVM 停止运行时终止</td>
 </tr>
 <tr>
 <td>软</td>
 <td>在内存不足时</td>
-<td>联合ReferenceQueue构造有效期短/占内存打/生命周期长的对象的二级高速缓冲器（内存不足时才情况）</td>
+<td>联合 ReferenceQueue 构造有效期短/占内存打/生命周期长的对象的二级高速缓冲器（内存不足时才情况）</td>
 <td>内存不足时终止</td>
 </tr>
 <tr>
 <td>弱</td>
 <td>在垃圾回收时</td>
-<td>联合ReferenceQueue构造有效期短/占内存打/生命周期长的对象的一级高速缓冲器（系统发生gc时清空）</td>
-<td>gc运行后终止</td>
+<td>联合 ReferenceQueue 构造有效期短/占内存打/生命周期长的对象的一级高速缓冲器（系统发生gc时清空）</td>
+<td>gc 运行后终止</td>
 </tr>
 <tr>
 <td>虚</td>
 <td>在垃圾回收时</td>
-<td>联合ReferenceQueue来跟踪对象被垃圾回收期回收的活动</td>
-<td>gc运行后终止</td>
+<td>联合 ReferenceQueue 来跟踪对象被垃圾回收期回收的活动</td>
+<td>gc 运行后终止</td>
 </tr>
 </tbody>
 </table>
-<p>在Android应用的开发中，为了防止内存溢出，在处理一些占用内存大而且声明周期较长的对象时候，可以尽量应用软引用和弱引用技术。</p>
-<p>软/弱引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收器回收，Java虚拟机就会把这个软引用加入到与之关联的引用队列中。利用这个队列可以得知被回收的软/弱引用的对象列表，从而为缓冲器清除已失效的软/弱引用。</p>
+<p>在 Android 应用的开发中，为了防止内存溢出，在处理一些占用内存大而且声明周期较长的对象时候，可以尽量应用软引用和弱引用技术。</p>
+<p>软/弱引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收器回收，Java 虚拟机就会把这个软引用加入到与之关联的引用队列中。利用这个队列可以得知被回收的软/弱引用的对象列表，从而为缓冲器清除已失效的软/弱引用。</p>
 <h2 id="2-7-Thread"><a href="#2-7-Thread" class="headerlink" title="2.7 Thread"></a>2.7 Thread</h2><p>看个范例：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SampleActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
     <span class="token keyword">void</span> <span class="token function">spawnThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -758,9 +759,9 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>其实这边发生的内存泄漏原因跟AsyncTask是一样的。</p>
-<p><strong><font color="#FFFFFF">正确的做法为：</font></strong></p>
-<p>我们自定义Thread并声明成static这样可以吗？其实这样的做法并不推荐，因为Thread位于GC根部，DVM会和所有的活动线程保持hard references关系，所以运行中的Thread绝不会被GC无端回收了，所以正确的解决办法是在自定义静态内部类的基础上给线程加上取消机制，因此我们可以在Activity的onDestroy方法中将thread关闭掉。</p>
+<p>其实这边发生的内存泄漏原因跟 AsyncTask 是一样的。</p>
+<p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
+<p>我们自定义 Thread 并声明成 static 这样可以吗？其实这样的做法并不推荐，因为 Thread 位于 GC 根部，DVM 会和所有的活动线程保持 hard references 关系，所以运行中的 Thread 绝不会被 GC 无端回收了，所以正确的解决办法是：在自定义静态内部类的基础上给线程加上取消机制，因此我们可以在 Activity 的 onDestroy 方法中将 thread 关闭掉。</p>
 <h2 id="2-8-Timer-Tasks"><a href="#2-8-Timer-Tasks" class="headerlink" title="2.8 Timer Tasks"></a>2.8 Timer Tasks</h2><p>看个范例：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SampleActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
     <span class="token keyword">void</span> <span class="token function">scheduleTimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -779,15 +780,15 @@ context <span class="token operator">=</span> <span class="token function">getAp
         ttButton<span class="token punctuation">.</span><span class="token function">setOnClickListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">View<span class="token punctuation">.</span>OnClickListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token annotation punctuation">@Override</span>
             <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onClick</span><span class="token punctuation">(</span>View v<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token function">scheduleTimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">scheduleTimer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>这里内存泄漏在于Timer和TimerTask没有进行Cancel，从而导致Timer和TimerTask一直引用外部类Activity。</p>
-<p><strong><font color="#FFFFFF">正确的做法为：</font></strong></p>
-<p>在适当的时机进行Cancel。</p>
+<p>这里内存泄漏在于 Timer 和 TimerTask 没有进行 Cancel，从而导致 Timer 和 TimerTask 一直引用外部类 Activity。</p>
+<p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
+<p>在适当的时机进行 Cancel。</p>
 <h2 id="2-9-Sensor-Manager"><a href="#2-9-Sensor-Manager" class="headerlink" title="2.9 Sensor Manager"></a>2.9 Sensor Manager</h2><p>看个范例：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SampleActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
     <span class="token keyword">void</span> <span class="token function">registerListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -809,40 +810,39 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>通过Context调用getSystemService获取系统服务，这些服务运行在他们自己的进程执行一系列后台工作或者提供和硬件交互的接口，如果Context对象需要在一个Service内部事件发生时随时收到通知，则需要把自己作为一个监听器注册进去，这样服务就会持有一个Activity，如果开发者忘记了在Activity被销毁前注销这个监听器，这样就导致内存泄漏。</p>
-<p><strong><font color="#FFFFFF">正确的做法为：</font></strong></p>
-<p>在onDestroy方法里注销监听器。</p>
-<h2 id="2-10-尽量避免使用-static-成员变量"><a href="#2-10-尽量避免使用-static-成员变量" class="headerlink" title="2.10 尽量避免使用 static 成员变量"></a>2.10 尽量避免使用 static 成员变量</h2><p>如果成员变量被声明为 static，那我们都知道其生命周期将与整个app进程生命周期一样。</p>
-<p>这会导致一系列问题，如果你的app进程设计上是长驻内存的，那即使app切到后台，这部分内存也不会被释放。按照现在手机app内存管理机制，占内存较大的后台进程将优先回收，如果此app做过进程互保保活，那会造成app在后台频繁重启。当手机安装了你参与开发的app以后一夜时间手机被消耗空了电量、流量，你的app不得不被用户卸载或者静默。</p>
-<p><strong><font color="#FFFFFF">这里修复的方法是：</font></strong></p>
-<p>不要在类初始时初始化静态成员。可以考虑lazy初始化（使用时初始化）。架构设计上要思考是否真的有必要这样做，尽量避免。如果架构需要这么设计，那么此对象的生命周期你有责任管理起来。</p>
-<h2 id="2-11-避免-override-finalize"><a href="#2-11-避免-override-finalize" class="headerlink" title="2.11 避免 override finalize()"></a>2.11 避免 override finalize()</h2><p>1、finalize 方法被执行的时间不确定，不能依赖与它来释放紧缺的资源。时间不确定的原因是：<br>虚拟机调用GC的时间不确定<br>Finalize daemon线程被调度到的时间不确定</p>
-<p>2、finalize 方法只会被执行一次，即使对象被复活，如果已经执行过了 finalize 方法，再次被 GC 时也不会再执行了，原因是：</p>
-<p>含有 finalize 方法的 object 是在 new 的时候由虚拟机生成了一个 finalize reference 在来引用到该Object的，而在 finalize 方法执行的时候，该 object 所对应的 finalize Reference 会被释放掉，即使在这个时候把该 object 复活(即用强引用引用住该 object )，再第二次被 GC 的时候由于没有了 finalize reference 与之对应，所以 finalize 方法不会再执行。</p>
-<p>3、含有Finalize方法的object需要至少经过两轮GC才有可能被释放。</p>
-<h2 id="2-13-集合对象及时清除"><a href="#2-13-集合对象及时清除" class="headerlink" title="2.13 集合对象及时清除"></a>2.13 集合对象及时清除</h2><p>我们通常会把一些对象的引用加入到集合容器（比如ArrayList）中，当我们不再需要该对象时，并没有把它的引用从集合中清理掉，这样这个集合就会越来越大。如果这个集合是static的话，那情况就更严重了。</p>
-<p>所以在退出程序之前，将集合里面的东西clear，然后置为null，再退出程序，如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> List<span class="token operator">&lt;</span>String<span class="token operator">></span> nameList<span class="token punctuation">;</span>
-<span class="token keyword">private</span> List<span class="token operator">&lt;</span>Fragment<span class="token operator">></span> list<span class="token punctuation">;</span>
+<p>通过 Context 调用 getSystemService 获取系统服务，这些服务运行在他们自己的进程执行一系列后台工作或者提供和硬件交互的接口，如果 Context 对象需要在一个 Service 内部事件发生时随时收到通知，则需要把自己作为一个监听器注册进去，这样服务就会持有一个 Activity，如果开发者忘记了在 Activity 被销毁前注销这个监听器，这样就导致内存泄漏。</p>
+<p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
+<p>在 onDestroy 方法里注销监听器。</p>
+<h2 id="2-10-尽量避免使用-static-成员变量"><a href="#2-10-尽量避免使用-static-成员变量" class="headerlink" title="2.10 尽量避免使用 static 成员变量"></a>2.10 尽量避免使用 static 成员变量</h2><p>如果成员变量被声明为 static，那我们都知道其生命周期将与整个 app 进程生命周期一样。</p>
+<p>这会导致一系列问题，如果你的 app 进程设计上是长驻内存的，那即使 app 切到后台，这部分内存也不会被释放。按照现在手机 app 内存管理机制，占内存较大的后台进程将优先回收，如果此 app 做过进程互保保活，那会造成 app 在后台频繁重启。当手机安装了你参与开发的 app 以后一夜时间手机被消耗空了电量、流量，你的 app 不得不被用户卸载或者静默。</p>
+<p><strong><font color="#0000ff">这里修复的方法是：</font></strong></p>
+<p>不要在类初始时初始化静态成员。可以考虑 lazy 初始化（使用时初始化）。架构设计上要思考是否真的有必要这样做，尽量避免。如果架构需要这么设计，那么此对象的生命周期你有责任管理起来。</p>
+<h2 id="2-11-避免-override-finalize"><a href="#2-11-避免-override-finalize" class="headerlink" title="2.11 避免 override finalize()"></a>2.11 避免 override finalize()</h2><p>1、finalize 方法被执行的时间不确定，不能依赖与它来释放紧缺的资源。时间不确定的原因是：（1）虚拟机调用 GC 的时间不确定；（2）Finalize daemon 线程被调度到的时间不确定。</p>
+<p>2、finalize 方法只会被执行一次，即使对象被复活，如果已经执行过了 finalize 方法，再次被 GC 时也不会再执行了，原因是：含有 finalize 方法的 object 是在 new 的时候由虚拟机生成了一个 finalize reference 在来引用到该 Object 的，而在 finalize 方法执行的时候，该 object 所对应的 finalize Reference 会被释放掉，即使在这个时候把该 object 复活(即用强引用引用住该 object )，再第二次被 GC 的时候由于没有了 finalize reference 与之对应，所以 finalize 方法不会再执行。</p>
+<p>3、含有 finalize 方法的 object 需要至少经过两轮 GC 才有可能被释放。</p>
+<h2 id="2-13-集合对象及时清除"><a href="#2-13-集合对象及时清除" class="headerlink" title="2.13 集合对象及时清除"></a>2.13 集合对象及时清除</h2><p>我们通常会把一些对象的引用加入到集合容器（比如 ArrayList）中，当我们不再需要该对象时，并没有把它的引用从集合中清理掉，这样这个集合就会越来越大。如果这个集合是 static 的话，那情况就更严重了。</p>
+<p>所以在退出程序之前，将集合里面的东西 clear，然后置为 null，再退出程序，如下：</p>
+<pre class=" language-java"><code class="language-java"> <span class="token keyword">private</span> List<span class="token operator">&lt;</span>String<span class="token operator">></span> nameList<span class="token punctuation">;</span>
+ <span class="token keyword">private</span> List<span class="token operator">&lt;</span>Fragment<span class="token operator">></span> list<span class="token punctuation">;</span>
 
-<span class="token annotation punctuation">@Override</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>nameList <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        nameList<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        nameList <span class="token operator">=</span> null<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>list <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        list<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        list <span class="token operator">=</span> null<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+ <span class="token annotation punctuation">@Override</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>nameList <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+         nameList<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         nameList <span class="token operator">=</span> null<span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>list <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+         list<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         list <span class="token operator">=</span> null<span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="2-14-webView"><a href="#2-14-webView" class="headerlink" title="2.14 webView"></a>2.14 webView</h2><p>当我们不再需要使用webView的时候，应该调用它的destory()方法来销毁它，并释放其占用的内存，否则其占用的内存长期也不能回收，从而造成内存泄漏。</p>
-<p><strong><font color="#FFFFFF">正确的做法为：</font></strong></p>
-<p>为webView开启另外一个进程，通过AIDL与主线程进行通信，webView所在的进程可以根据业务的需要选择合适的时机进行销毁，从而达到内存的完整释放。</p>
-<h2 id="2-15-资源未关闭"><a href="#2-15-资源未关闭" class="headerlink" title="2.15 资源未关闭"></a>2.15 资源未关闭</h2><p>对于使用了BraodcastReceiver，ContentObserver，File，游标 Cursor，Stream，Bitmap等资源的使用，应该在Activity销毁时及时关闭或者注销，否则这些资源将不会被回收，造成内存泄漏。</p>
-<h1 id="3-拓展-–-相关知识点"><a href="#3-拓展-–-相关知识点" class="headerlink" title="3. 拓展 – 相关知识点"></a>3. 拓展 – 相关知识点</h1><h2 id="3-1-static-关键字"><a href="#3-1-static-关键字" class="headerlink" title="3.1 static 关键字"></a>3.1 static 关键字</h2><h3 id="3-1-1-使用-static-声明属性"><a href="#3-1-1-使用-static-声明属性" class="headerlink" title="3.1.1 使用 static 声明属性"></a>3.1.1 使用 static 声明属性</h3><p>如果在程序中使用static声明属性，则此属性称为全局属性（也称静态属性），那么声明成全局属性有什么用？我们看下代码：</p>
+<h2 id="2-14-webView"><a href="#2-14-webView" class="headerlink" title="2.14 webView"></a>2.14 webView</h2><p>当我们不再需要使用 webView 的时候，应该调用它的 destory() 方法来销毁它，并释放其占用的内存，否则其占用的内存长期也不能回收，从而造成内存泄漏。</p>
+<p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
+<p>为 webView 开启另外一个进程，通过 AIDL 与主线程进行通信，webView 所在的进程可以根据业务的需要选择合适的时机进行销毁，从而达到内存的完整释放。</p>
+<h2 id="2-15-资源未关闭"><a href="#2-15-资源未关闭" class="headerlink" title="2.15 资源未关闭"></a>2.15 资源未关闭</h2><p>对于使用了 BraodcastReceiver，ContentObserver，File，游标 Cursor，Stream，Bitmap 等资源的使用，应该在 Activity 销毁时及时关闭或者注销，否则这些资源将不会被回收，造成内存泄漏。</p>
+<h1 id="3-拓展-–-相关知识点"><a href="#3-拓展-–-相关知识点" class="headerlink" title="3. 拓展 – 相关知识点"></a>3. 拓展 – 相关知识点</h1><h2 id="3-1-static-关键字"><a href="#3-1-static-关键字" class="headerlink" title="3.1 static 关键字"></a>3.1 static 关键字</h2><h3 id="3-1-1-使用-static-声明属性"><a href="#3-1-1-使用-static-声明属性" class="headerlink" title="3.1.1 使用 static 声明属性"></a>3.1.1 使用 static 声明属性</h3><p>如果在程序中使用 static 声明属性，则此属性称为全局属性（也称静态属性），那么声明成全局属性有什么用？我们看下代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
     String name<span class="token punctuation">;</span>
     <span class="token keyword">int</span> age<span class="token punctuation">;</span>
@@ -868,7 +868,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>以上程序很清晰的说明了static声明属性的好处，需要注意一点的是，类的公共属性应该由类进行修改是最合适的（当然也可以p1.country = …），有时也就把使用static声明的属性称为类属性。</p>
+<p>以上程序很清晰的说明了 static 声明属性的好处，需要注意一点的是，类的公共属性应该由类进行修改是最合适的（当然也可以 p1.country = …），有时也就把使用 static 声明的属性称为类属性。</p>
 <h3 id="3-1-2-使用-static-声明方法"><a href="#3-1-2-使用-static-声明方法" class="headerlink" title="3.1.2 使用 static 声明方法"></a>3.1.2 使用 static 声明方法</h3><p>直接看下代码就清楚了：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
@@ -901,23 +901,23 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><strong><font color="#FFFFFF">【特殊说明】</font></strong></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 非static声明的方法可以调用static声明的属性或方法<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;💥 static声明的方法不能调用非static声明的属性或方法</p>
+<p><strong><font color="#ff0000">【特殊说明】</font></strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;&nbsp;非 static 声明的方法可以调用 static 声明的属性或方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;&nbsp;static 声明的方法不能调用非 static 声明的属性或方法。</p>
 <p>比如以下代码就会出错：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> String country <span class="token operator">=</span> <span class="token string">"A城"</span><span class="token punctuation">;</span>
     <span class="token keyword">private</span> String name <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">sFun</span><span class="token punctuation">(</span>String C<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name = "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 错误，不能调用非static属性</span>
-        <span class="token function">fun</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                      <span class="token comment" spellcheck="true">// 错误，不能调用非static方法</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"name = "</span> <span class="token operator">+</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 错误，不能调用非 static 属性</span>
+        <span class="token function">fun</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                      <span class="token comment" spellcheck="true">// 错误，不能调用非 static 方法</span>
     <span class="token punctuation">}</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fun</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"World!!!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 </code></pre>
-<h2 id="3-2-内部类"><a href="#3-2-内部类" class="headerlink" title="3.2 内部类"></a>3.2 内部类</h2><h3 id="3-2-1-基本定义"><a href="#3-2-1-基本定义" class="headerlink" title="3.2.1 基本定义"></a>3.2.1 基本定义</h3><p>我们都知道，在类内部可以定义成员变量与方法，同样，在类内部也可以定义另一个类。如果在类Outer的内部定义一个类Inner，此时类Inner就称为内部类，而类Outer则称为外部类。</p>
-<p>内部类可声明成 public 或 private。当内部类声明成 public 或 private时，对其访问的限制与成员变量和成员方法完全相同。</p>
+<h2 id="3-2-内部类"><a href="#3-2-内部类" class="headerlink" title="3.2 内部类"></a>3.2 内部类</h2><h3 id="3-2-1-基本定义"><a href="#3-2-1-基本定义" class="headerlink" title="3.2.1 基本定义"></a>3.2.1 基本定义</h3><p>我们都知道，在类内部可以定义成员变量与方法，同样，在类内部也可以定义另一个类。如果在类 Outer 的内部定义一个类 Inner，此时类 Inner 就称为内部类，而类 Outer 则称为外部类。</p>
+<p>内部类可声明成 public 或 private。当内部类声明成 public 或 private 时，对其访问的限制与成员变量和成员方法完全相同。</p>
 <h3 id="3-2-2-内部类的定义格式"><a href="#3-2-2-内部类的定义格式" class="headerlink" title="3.2.2 内部类的定义格式"></a>3.2.2 内部类的定义格式</h3><pre class=" language-java"><code class="language-java">标识符 <span class="token keyword">class</span> 外部类的名称 <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// 外部类的成员</span>
     标识符 <span class="token keyword">class</span> 内部类的名称 <span class="token punctuation">{</span>
@@ -926,10 +926,10 @@ context <span class="token operator">=</span> <span class="token function">getAp
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="3-2-3-内部类的好处"><a href="#3-2-3-内部类的好处" class="headerlink" title="3.2.3 内部类的好处"></a>3.2.3 内部类的好处</h3><p>可以方便地访问外部类中的私有属性！</p>
-<h2 id="3-3-静态内部类"><a href="#3-3-静态内部类" class="headerlink" title="3.3 静态内部类"></a>3.3 静态内部类</h2><p>使用static可以声明属性或方法，而使用static也可以声明内部类，用static声明的内部类就变成了外部类，但是用static声明的内部类不能访问非static的外部类属性。</p>
+<h2 id="3-3-静态内部类"><a href="#3-3-静态内部类" class="headerlink" title="3.3 静态内部类"></a>3.3 静态内部类</h2><p>使用 static 可以声明属性或方法，而使用 static 也可以声明内部类，用 static 声明的内部类就变成了外部类，但是用 static 声明的内部类不能访问非 static 的外部类属性。</p>
 <p>比如如下例子：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Outer</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> String info <span class="token operator">=</span> <span class="token string">"Hello World!!!"</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 如果此时info不是static属性，则程序运行报错</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> String info <span class="token operator">=</span> <span class="token string">"Hello World!!!"</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 如果此时 info 不是 static 属性，则程序运行报错</span>
     <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Inner</span> <span class="token punctuation">{</span>
         <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>info<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -946,7 +946,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
 <p>执行结果：</p>
 <pre><code>Hello World!!!
 </code></pre><h2 id="3-4-在外部访问内部类"><a href="#3-4-在外部访问内部类" class="headerlink" title="3.4 在外部访问内部类"></a>3.4 在外部访问内部类</h2><p>一个内部类除了可以通过外部类访问，也可以直接在其他类中进行调用。</p>
-<p><strong><font color="#FFFFFF">【在外部访问内部类的格式】</font></strong></p>
+<p><strong><font color="#0000ff">【在外部访问内部类的格式】</font></strong></p>
 <pre class=" language-java"><code class="language-java">外部类<span class="token punctuation">.</span>内部类 内部类对象 <span class="token operator">=</span> 外部类实例<span class="token punctuation">.</span><span class="token keyword">new</span> 内部类<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Outer</span> <span class="token punctuation">{</span>
@@ -966,10 +966,10 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="3-5-在方法中定义内部类"><a href="#3-5-在方法中定义内部类" class="headerlink" title="3.5 在方法中定义内部类"></a>3.5 在方法中定义内部类</h2><p>除了在外部类中定义内部类，我们也可以在方法中定义内部类。但是需要注意的是，在方法中定义的内部类不能直接访问方法中的参数，如果方法中的参数想要被内部类访问，则参数前必须加上final关键字。</p>
+<h2 id="3-5-在方法中定义内部类"><a href="#3-5-在方法中定义内部类" class="headerlink" title="3.5 在方法中定义内部类"></a>3.5 在方法中定义内部类</h2><p>除了在外部类中定义内部类，我们也可以在方法中定义内部类。但是需要注意的是，在方法中定义的内部类不能直接访问方法中的参数，如果方法中的参数想要被内部类访问，则参数前必须加上 final 关键字。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Outer</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> String info <span class="token operator">=</span> <span class="token string">"Hello World!!!"</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fun</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">int</span> temp<span class="token punctuation">)</span> <span class="token punctuation">{</span>      <span class="token comment" spellcheck="true">// 参数要被访问必须用final声明</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fun</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">int</span> temp<span class="token punctuation">)</span> <span class="token punctuation">{</span>      <span class="token comment" spellcheck="true">// 参数要被访问必须用 final 声明</span>
         <span class="token keyword">class</span> <span class="token class-name">Inner</span> <span class="token punctuation">{</span>
             <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"类中的属性："</span> <span class="token operator">+</span> info<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -986,7 +986,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>在开发中，内存泄漏最坏的情况是app耗尽内存导致崩溃，但是往往真实情况不是这样的，相反它只会耗尽大量内存但不至于闪退，可分配的内存少了，GC便会更多的工作释放内存，GC是非常耗时的操作，因此会使得页面卡顿。我们在开发中一定要注意当在Activity里实例化一个对象时看看是否有潜在的内存泄漏，一定要经常对内存泄漏进行检测。</p>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>在开发中，内存泄漏最坏的情况是 App 耗尽内存导致崩溃，但是往往真实情况不是这样的，相反它只会耗尽大量内存但不至于闪退，可分配的内存少了，GC 便会更多的工作释放内存，GC 是非常耗时的操作，因此会使得页面卡顿。我们在开发中一定要注意当在 Activity 里实例化一个对象时看看是否有潜在的内存泄漏，一定要经常对内存泄漏进行检测。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;01. <a href="https://developer.android.google.cn/studio/profile/android-profiler" target="_blank" rel="noopener">https://developer.android.google.cn/studio/profile/android-profiler</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;02. <a href="https://developer.android.google.cn/studio/profile/memory-profiler" target="_blank" rel="noopener">https://developer.android.google.cn/studio/profile/memory-profiler</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;03. <a href="https://www.jianshu.com/p/f77fcb43b3d4" target="_blank" rel="noopener">https://www.jianshu.com/p/f77fcb43b3d4</a></p>
 
             </div>
