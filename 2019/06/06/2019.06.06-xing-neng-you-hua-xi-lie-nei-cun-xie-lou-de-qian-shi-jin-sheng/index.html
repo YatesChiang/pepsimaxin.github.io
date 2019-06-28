@@ -369,7 +369,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        6.8k
+                        6.7k
                     </div>
                     
 
@@ -418,22 +418,27 @@
 <h2 id="1-4-Java-是如何管理内存"><a href="#1-4-Java-是如何管理内存" class="headerlink" title="1.4 Java 是如何管理内存"></a>1.4 Java 是如何管理内存</h2><p><strong><font color="#ff0000">Java 的内存管理就是对象的分配和释放问题。</font></strong></p>
 <p>在 Java 中，程序员需要通过关键字 new 为每个对象申请内存空间（基本类型除外），所有的对象都在堆（Heap）中分配空间。另外，对象的释放是由 GC 决定和执行的。在 Java 中，内存的分配是由程序完成的，而内存的释放是由 GC 完成的，这种收支两条线的方法确实简化了程序员的工作。但同时，它也加重了 JVM 的工作。这也是 Java 程序运行速度较慢的原因之一。因为，GC 为了能够正确释放对象，必须监控每一个对象的运行状态，包括对象的申请、引用、被引用、赋值等，GC 都需要进行监控。</p>
 <p>监视对象状态是为了更加准确地、及时地释放对象，而释放对象的根本原则就是该对象不再被引用。</p>
-<h2 id="1-5-Java-中的内存泄漏"><a href="#1-5-Java-中的内存泄漏" class="headerlink" title="1.5 Java 中的内存泄漏"></a>1.5 Java 中的内存泄漏</h2><p>在 Java 中，内存泄漏就是存在一些被分配的对象，这些对象有下面两个特点，首先，这些对象是可达的，即在有向图中，存在通路可以与其相连；其次，这些对象是无用的，即程序以后不会再使用这些对象。如果对象满足这两个条件，这些对象就可以判定为Java中的内存泄漏，这些对象不会被GC所回收，然而它却占用内存。</p>
-<p>在C++中，内存泄漏的范围更大一些。有些对象被分配了内存空间，然后却不可达，由于C++中没有GC，这些内存将永远收不回来。在Java中，这些不可达的对象都由GC负责回收，因此程序员不需要考虑这部分的内存泄露。</p>
-<p>通过分析，我们得知，对于C++，程序员需要自己管理边和顶点，而对于Java程序员只需要管理边就可以了(不需要管理顶点的释放)。通过这种方式，Java提高了编程的效率。</p>
-<p>因此，通过以上分析，我们知道在Java中也有内存泄漏，但范围比C++要小一些。因为Java从语言上保证，任何对象都是可达的，所有的不可达对象都由GC管理。</p>
-<p>对于程序员来说，GC基本是透明的，不可见的。虽然，我们只有几个函数可以访问GC，例如运行GC的函数System.gc()，但是根据Java语言规范定义， 该函数不保证JVM的垃圾收集器一定会执行。因为，不同的JVM实现者可能使用不同的算法管理GC。通常，GC的线程的优先级别较低。JVM调用GC的策略也有很多种，有的是内存使用到达一定程度时，GC才开始工作，也有定时执行的，有的是平缓执行GC，有的是中断式执行GC。但通常来说，我们不需要关心这些。除非在一些特定的场合，GC的执行影响应用程序的性能，例如对于基于Web的实时系统，如网络游戏等，用户不希望GC突然中断应用程序执行而进行垃圾回收，那么我们需要调整GC的参数，让GC能够通过平缓的方式释放内存，例如将垃圾回收分解为一系列的小步骤执行，Sun提供的HotSpot JVM就支持这一特性。</p>
+<h2 id="1-5-Java-中的内存泄漏"><a href="#1-5-Java-中的内存泄漏" class="headerlink" title="1.5 Java 中的内存泄漏"></a>1.5 Java 中的内存泄漏</h2><p>在 Java 中，内存泄漏就是存在一些被分配的对象，这些对象有下面 <strong><font color="#0000ff">两个特点</font></strong>：</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;&nbsp;首先，这些对象是可达的，即在有向图中，存在通路可以与其相连；</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎ &nbsp;&nbsp;其次，这些对象是无用的，即程序以后不会再使用这些对象。</p>
+<p>如果对象满足这两个条件，这些对象就可以判定为 Java 中的内存泄漏，这些对象不会被 GC 所回收，然而它却占用内存。</p>
+<p>在 C++ 中，内存泄漏的范围更大一些。有些对象被分配了内存空间，然后却不可达，由于 C++ 中没有 GC，这些内存将永远收不回来。</p>
+<p>在 Java 中，这些不可达的对象都由 GC 负责回收，因此程序员不需要考虑这部分的内存泄露。</p>
+<p>对于 C++，程序员需要自己管理边和顶点，而对于 Java 程序员只需要管理边就可以了（不需要管理顶点的释放）。通过这种方式，Java 提高了编程的效率。</p>
+<p>因此，通过以上分析，我们知道在 Java 中也有内存泄漏，但范围比 C++ 要小一些。因为 Java 从语言上保证，任何对象都是可达的，所有的不可达对象都由 GC 管理。</p>
+<p>对于程序员来说，GC 基本是透明的，不可见的。虽然，我们只有几个函数可以访问 GC，例如运行 GC 的函数 System.gc()，但是根据 Java 语言规范定义， 该函数不保证 JVM 的垃圾收集器一定会执行。因为，不同的 JVM 实现者可能使用不同的算法管理 GC。通常，GC 的线程的优先级别较低。JVM 调用 GC 的策略也有很多种，有的是内存使用到达一定程度时，GC 才开始工作，也有定时执行的，有的是平缓执行GC，有的是中断式执行 GC。</p>
 <p>以下给出一个 Java 内存泄漏的典型例子：</p>
-<pre class=" language-java"><code class="language-java">Vector v <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vector</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    Object o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    v<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    o <span class="token operator">=</span> null<span class="token punctuation">;</span>   
-<span class="token punctuation">}</span>
+<pre class=" language-java"><code class="language-java"> Vector v <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vector</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     Object o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     v<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     o <span class="token operator">=</span> null<span class="token punctuation">;</span>   
+ <span class="token punctuation">}</span>
 </code></pre>
-<p>在这个例子中，我们循环申请Object对象，并将所申请的对象放入一个 Vector 中，如果我们仅仅释放引用本身，那么 Vector 仍然引用该对象，所以这个对象对 GC 来说是不可回收的。因此，如果对象加入到Vector 后，还必须从 Vector 中删除，最简单的方法就是将 Vector 对象设置为 null。</p>
-<h1 id="2-常见内存泄漏"><a href="#2-常见内存泄漏" class="headerlink" title="2. 常见内存泄漏"></a>2. 常见内存泄漏</h1><h2 id="2-1-永远的单例"><a href="#2-1-永远的单例" class="headerlink" title="2.1 永远的单例"></a>2.1 永远的单例</h2><p>单例的使用在我们的程序中随处可见，因为使用它可以完美的解决我们在程序中重复创建对象的问题，不过可别小瞧它。由于 <strong><font color="#CAFF70">单例的静态特性使得其生命周期跟应用的生命周期一样长</font></strong>，所以一旦使用有误，小心无限制的持有Activity的引用而导致内存泄漏。</p>
-<p>我们看个例子：</p>
+<p>在这个例子中，我们循环申请 Object 对象，并将所申请的对象放入一个 Vector 中，如果我们仅仅释放引用本身，那么 Vector 仍然引用该对象，所以这个对象对 GC 来说是不可回收的。因此，如果对象加入到 Vector 后，还必须从 Vector 中删除，最简单的方法就是将 Vector 对象设置为 null。</p>
+<h1 id="2-常见内存泄漏"><a href="#2-常见内存泄漏" class="headerlink" title="2. 常见内存泄漏"></a>2. 常见内存泄漏</h1><p>接下来，我们探讨在实际的开发过程中，存在的内存泄漏可能。</p>
+<h2 id="2-1-永远的单例"><a href="#2-1-永远的单例" class="headerlink" title="2.1 永远的单例"></a>2.1 永远的单例</h2><p>单例的使用在我们的程序中随处可见，因为使用它可以完美的解决我们在程序中重复创建对象的问题，不过可别小瞧它。由于 <strong><font color="#ff0000">单例的静态特性使得其生命周期跟应用的生命周期一样长</font></strong>，所以一旦使用有误，小心无限制的持有 Activity 的引用而导致内存泄漏。</p>
+<p>比如，我们看下面这个例子：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppManager</span> <span class="token punctuation">{</span>
 
     <span class="token keyword">private</span> <span class="token keyword">static</span> AppManager instance<span class="token punctuation">;</span>
@@ -451,17 +456,17 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>这是一个普通的单例模式，当创建这个单例的时候，由于需要传入一个Context，所以这个Context的生命周期的长短至关重要！<strong><font color="#FF0000">（实际常见）</font></strong></p>
+<p>这是一个普通的单例模式，当创建这个单例的时候，需要传入一个 Context，所以这个 Context 的生命周期的长短至关重要！<strong><font color="#FF0000">（实际开发过程中常见）</font></strong></p>
 <p>1、如果此时传入的是 <font color="#BA55D3">Application 的 Context</font>，因为 Application 的生命周期就是整个应用的生命周期，所以这将没有任何问题。</p>
 <p>2、如果此时传入的是 <font color="#BA55D3">Activity 的 Context</font>，当这个 Context 所对应的 Activity 退出时，由于该 Context 的引用被单例对象所持有，其生命周期等于整个应用程序的生命周期，所以当前 Activity 退出时它的内存并不会被回收，这就造成泄漏了。</p>
-<p><strong><font color="#FFFFFF">正确的方式（写法一）：</font></strong></p>
+<p><strong><font color="#0000ff">正确的方式（写法一）：</font></strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppManager</span> <span class="token punctuation">{</span>
 
     <span class="token keyword">private</span> <span class="token keyword">static</span> AppManager instance<span class="token punctuation">;</span>
     <span class="token keyword">private</span> Context context<span class="token punctuation">;</span>
 
     <span class="token keyword">private</span> <span class="token function">AppManager</span><span class="token punctuation">(</span>Context context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>context <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 使用 Application 的 context</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>context <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">getApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 使用 Application 的 context</span>
     <span class="token punctuation">}</span>
 
     <span class="token keyword">public</span> <span class="token keyword">static</span> AppManager <span class="token function">getInstance</span><span class="token punctuation">(</span>Context context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -472,7 +477,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p><strong><font color="#FFFFFF">正确的方式（写法二）：</font></strong></p>
+<p><strong><font color="#0000ff">正确的方式（写法二）：</font></strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 在你的 Application 中添加一个静态方法，getContext() 返回 Application 的 context</span>
 
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -481,8 +486,8 @@ context <span class="token operator">=</span> <span class="token function">getAp
 
 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
    <span class="token comment" spellcheck="true">/**
-     * 获取全局的context
-     * @return 返回全局context对象
+     * 获取全局的 context
+     * @return 返回全局 context 对象
      */</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> Context <span class="token function">getContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
         <span class="token keyword">return</span> context<span class="token punctuation">;</span>
@@ -494,7 +499,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token keyword">private</span> Context context<span class="token punctuation">;</span>
 
     <span class="token keyword">private</span> <span class="token function">AppManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>context <span class="token operator">=</span> MyApplication<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 使用Application 的context</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>context <span class="token operator">=</span> MyApplication<span class="token punctuation">.</span><span class="token function">getContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 使用Application 的context</span>
     <span class="token punctuation">}</span>
 
     <span class="token keyword">public</span> <span class="token keyword">static</span> AppManager <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -507,7 +512,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
 </code></pre>
 <h2 id="2-2-静态-Activity"><a href="#2-2-静态-Activity" class="headerlink" title="2.2 静态 Activity"></a>2.2 静态 Activity</h2><p>我们看一段代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> MainActivity activity<span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 这边设置了静态Activity，发生了内存泄漏</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> MainActivity activity<span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 这边设置了静态 Activity，发生了内存泄漏</span>
     TextView saButton<span class="token punctuation">;</span>
     <span class="token annotation punctuation">@Override</span>
     <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -537,16 +542,16 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>在上面代码中，我们声明了一个静态的 Activity 变量并且在 TextView 的 OnClick 事件里引用了当前正在运行的 Activity 实例，所以如果在 activity 的生命周期结束之前没有清除这个引用，则会引起内存泄漏。因为声明的 activity 是静态的，会常驻内存，如果该对象不清除，则垃圾回收器无法回收变量。</p>
-<p><strong><font color="#FFFFFF">我们可以这样解决：</font></strong></p>
+<p>在上面代码中，我们声明了一个静态的 Activity 变量并且在 TextView 的 OnClick 事件里引用了当前正在运行的 Activity 实例，所以如果在 Activity 的生命周期结束之前没有清除这个引用，则会引起内存泄漏。因为声明的 Activity 是静态的，会常驻内存，如果该对象不清除，则垃圾回收器无法回收变量。</p>
+<p><strong><font color="#0000ff">我们可以这样解决：</font></strong></p>
 <pre class=" language-java"><code class="language-java">    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        activity <span class="token operator">=</span> null<span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 在onDestory方法中将静态变量activity置空，这样垃圾回收器就可以将静态变量回收</span>
+        activity <span class="token operator">=</span> null<span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 在 onDestory 方法中将静态变量 activity 置空，这样垃圾回收器就可以将静态变量回收</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="2-3-静态-View"><a href="#2-3-静态-View" class="headerlink" title="2.3 静态 View"></a>2.3 静态 View</h2><p>其实和静态Activity颇为相似，我们看下代码：</p>
+<h2 id="2-3-静态-View"><a href="#2-3-静态-View" class="headerlink" title="2.3 静态 View"></a>2.3 静态 View</h2><p>其实和静态 Activity 颇为相似，我们看下代码：</p>
 <pre class=" language-java"><code class="language-java">    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> View view<span class="token punctuation">;</span>               <span class="token comment" spellcheck="true">// 定义静态View</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> View view<span class="token punctuation">;</span>               <span class="token comment" spellcheck="true">// 定义静态 View</span>
     TextView saButton<span class="token punctuation">;</span>
     <span class="token annotation punctuation">@Override</span>
     <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -565,11 +570,11 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 </code></pre>
-<p>View一旦被加载到界面中将会持有一个Context对象的引用，在这个例子中，这个context对象是我们的Activity，声明一个静态变量引用这个View，也就引用了activity，所以当activity生命周期结束了，静态View没有清除掉，还持有activity的引用，因此内存泄漏了。</p>
-<p><strong><font color="#FFFFFF">我们可以这样解决：</font></strong></p>
+<p>View一旦被加载到界面中将会持有一个 Context 对象的引用，在这个例子中，这个 context 对象是我们的 Activity，声明一个静态变量引用这个 View，也就引用了 Activity，所以当 Activity 生命周期结束了，静态 View 没有清除掉，还持有 Activity 的引用，因此内存泄漏了。</p>
+<p><strong><font color="#0000ff">我们可以这样解决：</font></strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    view <span class="token operator">=</span> null<span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 在onDestroy方法里将静态变量置空</span>
+    view <span class="token operator">=</span> null<span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 在 onDestroy 方法里将静态变量置空</span>
 <span class="token punctuation">}</span> 
 </code></pre>
 <h2 id="2-4-匿名类-AsyncTask"><a href="#2-4-匿名类-AsyncTask" class="headerlink" title="2.4 匿名类 / AsyncTask"></a>2.4 匿名类 / AsyncTask</h2><p>我们看下面的例子：</p>
@@ -596,10 +601,10 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>上面代码在activity中创建了一个匿名类 AsyncTask，匿名类和非静态内部类相同，会持有外部类对象，这里也就是activity，因此如果你在 Activity 里声明且实例化一个匿名的AsyncTask对象，则可能会发生内存泄漏，如果这个线程在Activity销毁后还一直在后台执行，那这个线程会继续持有这个Activity的引用从而不会被GC回收，直到线程执行完成。</p>
-<p><strong><font color="#FFFFFF">我们可以这样解决：</font></strong></p>
+<p>上面代码在 Activity 中创建了一个匿名类 AsyncTask，匿名类和非静态内部类相同，会持有外部类对象，这里也就是 Activity，因此如果你在 Activity 里声明且实例化一个匿名的 AsyncTask 对象，则可能会发生内存泄漏，如果这个线程在 Activity 销毁后还一直在后台执行，那这个线程会继续持有这个 Activity 的引用从而不会被 GC 回收，直到线程执行完成。</p>
+<p><strong><font color="#0000ff">我们可以这样解决：</font></strong></p>
 <p>自定义静态 AsyncTask 类，并且让 AsyncTask 的周期和 Activity 周期保持一致，也就是在 Activity 生命周期结束时要将 AsyncTask cancel 掉。</p>
-<h2 id="2-5-非静态内部类"><a href="#2-5-非静态内部类" class="headerlink" title="2.5 非静态内部类"></a>2.5 非静态内部类</h2><p>有的时候我们可能会在启动频繁的Activity中，为了避免重复创建相同的数据资源，可能会出现这种写法：</p>
+<h2 id="2-5-非静态内部类"><a href="#2-5-非静态内部类" class="headerlink" title="2.5 非静态内部类"></a>2.5 非静态内部类</h2><p>有的时候我们可能会在启动频繁的 Activity 中，为了避免重复创建相同的数据资源，可能会出现这种写法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token punctuation">{</span>
 
     <span class="token keyword">private</span> <span class="token keyword">static</span> TestResource mResource <span class="token operator">=</span> null<span class="token punctuation">;</span>
@@ -609,7 +614,7 @@ context <span class="token operator">=</span> <span class="token function">getAp
         <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token function">setContentView</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>activity_main<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token keyword">if</span><span class="token punctuation">(</span>mManager <span class="token operator">==</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>mManager <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             mManager <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TestResource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
         <span class="token comment" spellcheck="true">//...</span>
@@ -620,10 +625,10 @@ context <span class="token operator">=</span> <span class="token function">getAp
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>上面这段代码在Activity内部创建了一个非静态内部类的单例（mManager），每次启动Activity时都会使用该单例的数据，这样虽然避免了资源的重复创建，不过这种写法却会造成内存泄漏。</p>
-<p>因为非静态内部类默认会持有外部类的引用，而该非静态内部类又创建了一个静态的实例，该实例的生命周期和应用的一样长，这就导致了该静态实例一直会持有该Activity的引用，导致Activity的内存资源不能正常回收。</p>
-<p><strong><font color="#FFFFFF">正确的做法为：</font></strong></p>
-<p>将该内部类设为静态内部类或将该内部类抽取出来封装成一个单例，如果需要使用Context，请按照上面推荐的使用Application 的 Context。当然，Application 的 context 不是万能的，所以也不能随便乱用，对于有些地方则必须使用 Activity 的 Context。</p>
+<p>上面这段代码在 Activity 内部创建了一个非静态内部类的单例（mManager），每次启动 Activity 时都会使用该单例的数据，这样虽然避免了资源的重复创建，不过这种写法却会造成内存泄漏。</p>
+<p>因为非静态内部类默认会持有外部类的引用，而该非静态内部类又创建了一个静态的实例，该实例的生命周期和应用的一样长，这就导致了该静态实例一直会持有该 Activity 的引用，导致 Activity 的内存资源不能正常回收。</p>
+<p><strong><font color="#0000ff">正确的做法为：</font></strong></p>
+<p>将该内部类设为静态内部类或将该内部类抽取出来封装成一个单例，如果需要使用 Context，请按照上面推荐的使用 Application 的 Context。<strong><font color="#ff0000">当然，Application 的 context 不是万能的，所以也不能随便乱用，对于有些地方则必须使用 Activity 的 Context</font></strong>。</p>
 <h2 id="2-6-Handler"><a href="#2-6-Handler" class="headerlink" title="2.6 Handler"></a>2.6 Handler</h2><p>Handler 的使用造成的内存泄漏问题应该说是<strong><font color="#FF0000"> 最为常见 </font></strong>了，很多时候我们为了避免 ANR 而不在主线程进行耗时操作，在处理网络任务或者封装一些请求回调等api都借助Handler来处理，但 Handler 不是万能的，对于 Handler 的使用代码编写不规范即有可能造成内存泄漏。另外，我们知道 Handler、Message 和 MessageQueue 都是相互关联在一起的，万一 Handler 发送的 Message 尚未被处理，则该 Message 及发送它的 Handler 对象将被线程 MessageQueue 一直持有。</p>
 <p>由于 Handler 属于 TLS(Thread Local Storage) 变量, 生命周期和 Activity 是不一致的。因此这种实现方式一般很难保证跟 View 或者 Activity 的生命周期保持一致，故很容易导致无法正确释放。</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SampleActivity</span> <span class="token keyword">extends</span> <span class="token class-name">Activity</span> <span class="token punctuation">{</span>
