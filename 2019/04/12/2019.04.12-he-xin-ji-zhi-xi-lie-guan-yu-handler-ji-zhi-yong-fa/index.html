@@ -338,10 +338,6 @@
                                 <span class="chip bg-color">Handler</span>
                             </a>
                         
-                            <a href="/tags/UI-更新/" target="_blank">
-                                <span class="chip bg-color">UI 更新</span>
-                            </a>
-                        
                     </div>
                     
                 </div>
@@ -369,7 +365,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        2.5k
+                        2.4k
                     </div>
                     
 
@@ -431,7 +427,7 @@
                 System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"开始下载文件"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"下载完成"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                MainActivity<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>textView<span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span><span class="token string">"文件下载完成"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 执行后，此处崩溃！！！</span>
+                MainActivity<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>textView<span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span><span class="token string">"文件下载完成"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 执行后，此处崩溃！！！</span>
             <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
                 e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
@@ -460,11 +456,11 @@
 </code></pre>
 <h2 id="1-4-错误分析"><a href="#1-4-错误分析" class="headerlink" title="1.4 错误分析"></a>1.4 错误分析</h2><p>执行之后，我们发现程序崩溃，并且出现了以上的错误：<strong><font color="#ff0000">只有创建 View 的原始线程才能更新 View。</font></strong>为什么会出现这个错误？</p>
 <p>出现这样错误的原因是 Android 中的 View 不是线程安全的，在 Android 应用启动时，会自动创建一个线程，即程序的主线程，主线程负责 UI 的展示、UI 事件消息的派发处理等等，因此主线程也叫做 UI 线程，textView 是在 UI 线程中创建的，当我们在 DownloadThread 线程中去更新 UI 线程中创建的 textView 时自然会报上面的错误。</p>
-<p>Android 的 UI 控件是非线程安全的，不同的平台提供了不同的解决方案以实现跨线程更新 UI 控件，Android 为了解决这种问题引入了 <strong><font color="FF0000">Handler机制</font></strong> 。</p>
+<p>Android 的 UI 控件是非线程安全的，不同的平台提供了不同的解决方案以实现跨线程更新 UI 控件，Android 为了解决这种问题引入了 <strong><font color="FF0000">Handler 机制</font></strong> 。</p>
 <h2 id="1-5-Handler-引入"><a href="#1-5-Handler-引入" class="headerlink" title="1.5 Handler 引入"></a>1.5 Handler 引入</h2><p>那么 Handler 到底是什么呢？ <strong><font color="#FF00FF">Handler 是 Android 中引入的一种让开发者参与处理线程中消息循环的机制。</font></strong></p>
 <p>每个 Hanlder 都关联了一个线程，每个线程内部都维护了一个消息队列 MessageQueue，这样 Handler 实际上也就关联了一个消息队列。可以通过 Handler 将 Message 或 Runnable 对象发送到该 Handler 所关联线程的 MessageQueue（消息队列）中，然后该消息队列一直在循环拿出一个 Message，对其进行处理，处理完之后拿出下一个 Message，继续进行处理，周而复始。</p>
-<p>Handler 可以用来在多线程间进行通信，在另一个线程中去更新 UI 线程中的 UI 控件只是 Handler 使用中的一种典型案例，除此之外，Handler 可以做很多其他的事情。每个 Handler 都绑定了一个线程，假设存在两个线程 ThreadA 和 ThreadB，并且 HandlerA 绑定了 ThreadA，在 ThreadB 中的代码执行到某处时，出于某些原因，我们需要让 ThreadA 执行某些代码，此时我们就可以使用 Handler，我们可以在 ThreadB 中向 HandlerA 中加入某些信息以告知 ThreadA 中该做某些处理了。由此可以看出，Handler 是 Thread 的代言人，是多线程之间通信的桥梁，通过 Handler，我们可以在一个线程中控制另一个线程去做某些事情。</p>
-<h1 id="2-Handler-用法"><a href="#2-Handler-用法" class="headerlink" title="2. Handler 用法"></a>2. Handler 用法</h1><p>Handler 提供了两种方式解决前面遇到的问题（在一个新线程中更新主线程中的 UI 控件），一种是通过 <strong><font color="4F94CD">post</font></strong> 方法，一种是调用 <strong><font color="4F94CD">sendMessage</font></strong> 方法。</p>
+<p>Handler 可以用来在多线程间进行通信，在另一个线程中去更新 UI 线程中的 UI 控件只是 Handler 使用中的一种典型案例，除此之外，Handler 可以做很多其他的事情。每个 Handler 都绑定了一个线程，假设存在两个线程 Thread A 和 Thread B，并且 Handler A 绑定了 Thread A，在 Thread B 中的代码执行到某处时，出于某些原因，我们需要让 Thread A 执行某些代码，此时我们就可以使用 Handler，我们可以在 Thread B 中向 Handler A 中加入某些信息以告知 Thread A 中该做某些处理了。由此可以看出，Handler 是 Thread 的代言人，是多线程之间通信的桥梁，通过 Handler，我们可以在一个线程中控制另一个线程去做某些事情。</p>
+<h1 id="2-Handler-用法"><a href="#2-Handler-用法" class="headerlink" title="2. Handler 用法"></a>2. Handler 用法</h1><p>Handler 提供了两种方式解决前面遇到的问题（在一个新线程中更新主线程中的 UI 控件），<strong><font color="4F94CD">post()</font></strong> 和 <strong><font color="4F94CD">sendMessage()</font></strong> 方法。</p>
 <h2 id="2-1-post"><a href="#2-1-post" class="headerlink" title="2.1 post"></a>2.1 post</h2><h3 id="2-1-1-代码实例"><a href="#2-1-1-代码实例" class="headerlink" title="2.1.1 代码实例"></a>2.1.1 代码实例</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>marco<span class="token punctuation">.</span>handlerdemo<span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Handler<span class="token punctuation">;</span>
@@ -527,8 +523,8 @@
 <span class="token number">2018</span><span class="token operator">-</span><span class="token number">09</span><span class="token operator">-</span><span class="token number">28</span> <span class="token number">15</span><span class="token operator">:</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">31.902</span> <span class="token number">15864</span><span class="token operator">-</span><span class="token number">15938</span><span class="token operator">/</span>com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>marco<span class="token punctuation">.</span>handlerdemo I<span class="token operator">/</span>System<span class="token punctuation">.</span>out<span class="token operator">:</span> 下载完成
 <span class="token number">2018</span><span class="token operator">-</span><span class="token number">09</span><span class="token operator">-</span><span class="token number">28</span> <span class="token number">15</span><span class="token operator">:</span><span class="token number">18</span><span class="token operator">:</span><span class="token number">31.906</span> <span class="token number">15864</span><span class="token operator">-</span><span class="token number">15864</span><span class="token operator">/</span>com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>marco<span class="token punctuation">.</span>handlerdemo I<span class="token operator">/</span>System<span class="token punctuation">.</span>out<span class="token operator">:</span> RunnableThread id <span class="token number">2</span>
 </code></pre>
-<p>通过输出结果可以看出，Runnable 中的代码所执行的线程 ID 与 DownloadThread 的线程 ID 不同，而与主线程的线程 ID 相同，因此我们也由此看出在执行了 Handler.post(Runnable) 这句代码之后，运行 Runnable 代码的线程与 Handler 所绑定的线程是一致的，而与执行 Handler.post(Runnable) 这句代码的线程（DownloadThread）无关。</p>
-<h3 id="2-1-3-结果分析"><a href="#2-1-3-结果分析" class="headerlink" title="2.1.3 结果分析"></a>2.1.3 结果分析</h3><p>我们在 Activity 中创建了一个 Handler 成员变量 uiHandler，Handler 有个特点，在执行 new Handler() 的时候，默认情况下 Handler 会绑定当前代码执行的线程，我们在主线程中实例化了 uiHandler，所以 uiHandle r就自动绑定了主线程，即 UI 线程。当我们在 DownloadThread 中执行完耗时代码后，我们将一个 Runnable 对象通过 post 方法传入到了 Handler 中，Handler 会在合适的时候让主线程执行 Runnable 中的代码，这样 Runnable 就在主线程中执行了，从而正确更新了主线程中的 UI。</p>
+<p>通过输出结果可以看出，<code>Runnable 中的代码所执行的线程 ID 与 DownloadThread 的线程 ID 不同，而与主线程的线程 ID 相同</code>，因此我们也由此看出在执行了 Handler.post(Runnable) 这句代码之后，运行 Runnable 代码的线程与 Handler 所绑定的线程是一致的，而与执行 Handler.post(Runnable) 这句代码的线程（DownloadThread）无关。</p>
+<h3 id="2-1-3-结果分析"><a href="#2-1-3-结果分析" class="headerlink" title="2.1.3 结果分析"></a>2.1.3 结果分析</h3><p>我们在 Activity 中创建了一个 Handler 成员变量 uiHandler，Handler 有个特点，<code>在执行 new Handler() 的时候，默认情况下 Handler 会绑定当前代码执行的线程</code>，我们在主线程中实例化了 uiHandler，所以 uiHandle r就自动绑定了主线程，即 UI 线程。在 DownloadThread 中执行完耗时代码后，我们将一个 Runnable 对象通过 post 方法传入到了 Handler 中，Handler 会在合适的时候让主线程执行 Runnable 中的代码，这样 Runnable 就在主线程中执行了，从而正确更新了主线程中的 UI。</p>
 <h2 id="2-2-sendMessage"><a href="#2-2-sendMessage" class="headerlink" title="2.2 sendMessage"></a>2.2 sendMessage</h2><h3 id="2-2-1-代码实例"><a href="#2-2-1-代码实例" class="headerlink" title="2.2.1 代码实例"></a>2.2.1 代码实例</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>marco<span class="token punctuation">.</span>handlerdemo<span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Handler<span class="token punctuation">;</span>
@@ -620,7 +616,7 @@
 <ol>
 <li><p>重写 Handler 的 handleMessage 方法，根据 Message 的 what 值进行不同的处理操作； </p>
 </li>
-<li><p>设置 Message 的 what 值：Message.what 是我们自定义的一个 Message 的识别码，以便于在 Handler 的 handleMessage 方法中根据 what     识别出不同的 Message ，以便我们做出不同的处理操作；</p>
+<li><p>设置 Message 的 what 值：Message.what 是我们自定义的一个 Message 的识别码，以便于在 Handler 的 handleMessage 方法中根据 what 识别出不同的 Message ，从而做出不同的处理操作；</p>
 </li>
 <li><p>设置 Message 的所携带的数据，简单数据可以通过两个 int 类型的 field ：arg1 和 arg2 来赋值，并可以在 handleMessage 中读取；</p>
 </li>
@@ -633,7 +629,6 @@
 <li><p>由上我们可以看出，执行 handleMessage 的线程与创建 Handler 的线程是同一线程，在本示例中都是主线程。执行 handleMessage 的线程与执行 uiHandler.sendMessage(msg) 的线程没有关系。</p>
 </li>
 </ol>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>相关推荐：<a href="https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/">博客索引（Android 9.0）</a></p>
 
             </div>
             <hr>
