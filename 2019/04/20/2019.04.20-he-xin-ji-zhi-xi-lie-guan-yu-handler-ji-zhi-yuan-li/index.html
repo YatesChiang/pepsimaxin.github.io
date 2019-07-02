@@ -521,10 +521,11 @@ frameworks/base/c">
 </code></pre>
 <h2 id="2-3-ThreadLocal"><a href="#2-3-ThreadLocal" class="headerlink" title="2.3 ThreadLocal"></a>2.3 ThreadLocal</h2><p>ThreadLocal 是一个本地线程副本变量工具类。</p>
 <p>主要用于将私有线程和该线程存放的副本对象做一个映射，各个线程之间的变量互不干扰，在高并发场景下，可以实现无状态的调用，特别适用于各个线程依赖不通的变量值完成操作的场景。</p>
-<h3 id="2-3-1-内部结构图"><a href="#2-3-1-内部结构图" class="headerlink" title="2.3.1 内部结构图"></a>2.3.1 内部结构图</h3><p><img src="/medias/Codes/Handler_01.png" alt="--&gt; ThreadLocal 内部结构图：singleTop &lt;--"></p>
-<p>从上面的结构图，我们已经窥见 ThreadLocal 的核心机制：</p>
+<h3 id="2-3-1-内部结构图"><a href="#2-3-1-内部结构图" class="headerlink" title="2.3.1 内部结构图"></a>2.3.1 内部结构图</h3><p><img src="/medias/Codes/Handler_01.png" alt="--&gt; ThreadLocal 内部结构图 &lt;--"></p>
+<p>从上面的结构图，我们已经窥见 ThreadLocal 的<strong>核心机制</strong>：</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;每个 Thread 线程内部都有一个 Map。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;Map 里面存储线程本地对象（key）和线程的变量副本（value）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;Thread 内部的 Map 是由 ThreadLocal 维护的，由 ThreadLocal 负责向 map 获取和设置线程的变量值。</p>
 <p>所以对于不同的线程，每次获取副本值时，别的线程并不能获取到当前线程的副本值，形成了副本的隔离，互不干扰。</p>
+<p>下面我们看下 ThreadLocal 类的几个核心方法：</p>
 <h3 id="2-3-2-set"><a href="#2-3-2-set" class="headerlink" title="2.3.2 set"></a>2.3.2 set</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// sThreadLocal.set(new Looper(quitAllowed));   </span>
 
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">set</span><span class="token punctuation">(</span>T value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -549,20 +550,19 @@ frameworks/base/c">
 
     <span class="token keyword">public</span> T <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Thread t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 获取当前线程 </span>
-        ThreadLocalMap map <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 查找当前线程的本地储存区</span>
+        ThreadLocalMap map <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 查找当前线程的 map</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>map <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            ThreadLocalMap<span class="token punctuation">.</span>Entry e <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">getEntry</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            ThreadLocalMap<span class="token punctuation">.</span>Entry e <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">getEntry</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 从 map 中获取线程存储的 Entry 节点</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token string">"unchecked"</span><span class="token punctuation">)</span>
-                T result <span class="token operator">=</span> <span class="token punctuation">(</span>T<span class="token punctuation">)</span>e<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
-                <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+                T result <span class="token operator">=</span> <span class="token punctuation">(</span>T<span class="token punctuation">)</span>e<span class="token punctuation">.</span>value<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 从 Entry 节点获取存储的 Value 副本值</span>
+                <span class="token keyword">return</span> result<span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">// 返回获取值</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
         <span class="token keyword">return</span> <span class="token function">setInitialValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// 创建 ThreadLocalMap</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<p>查看 setInitialValue() ：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> T <span class="token function">setInitialValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> T <span class="token function">setInitialValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         T value <span class="token operator">=</span> <span class="token function">initialValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         Thread t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         ThreadLocalMap map <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
