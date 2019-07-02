@@ -526,7 +526,7 @@ frameworks/base/c">
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;每个 Thread 线程内部都有一个 Map。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;Map 里面存储线程本地对象（key）和线程的变量副本（value）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;Thread 内部的 Map 是由 ThreadLocal 维护的，由 ThreadLocal 负责向 map 获取和设置线程的变量值。</p>
 <p>所以对于不同的线程，每次获取副本值时，别的线程并不能获取到当前线程的副本值，形成了副本的隔离，互不干扰。</p>
 <p>下面我们看下 ThreadLocal 类的几个核心方法：</p>
-<h3 id="2-3-2-set"><a href="#2-3-2-set" class="headerlink" title="2.3.2 set"></a>2.3.2 set</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// sThreadLocal.set(new Looper(quitAllowed));   </span>
+<h3 id="2-3-2-set"><a href="#2-3-2-set" class="headerlink" title="2.3.2 set()"></a>2.3.2 set()</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// sThreadLocal.set(new Looper(quitAllowed));   </span>
 
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">set</span><span class="token punctuation">(</span>T value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Thread t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 获取当前线程 </span>
@@ -546,7 +546,7 @@ frameworks/base/c">
         t<span class="token punctuation">.</span>threadLocals <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadLocalMap</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> firstValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="2-3-3-get"><a href="#2-3-3-get" class="headerlink" title="2.3.3 get"></a>2.3.3 get</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// if (sThreadLocal.get() != null) {</span>
+<h3 id="2-3-3-get"><a href="#2-3-3-get" class="headerlink" title="2.3.3 get()"></a>2.3.3 get()</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// if (sThreadLocal.get() != null) {</span>
 
     <span class="token keyword">public</span> T <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Thread t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 获取当前线程 </span>
@@ -578,17 +578,25 @@ frameworks/base/c">
 </code></pre>
 <p>所以在 Looper 对象中通过 sThreadLocal 就可以找到其绑定的线程。ThreadLocal 可以通过 set() 向 ThreadLocal 中存入一个对象，然后可以通过 get() 取出存入的对象。</p>
 <p>ThreadLocal 在 new 的时候使用了泛型，从上面的代码中我们可以看到此处的泛型类型是 Looper ，也就是我们通过 ThreadLocal 的 set() 和 get() 方法只能写入和读取 Looper 对象类型。</p>
-<h2 id="2-4-构造函数"><a href="#2-4-构造函数" class="headerlink" title="2.4 构造函数"></a>2.4 构造函数</h2><p>我们发现源码中 Looper 的构造函数是 private，也就是说：在该类的外部我们是不能用 new Looper() 的形式得到一个 Looper 对象。</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token function">Looper</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">}</span>
+<h2 id="2-4-构造函数"><a href="#2-4-构造函数" class="headerlink" title="2.4 构造函数"></a>2.4 构造函数</h2><p>我们发现源码中 Looper 的构造函数是 <code>private</code>，也就是说：在该类的外部我们是<code>不能用 new Looper()</code> 的形式得到一个 Looper 对象。</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sThreadLocal<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Only one Looper may be created per thread"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        sThreadLocal<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Looper</span><span class="token punctuation">(</span>quitAllowed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token function">Looper</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        mQueue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MessageQueue</span><span class="token punctuation">(</span>quitAllowed<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 创建 MessageQueue 对象</span>
+        mThread <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 记录当前线程</span>
+    <span class="token punctuation">}</span>
 </code></pre>
-<p>我们看下上面代码中 new Looper() 创建 Looper 对象的工作：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token function">Looper</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> quitAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    mQueue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MessageQueue</span><span class="token punctuation">(</span>quitAllowed<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 创建 MessageQueue 对象</span>
-    mThread <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 记录当前线程</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>Looper.prepare()在每个线程只允许执行一次，该方法会创建 Looper 对象，Looper 的构造方法中会创建一个 MessageQueue 对象，再将 Looper 对象保存到当前线程 TLS。</p>
-<h2 id="2-5-loop"><a href="#2-5-loop" class="headerlink" title="2.5 loop()"></a>2.5 loop()</h2><p>讨论完 Looper.prepare() 后，我们看下 Looper.loop()的代码:</p>
+<p>Looper.prepare() 在每个线程只允许执行一次，该方法会创建 Looper 对象，Looper 的构造方法中会创建一个 MessageQueue 对象，再将 Looper 对象保存到当前线程 TLS。</p>
+<h2 id="2-5-loop"><a href="#2-5-loop" class="headerlink" title="2.5 loop()"></a>2.5 loop()</h2><p>讨论完 Looper.prepare() 后，我们看下 Looper.loop() 的代码:</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
      * Run the message queue in this thread. Be sure to call
      * {@link #quit()} to end the loop.
@@ -638,7 +646,6 @@ frameworks/base/c">
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>源码不算很长，我们重点分析 loop() 里面的几个函数：</p>
 <h3 id="2-5-1-myLooper"><a href="#2-5-1-myLooper" class="headerlink" title="2.5.1 myLooper()"></a>2.5.1 myLooper()</h3><p>前面我们说过，在执行完了 Looper.prepare() 之后，我们就可以在外部通过调用 Looper.myLooper() 获取当前线程绑定的 Looper 对象。 </p>
 <pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token annotation punctuation">@Nullable</span> Looper <span class="token function">myLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 还是通过 sThreadLocal.get()方法获取当前线程绑定的 Looper 对象</span>
@@ -650,8 +657,8 @@ frameworks/base/c">
         mQueue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MessageQueue</span><span class="token punctuation">(</span>quitAllowed<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// 创建 MessageQueue 对象</span>
         mThread <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 记录当前线程</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> Looper me <span class="token operator">=</span> <span class="token function">myLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>             <span class="token comment" spellcheck="true">// 获取当前线程绑定的 Looper 对象</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>me <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
@@ -661,15 +668,15 @@ frameworks/base/c">
     <span class="token punctuation">}</span>
 </code></pre>
 <p>变量 me 是通过静态方法 myLooper() 获得的当前线程所绑定的 Looper，me.mQueue 就是当前线程所关联的消息队列。 </p>
-<h3 id="2-5-3-for"><a href="#2-5-3-for" class="headerlink" title="2.5.3 for()"></a>2.5.3 for()</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>     <span class="token comment" spellcheck="true">// 进入loop的主循环方法</span>
+<h3 id="2-5-3-for"><a href="#2-5-3-for" class="headerlink" title="2.5.3 for()"></a>2.5.3 for()</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>     <span class="token comment" spellcheck="true">// 进入 loop 的主循环方法</span>
 </code></pre>
-<p>我们发现for循环没有设置循环终止的条件，所以这个for循环是个死循环。 </p>
+<p>我们发现 for 循环没有设置循环终止的条件，所以这个 for 循环是个<code>死循环</code>，即不断取出消息进行处理。 </p>
 <h4 id="2-5-3-1-Message"><a href="#2-5-3-1-Message" class="headerlink" title="2.5.3.1 Message"></a>2.5.3.1 Message</h4><pre class=" language-java"><code class="language-java">    Message msg <span class="token operator">=</span> queue<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// might block </span>
 </code></pre>
-<p>我们通过消息队列 MessageQueue 的 next 方法从消息队列中取出一条消息，如果此时消息队列中有 Message，那么 next 方法会立即返回该 Message，如果此时消息队列中没有 Message，那么 next 方法就会阻塞式地等待获取 Message。 </p>
+<p>我们通过消息队列 MessageQueue 的 <code>next</code> 方法从消息队列中取出一条消息，如果此时消息队列中有 Message，那么 next 方法会立即返回该 Message，如果此时消息队列中没有 Message，那么 next 方法就会阻塞式地等待获取 Message。 </p>
 <h4 id="2-5-3-2-dispatchMessage"><a href="#2-5-3-2-dispatchMessage" class="headerlink" title="2.5.3.2 dispatchMessage()"></a>2.5.3.2 dispatchMessage()</h4><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/*package*/</span> Handler target<span class="token punctuation">;</span>
-</code></pre>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
         msg<span class="token punctuation">.</span>target<span class="token punctuation">.</span><span class="token function">dispatchMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
         dispatchEnd <span class="token operator">=</span> needEndTime <span class="token operator">?</span> SystemClock<span class="token punctuation">.</span><span class="token function">uptimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
@@ -678,7 +685,7 @@ frameworks/base/c">
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>msg 的 target 属性是 Handler，该代码的意思是让 Message 所关联的 Handler 通过 dispatchMessage 方法让 Handler 处理该 Message ，关于 Handler 的 dispatchMessage 方法将会在下面详细介绍。</p>
+<p>msg 的 target 属性是 <code>Handler</code>，该代码的意思是让 Message 所关联的 Handler 通过 <code>dispatchMessage</code> 方法让 Handler 处理该 Message ，关于 Handler 的 dispatchMessage 方法将会在下面详细介绍。</p>
 <h4 id="2-5-3-3-recycleUnchecked"><a href="#2-5-3-3-recycleUnchecked" class="headerlink" title="2.5.3.3 recycleUnchecked()"></a>2.5.3.3 recycleUnchecked()</h4><pre class=" language-java"><code class="language-java">msg<span class="token punctuation">.</span><span class="token function">recycleUnchecked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 分发后的 Message 回收到消息池，以便重复利用</span>
 </code></pre>
 <h3 id="2-5-4-小结"><a href="#2-5-4-小结" class="headerlink" title="2.5.4 小结"></a>2.5.4 小结</h3><pre><code>loop()进入循环模式，不断重复下面的操作，直到没有消息时退出循环：
