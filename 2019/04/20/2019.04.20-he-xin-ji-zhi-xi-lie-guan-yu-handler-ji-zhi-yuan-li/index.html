@@ -497,8 +497,8 @@ frameworks/base/c">
 
 <span class="token punctuation">}</span>
 </code></pre>
-<p>可以看出在 prepare 方法中首先通过 sThreadLocal.get() 拿到线程 sThreadLocal 所绑定的 Looper 对象，由于初始情况下 sThreadLocal 并没有绑定 Looper ，所以第一次调用 prepare 方法时，sThreadLocal.get() 返回 null，不会抛出异常。</p>
-<h2 id="2-2-prepareMainLooper"><a href="#2-2-prepareMainLooper" class="headerlink" title="2.2 prepareMainLooper()"></a>2.2 prepareMainLooper()</h2><p>另外，与 prepare() 相近功能的，还有一个 prepareMainLooper() 方法，该方法主要在 ActivityThread 类中使用。</p>
+<p>可以看出在 prepare 方法中首先通过 <code>sThreadLocal.get()</code> 拿到线程 sThreadLocal 所绑定的 <code>Looper</code> 对象，由于初始情况下 sThreadLocal 并没有绑定 Looper ，所以第一次调用 prepare 方法时，sThreadLocal.get() 返回 null，不会抛出异常。</p>
+<h2 id="2-2-prepareMainLooper"><a href="#2-2-prepareMainLooper" class="headerlink" title="2.2 prepareMainLooper()"></a>2.2 prepareMainLooper()</h2><p>另外，与 prepare() 相近功能的，还有一个 <code>prepareMainLooper()</code> 方法，该方法主要在 <code>ActivityThread</code> 类中使用。</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// 初始化主线程的 Looper</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">prepareMainLooper</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 设置不允许退出的 Looper</span>
@@ -519,30 +519,30 @@ frameworks/base/c">
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="2-3-ThreadLocal"><a href="#2-3-ThreadLocal" class="headerlink" title="2.3 ThreadLocal"></a>2.3 ThreadLocal</h2><p><strong>ThreadLocal</strong>：线程本地存储区（Thread Local Storage，简称为 TLS），每个线程都有自己的私有的本地存储区域，不同线程之间彼此不能访问对方的 TLS 区域。</p>
-<p>我们简单了解一下 TLS 常用的操作方法：</p>
-<h3 id="2-3-1-set"><a href="#2-3-1-set" class="headerlink" title="2.3.1 set()"></a>2.3.1 set()</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// sThreadLocal.set(new Looper(quitAllowed));   </span>
+<h2 id="2-3-ThreadLocal"><a href="#2-3-ThreadLocal" class="headerlink" title="2.3 ThreadLocal"></a>2.3 ThreadLocal</h2><p>ThreadLocal 是一个本地线程副本变量工具类。</p>
+<p>主要用于将私有线程和该线程存放的副本对象做一个映射，各个线程之间的变量互不干扰，在高并发场景下，可以实现无状态的调用，特别适用于各个线程依赖不通的变量值完成操作的场景。</p>
+<h3 id="2-3-1-内部结构图"><a href="#2-3-1-内部结构图" class="headerlink" title="2.3.1 内部结构图"></a>2.3.1 内部结构图</h3><p><img src="/medias/Codes/Handler_01.png" alt="--&gt; ThreadLocal 内部结构图：singleTop &lt;--"></p>
+<h3 id="2-3-2-set"><a href="#2-3-2-set" class="headerlink" title="2.3.2 set"></a>2.3.2 set</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// sThreadLocal.set(new Looper(quitAllowed));   </span>
 
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">set</span><span class="token punctuation">(</span>T value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Thread t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 获取当前线程 </span>
-        ThreadLocalMap map <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 查找当前线程的本地储存区</span>
+        ThreadLocalMap map <span class="token operator">=</span> <span class="token function">getMap</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 查找当前线程的本地储存区（成员变量）</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>map <span class="token operator">!=</span> null<span class="token punctuation">)</span>
             map<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>             <span class="token comment" spellcheck="true">// 保存数据 value 到当前线程 this</span>
         <span class="token keyword">else</span>
             <span class="token function">createMap</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<p>我们看下 getMap() 函数：</p>
-<pre class=" language-java"><code class="language-java">    ThreadLocalMap <span class="token function">getMap</span><span class="token punctuation">(</span>Thread t<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    ThreadLocalMap <span class="token function">getMap</span><span class="token punctuation">(</span>Thread t<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> t<span class="token punctuation">.</span>threadLocals<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-</code></pre>
-<p>判断 map 是否为空，如果为空则创建 ThreadLocalMap ：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">void</span> <span class="token function">createMap</span><span class="token punctuation">(</span>Thread t<span class="token punctuation">,</span> T firstValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">// map 为空，则对线程的成员变量 ThreadLocalMap 进行初始化创建，并将 ThreadLocal 和 value 副本放入 map 中</span>
+    <span class="token keyword">void</span> <span class="token function">createMap</span><span class="token punctuation">(</span>Thread t<span class="token punctuation">,</span> T firstValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         t<span class="token punctuation">.</span>threadLocals <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadLocalMap</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> firstValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="2-3-2-get"><a href="#2-3-2-get" class="headerlink" title="2.3.2 get()"></a>2.3.2 get()</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// if (sThreadLocal.get() != null) {</span>
+<h3 id="2-3-3-get"><a href="#2-3-3-get" class="headerlink" title="2.3.3 get"></a>2.3.3 get</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// if (sThreadLocal.get() != null) {</span>
 
     <span class="token keyword">public</span> T <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Thread t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 获取当前线程 </span>
@@ -1138,8 +1138,7 @@ queue<span class="token punctuation">.</span><span class="token function">enqueu
 
 <p><strong>图解：</strong></p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;Handler 通过 sendMessage() 发送 Message 到 MessageQueue 队列；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;Looper 通过 loop()，不断提取出达到触发条件的 Message，并将 Message 交给 target 来处理；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;经过 dispatchMessage() 后，交回给 Handler 的 handleMessage() 来进行相应地处理；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;将 Message 加入 MessageQueue 时，往管道写入字符，可以会唤醒 loop 线程；如果 MessageQueue 中没有 Message，并处于 Idle 状态，则会执行 IdelHandler 接口中的方法，往往用于做一些清理性地工作。</p>
-<h1 id="参考Blog"><a href="#参考Blog" class="headerlink" title="参考Blog"></a>参考Blog</h1><p>&nbsp; 01. <a href="https://blog.csdn.net/iispring/article/details/47180325" target="_blank" rel="noopener">https://blog.csdn.net/iispring/article/details/47180325</a><br>&nbsp; 02. <a href="http://gityuan.com/2015/12/26/handler-message-framework/" target="_blank" rel="noopener">http://gityuan.com/2015/12/26/handler-message-framework/</a></p>
-<h1 id="索引链接"><a href="#索引链接" class="headerlink" title="索引链接"></a>索引链接</h1><p>推荐跳转：<a href="https://superandroid.pro/2019/01/01/00.%20Thinking%20in%20Android%20--%2001.%20%E5%8D%9A%E5%AE%A2%E7%B4%A2%E5%BC%95/">博客索引（Android 9.0）</a></p>
+<h1 id="参考Blog"><a href="#参考Blog" class="headerlink" title="参考Blog"></a>参考Blog</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 01. <a href="https://blog.csdn.net/iispring/article/details/47180325" target="_blank" rel="noopener">https://blog.csdn.net/iispring/article/details/47180325</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 02. <a href="http://gityuan.com/2015/12/26/handler-message-framework/" target="_blank" rel="noopener">http://gityuan.com/2015/12/26/handler-message-framework/</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 03. <a href="https://www.jianshu.com/p/98b68c97df9b" target="_blank" rel="noopener">https://www.jianshu.com/p/98b68c97df9b</a></p>
 
             </div>
             <hr>
