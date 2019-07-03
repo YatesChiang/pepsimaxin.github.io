@@ -378,14 +378,14 @@ frameworks/base/c">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        6.3k
+                        6.1k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        27 分钟
+                        26 分钟
                     </div>
                     
                 
@@ -671,10 +671,10 @@ frameworks/base/c">
 <h3 id="2-5-3-for"><a href="#2-5-3-for" class="headerlink" title="2.5.3 for()"></a>2.5.3 for()</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>     <span class="token comment" spellcheck="true">// 进入 loop 的主循环方法</span>
 </code></pre>
 <p>我们发现 for 循环没有设置循环终止的条件，所以这个 for 循环是个<code>死循环</code>，即不断取出消息进行处理。 </p>
-<h4 id="2-5-3-1-Message"><a href="#2-5-3-1-Message" class="headerlink" title="2.5.3.1 Message"></a>2.5.3.1 Message</h4><pre class=" language-java"><code class="language-java">    Message msg <span class="token operator">=</span> queue<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// might block </span>
+<h3 id="2-5-4-Message"><a href="#2-5-4-Message" class="headerlink" title="2.5.4 Message"></a>2.5.4 Message</h3><pre class=" language-java"><code class="language-java">    Message msg <span class="token operator">=</span> queue<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// might block </span>
 </code></pre>
 <p>我们通过消息队列 MessageQueue 的 <code>next</code> 方法从消息队列中取出一条消息，如果此时消息队列中有 Message，那么 next 方法会立即返回该 Message，如果此时消息队列中没有 Message，那么 next 方法就会阻塞式地等待获取 Message。 </p>
-<h4 id="2-5-3-2-dispatchMessage"><a href="#2-5-3-2-dispatchMessage" class="headerlink" title="2.5.3.2 dispatchMessage()"></a>2.5.3.2 dispatchMessage()</h4><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/*package*/</span> Handler target<span class="token punctuation">;</span>
+<h3 id="2-5-5-dispatchMessage"><a href="#2-5-5-dispatchMessage" class="headerlink" title="2.5.5 dispatchMessage()"></a>2.5.5 dispatchMessage()</h3><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/*package*/</span> Handler target<span class="token punctuation">;</span>
 
     <span class="token keyword">try</span> <span class="token punctuation">{</span>
         msg<span class="token punctuation">.</span>target<span class="token punctuation">.</span><span class="token function">dispatchMessage</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -686,14 +686,7 @@ frameworks/base/c">
     <span class="token punctuation">}</span>
 </code></pre>
 <p>msg 的 target 属性是 <code>Handler</code>，该代码的意思是让 Message 所关联的 Handler 通过 <code>dispatchMessage</code> 方法让 Handler 处理该 Message ，关于 Handler 的 dispatchMessage 方法将会在下面详细介绍。</p>
-<h4 id="2-5-3-3-recycleUnchecked"><a href="#2-5-3-3-recycleUnchecked" class="headerlink" title="2.5.3.3 recycleUnchecked()"></a>2.5.3.3 recycleUnchecked()</h4><pre class=" language-java"><code class="language-java">msg<span class="token punctuation">.</span><span class="token function">recycleUnchecked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 分发后的 Message 回收到消息池，以便重复利用</span>
-</code></pre>
-<h3 id="2-5-4-小结"><a href="#2-5-4-小结" class="headerlink" title="2.5.4 小结"></a>2.5.4 小结</h3><pre><code>loop()进入循环模式，不断重复下面的操作，直到没有消息时退出循环：
-
-1、读取 MessageQueue 的下一条 Message；
-2、把 Message 分发给相应的 target；
-3、再把分发后的 Message 回收到消息池，以便重复利用。
-</code></pre><h2 id="2-6-quit"><a href="#2-6-quit" class="headerlink" title="2.6 quit()"></a>2.6 quit()</h2><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// 直接退出消息循环，不管是否还有消息</span>
+<h2 id="2-6-quit"><a href="#2-6-quit" class="headerlink" title="2.6 quit()"></a>2.6 quit()</h2><pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// 直接退出消息循环，不管是否还有消息</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">quit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         mQueue<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
@@ -727,13 +720,14 @@ frameworks/base/c">
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<pre><code>消息移除的方式：
+<p><strong><font color="#ff0000">消息移除的方式：</font></strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;当 safe = true 时，只移除尚未触发的所有消息，对于正在触发的消息并不移除。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;当 safe = flase 时，移除所有的消息。</p>
+<h1 id="3-Handler"><a href="#3-Handler" class="headerlink" title="3. Handler"></a>3. Handler</h1><p>分析完 Loop，接下来我们看看 Handler 类，它是怎么与 Looper 和 MessageQueue 一起搭配工作的。</p>
+<h2 id="3-1-构造函数"><a href="#3-1-构造函数" class="headerlink" title="3.1 构造函数"></a>3.1 构造函数</h2><h3 id="3-1-1-无参构造"><a href="#3-1-1-无参构造" class="headerlink" title="3.1.1 无参构造"></a>3.1.1 无参构造</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Handler</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
-当 safe = true 时，只移除尚未触发的所有消息，对于正在触发的消息并不移除
-当 safe = flase 时，移除所有的消息
-</code></pre><h1 id="3-Handler"><a href="#3-Handler" class="headerlink" title="3. Handler"></a>3. Handler</h1><p>分析完 Loop，接下来我们看看 Handler 类，它是怎么与 Looper 和 MessageQueue 一起搭配工作的。</p>
-<h2 id="3-1-构造函数"><a href="#3-1-构造函数" class="headerlink" title="3.1 构造函数"></a>3.1 构造函数</h2><p>两种构造函数：无参和有参！</p>
-<h3 id="3-1-1-无参构造"><a href="#3-1-1-无参构造" class="headerlink" title="3.1.1 无参构造"></a>3.1.1 无参构造</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">this</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
@@ -745,9 +739,7 @@ frameworks/base/c">
         <span class="token keyword">this</span><span class="token punctuation">(</span>null<span class="token punctuation">,</span> async<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token comment" spellcheck="true">/**
-     * 主线程调用的构造方法，主线程已经调用了 Looper.prepareMainLooper();
-     */</span>
+    <span class="token comment" spellcheck="true">// 主线程调用的构造方法，主线程已经调用了 Looper.prepareMainLooper();</span>
     <span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span>Callback callback<span class="token punctuation">,</span> <span class="token keyword">boolean</span> async<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 匿名类、内部类或本地类都必须申明为 static，否则会警告可能出现内存泄露</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>FIND_POTENTIAL_LEAKS<span class="token punctuation">)</span> <span class="token punctuation">{</span>     <span class="token comment" spellcheck="true">// 默认为 false</span>
@@ -769,9 +761,14 @@ frameworks/base/c">
         mCallback <span class="token operator">=</span> callback<span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 回调方法</span>
         mAsynchronous <span class="token operator">=</span> async<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 设置消息是否为异步处理方式</span>
     <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>对于 Handler 的无参构造方法，默认采用当前线程 TLS 中的 Looper 对象，并且 callback 回调方法为 null，且消息为同步处理方式。只要执行的 Looper.prepare() 方法，那么便可以获取有效的 Looper 对象。</p>
-<h3 id="3-1-2-有参构造"><a href="#3-1-2-有参构造" class="headerlink" title="3.1.2 有参构造"></a>3.1.2 有参构造</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span>Looper looper<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h3 id="3-1-2-有参构造"><a href="#3-1-2-有参构造" class="headerlink" title="3.1.2 有参构造"></a>3.1.2 有参构造</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Handler</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token keyword">public</span> <span class="token function">Handler</span><span class="token punctuation">(</span>Looper looper<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">this</span><span class="token punctuation">(</span>looper<span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
@@ -788,6 +785,8 @@ frameworks/base/c">
         mCallback <span class="token operator">=</span> callback<span class="token punctuation">;</span>
         mAsynchronous <span class="token operator">=</span> async<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>Handler 类在构造方法中，可指定 Looper，Callback 回调方法以及消息的处理方式(同步或异步)，对于无参的 handler，默认是当前线程的 Looper。</p>
 <h2 id="3-2-post"><a href="#3-2-post" class="headerlink" title="3.2 post"></a>3.2 post</h2><p>我们看下 post() 源码处理流程：</p>
@@ -815,7 +814,8 @@ frameworks/base/c">
         <span class="token keyword">if</span> <span class="token punctuation">(</span>delayMillis <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             delayMillis <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        <span class="token keyword">return</span> <span class="token function">sendMessageAtTime</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span> SystemClock<span class="token punctuation">.</span><span class="token function">uptimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> delayMillis<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 最终调 sendMessageAtTime()</span>
+        <span class="token comment" spellcheck="true">// 最终调 sendMessageAtTime()</span>
+        <span class="token keyword">return</span> <span class="token function">sendMessageAtTime</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span> SystemClock<span class="token punctuation">.</span><span class="token function">uptimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> delayMillis<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
 </code></pre>
@@ -1143,12 +1143,7 @@ queue<span class="token punctuation">.</span><span class="token function">enqueu
     <span class="token punctuation">}</span>
 </code></pre>
 <p>这个移除消息的方法，采用了两个 while 循环，第一个循环是从队头开始，移除符合条件的消息，第二个循环是从头部移除完连续的满足条件的消息之后，再从队列后面继续查询是否有满足条件的消息需要被移除。</p>
-<h1 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h1><p>最后用一张图，来表示整个消息机制：<br><br></p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-bd6811a7ae7e3e63.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="handler_java.jpg"></center>
-
-<p><strong>图解：</strong></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;Handler 通过 sendMessage() 发送 Message 到 MessageQueue 队列；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;Looper 通过 loop()，不断提取出达到触发条件的 Message，并将 Message 交给 target 来处理；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;经过 dispatchMessage() 后，交回给 Handler 的 handleMessage() 来进行相应地处理；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨&nbsp;将 Message 加入 MessageQueue 时，往管道写入字符，可以会唤醒 loop 线程；如果 MessageQueue 中没有 Message，并处于 Idle 状态，则会执行 IdelHandler 接口中的方法，往往用于做一些清理性地工作。</p>
-<h1 id="参考Blog"><a href="#参考Blog" class="headerlink" title="参考Blog"></a>参考Blog</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 01. <a href="https://blog.csdn.net/iispring/article/details/47180325" target="_blank" rel="noopener">https://blog.csdn.net/iispring/article/details/47180325</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 02. <a href="http://gityuan.com/2015/12/26/handler-message-framework/" target="_blank" rel="noopener">http://gityuan.com/2015/12/26/handler-message-framework/</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 03. <a href="https://www.jianshu.com/p/98b68c97df9b" target="_blank" rel="noopener">https://www.jianshu.com/p/98b68c97df9b</a></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 01. <a href="https://blog.csdn.net/iispring/article/details/47180325" target="_blank" rel="noopener">https://blog.csdn.net/iispring/article/details/47180325</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 02. <a href="http://gityuan.com/2015/12/26/handler-message-framework/" target="_blank" rel="noopener">http://gityuan.com/2015/12/26/handler-message-framework/</a><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 03. <a href="https://www.jianshu.com/p/98b68c97df9b" target="_blank" rel="noopener">https://www.jianshu.com/p/98b68c97df9b</a></p>
 
             </div>
             <hr>
