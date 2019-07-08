@@ -386,14 +386,14 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        4.9k
+                        5k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        22 分钟
+                        23 分钟
                     </div>
                     
                 
@@ -629,22 +629,16 @@ frameworks/base/">
         <span class="token comment" spellcheck="true">// split：代表当前的 ViewGroup 是不是支持分割 MotionEvent 到不同的 View 当中</span>
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> split <span class="token operator">=</span> <span class="token punctuation">(</span>mGroupFlags <span class="token operator">&amp;</span> FLAG_SPLIT_MOTION_EVENTS<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
 
-        <span class="token comment" spellcheck="true">// 新的触摸对象</span>
-        TouchTarget newTouchTarget <span class="token operator">=</span> null<span class="token punctuation">;</span>
-
-        <span class="token comment" spellcheck="true">//是否把事件分配给了新的触摸</span>
-        <span class="token keyword">boolean</span> alreadyDispatchedToNewTouchTarget <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        TouchTarget newTouchTarget <span class="token operator">=</span> null<span class="token punctuation">;</span>                    <span class="token comment" spellcheck="true">// 新的触摸对象</span>
+        <span class="token keyword">boolean</span> alreadyDispatchedToNewTouchTarget <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// 是否把事件分配给了新的触摸</span>
 
         ★ ★ ★ ★ ★ ★ ★ ★ 重点方法 ★ ★ ★ ★ ★ ★ ★ ★ 
         <span class="token comment" spellcheck="true">// 如果事件不是取消事件，也没有拦截，那么进入此函数</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>canceled <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>intercepted<span class="token punctuation">)</span> <span class="token punctuation">{</span>      
-
             View childWithAccessibilityFocus <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">isTargetAccessibilityFocus</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
                     <span class="token operator">?</span> <span class="token function">findChildWithAccessibilityFocus</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> null<span class="token punctuation">;</span>
 
-            <span class="token comment" spellcheck="true">/*
-             * 如果是个全新的 Down 事件，或者是有新的触摸点，或者是光标来回移动事件
-             */</span>
+            <span class="token comment" spellcheck="true">// 如果是个全新的 Down 事件，或者是有新的触摸点，或者是光标来回移动事件</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN
                     <span class="token operator">||</span> <span class="token punctuation">(</span>split <span class="token operator">&amp;&amp;</span> actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_POINTER_DOWN<span class="token punctuation">)</span>
                     <span class="token operator">||</span> actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_HOVER_MOVE<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -653,31 +647,27 @@ frameworks/base/">
                 <span class="token keyword">final</span> <span class="token keyword">int</span> actionIndex <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getActionIndex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// always 0 for down</span>
 
                 <span class="token comment" spellcheck="true">// 获取分配的 ID 的 bit 数量</span>
-                <span class="token keyword">final</span> <span class="token keyword">int</span> idBitsToAssign <span class="token operator">=</span> split <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> 
-                       ev<span class="token punctuation">.</span><span class="token function">getPointerId</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span> <span class="token operator">:</span> TouchTarget<span class="token punctuation">.</span>ALL_POINTER_IDS<span class="token punctuation">;</span>
+                <span class="token keyword">final</span> <span class="token keyword">int</span> idBitsToAssign <span class="token operator">=</span> split <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> ev<span class="token punctuation">.</span><span class="token function">getPointerId</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span>
+                            <span class="token operator">:</span> TouchTarget<span class="token punctuation">.</span>ALL_POINTER_IDS<span class="token punctuation">;</span>
 
                 <span class="token comment" spellcheck="true">// 清理之前触摸这个指针标识，以防它们的目标变得不同步</span>
                 <span class="token function">removePointersFromTouchTargets</span><span class="token punctuation">(</span>idBitsToAssign<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
                 <span class="token keyword">final</span> <span class="token keyword">int</span> childrenCount <span class="token operator">=</span> mChildrenCount<span class="token punctuation">;</span>
-
                 <span class="token comment" spellcheck="true">// 如果新的触摸对象为 null &amp; 当前 ViewGroup 有子元素</span>
                 <span class="token keyword">if</span> <span class="token punctuation">(</span>newTouchTarget <span class="token operator">==</span> null <span class="token operator">&amp;&amp;</span> childrenCount <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     <span class="token keyword">final</span> <span class="token keyword">float</span> x <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getX</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">final</span> <span class="token keyword">float</span> y <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getY</span><span class="token punctuation">(</span>actionIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-                    <span class="token keyword">final</span> ArrayList<span class="token operator">&lt;</span>View<span class="token operator">></span> preorderedList 
-                                              <span class="token operator">=</span> <span class="token function">buildTouchDispatchChildList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">final</span> ArrayList<span class="token operator">&lt;</span>View<span class="token operator">></span> preorderedList <span class="token operator">=</span> <span class="token function">buildTouchDispatchChildList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">final</span> <span class="token keyword">boolean</span> customOrder <span class="token operator">=</span> preorderedList <span class="token operator">==</span> null
                             <span class="token operator">&amp;&amp;</span> <span class="token function">isChildrenDrawingOrderEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token keyword">final</span> View<span class="token punctuation">[</span><span class="token punctuation">]</span> children <span class="token operator">=</span> mChildren<span class="token punctuation">;</span>
 
                     <span class="token comment" spellcheck="true">// 通过 for 循环，遍历了当前 ViewGroup 下的所有子 View</span>
                     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> childrenCount <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                        <span class="token keyword">final</span> <span class="token keyword">int</span> childIndex <span class="token operator">=</span> <span class="token function">getAndVerifyPreorderedIndex</span><span class="token punctuation">(</span>
-                                childrenCount<span class="token punctuation">,</span> i<span class="token punctuation">,</span> customOrder<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                        <span class="token keyword">final</span> View child <span class="token operator">=</span> <span class="token function">getAndVerifyPreorderedView</span><span class="token punctuation">(</span>
-                                preorderedList<span class="token punctuation">,</span> children<span class="token punctuation">,</span> childIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">final</span> <span class="token keyword">int</span> childIndex <span class="token operator">=</span> <span class="token function">getAndVerifyPreorderedIndex</span><span class="token punctuation">(</span>childrenCount<span class="token punctuation">,</span> i<span class="token punctuation">,</span> customOrder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        <span class="token keyword">final</span> View child <span class="token operator">=</span> <span class="token function">getAndVerifyPreorderedView</span><span class="token punctuation">(</span>preorderedList<span class="token punctuation">,</span> children<span class="token punctuation">,</span> childIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
                         <span class="token keyword">if</span> <span class="token punctuation">(</span>childWithAccessibilityFocus <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                             <span class="token keyword">if</span> <span class="token punctuation">(</span>childWithAccessibilityFocus <span class="token operator">!=</span> child<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -690,7 +680,7 @@ frameworks/base/">
                         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>    <span class="token comment" spellcheck="true">// 无关紧要的代码我们这边暂且省略</span>
 
                         <span class="token comment" spellcheck="true">// 派发事件到子 View 处理</span>
-                        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">dispatchTransformedTouchEvent</span><span class="token punctuation">(</span>ev<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+                        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">dispatchTransformedTouchEvent</span><span class="token punctuation">(</span>ev<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> child<span class="token punctuation">,</span> idBitsToAssign<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
                             <span class="token comment" spellcheck="true">// Child wants to receive touch within its bounds.</span>
                             mLastTouchDownTime <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getDownTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                             <span class="token keyword">if</span> <span class="token punctuation">(</span>preorderedList <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -707,8 +697,7 @@ frameworks/base/">
                             mLastTouchDownY <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getY</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                             newTouchTarget <span class="token operator">=</span> <span class="token function">addTouchTarget</span><span class="token punctuation">(</span>child<span class="token punctuation">,</span> idBitsToAssign<span class="token punctuation">)</span><span class="token punctuation">;</span>
                             alreadyDispatchedToNewTouchTarget <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-                            <span class="token comment" spellcheck="true">// 如果子 View 处理了事件，则 break，</span>
-                            <span class="token comment" spellcheck="true">// ViewGroup 不在处理事件（事件被拦截）。</span>
+                            <span class="token comment" spellcheck="true">// 如果子 View 处理了事件，则 break，ViewGroup 不再处理事件（事件被拦截）</span>
                             <span class="token keyword">break</span><span class="token punctuation">;</span>     
                         <span class="token punctuation">}</span>
 
@@ -716,14 +705,10 @@ frameworks/base/">
                     <span class="token punctuation">}</span>
                     <span class="token keyword">if</span> <span class="token punctuation">(</span>preorderedList <span class="token operator">!=</span> null<span class="token punctuation">)</span> preorderedList<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span>
-
-                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
-
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> handled<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -740,11 +725,10 @@ frameworks/base/">
         <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h3 id="4-1-2-dispatchTransformedTouchEvent"><a href="#4-1-2-dispatchTransformedTouchEvent" class="headerlink" title="4.1.2 dispatchTransformedTouchEvent"></a>4.1.2 dispatchTransformedTouchEvent</h3><p>dispatchTransformedTouchEvent 方法的作用，主要就是把事件下发给子 View 进行处理。</p>
+<h3 id="4-1-2-dispatchTransformedTouchEvent"><a href="#4-1-2-dispatchTransformedTouchEvent" class="headerlink" title="4.1.2 dispatchTransformedTouchEvent"></a>4.1.2 dispatchTransformedTouchEvent</h3><p><code>dispatchTransformedTouchEvent</code> 方法的作用，主要就是把事件<code>下发给子 View 进行处理</code>。</p>
 <pre class=" language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTransformedTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">,</span> 
-            <span class="token keyword">boolean</span> cancel<span class="token punctuation">,</span> View child<span class="token punctuation">,</span> <span class="token keyword">int</span> desiredPointerIdBits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                                                  <span class="token keyword">boolean</span> cancel<span class="token punctuation">,</span> View child<span class="token punctuation">,</span> <span class="token keyword">int</span> desiredPointerIdBits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> handled<span class="token punctuation">;</span>
-
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
         <span class="token keyword">final</span> MotionEvent transformedEvent<span class="token punctuation">;</span>
@@ -753,8 +737,10 @@ frameworks/base/">
                 <span class="token keyword">if</span> <span class="token punctuation">(</span>child <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     handled <span class="token operator">=</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-                    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-                    <span class="token comment" spellcheck="true">// dispatchTouchEvent()</span>
+                    <span class="token keyword">final</span> <span class="token keyword">float</span> offsetX <span class="token operator">=</span> mScrollX <span class="token operator">-</span> child<span class="token punctuation">.</span>mLeft<span class="token punctuation">;</span>
+                    <span class="token keyword">final</span> <span class="token keyword">float</span> offsetY <span class="token operator">=</span> mScrollY <span class="token operator">-</span> child<span class="token punctuation">.</span>mTop<span class="token punctuation">;</span>
+                    event<span class="token punctuation">.</span><span class="token function">offsetLocation</span><span class="token punctuation">(</span>offsetX<span class="token punctuation">,</span> offsetY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
                     handled <span class="token operator">=</span> child<span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
                     event<span class="token punctuation">.</span><span class="token function">offsetLocation</span><span class="token punctuation">(</span><span class="token operator">-</span>offsetX<span class="token punctuation">,</span> <span class="token operator">-</span>offsetY<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -770,22 +756,21 @@ frameworks/base/">
         <span class="token keyword">if</span> <span class="token punctuation">(</span>child <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             handled <span class="token operator">=</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>transformedEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token keyword">final</span> <span class="token keyword">float</span> offsetX <span class="token operator">=</span> mScrollX <span class="token operator">-</span> child<span class="token punctuation">.</span>mLeft<span class="token punctuation">;</span>
+            <span class="token keyword">final</span> <span class="token keyword">float</span> offsetY <span class="token operator">=</span> mScrollY <span class="token operator">-</span> child<span class="token punctuation">.</span>mTop<span class="token punctuation">;</span>
+            transformedEvent<span class="token punctuation">.</span><span class="token function">offsetLocation</span><span class="token punctuation">(</span>offsetX<span class="token punctuation">,</span> offsetY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
             <span class="token comment" spellcheck="true">// dispatchTouchEvent()</span>
             handled <span class="token operator">=</span> child<span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>transformedEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
         <span class="token comment" spellcheck="true">// Done.</span>
         transformedEvent<span class="token punctuation">.</span><span class="token function">recycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> handled<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>你有没有发现？当存在子 View 的时候，会调用 View.dispatchTouchEvent 方法，如果没有则会向上调用 super.dispatchTouchEvent 方法。</p>
-<h2 id="4-2-Demo"><a href="#4-2-Demo" class="headerlink" title="4.2 Demo"></a>4.2 Demo</h2><p><strong>Layout 层次：</strong></p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-e7ef15d4b48428d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="layout.png"></center>
-
-<p><strong>Layout 代码：</strong></p>
+<p>你有没有发现？当存在子 View 的时候，会调用 <code>View.dispatchTouchEvent</code> 方法，如果没有则会向上调用 <code>super.dispatchTouchEvent</code> 方法。</p>
+<h2 id="4-2-Demo"><a href="#4-2-Demo" class="headerlink" title="4.2 Demo"></a>4.2 Demo</h2><p><strong>Layout 代码：</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token operator">&lt;</span><span class="token operator">?</span>xml version<span class="token operator">=</span><span class="token string">"1.0"</span> encoding<span class="token operator">=</span><span class="token string">"utf-8"</span><span class="token operator">?</span><span class="token operator">></span>
 <span class="token operator">&lt;</span>android<span class="token punctuation">.</span>support<span class="token punctuation">.</span>constraint<span class="token punctuation">.</span>ConstraintLayout xmlns<span class="token operator">:</span>android<span class="token operator">=</span><span class="token string">"http://schemas.android.com/apk/res/android"</span>
     xmlns<span class="token operator">:</span>app<span class="token operator">=</span><span class="token string">"http://schemas.android.com/apk/res-auto"</span>
@@ -877,9 +862,8 @@ frameworks/base/">
 <li>只有点击空白区域时，才会执行 ViewGroup_Layout 的 onClick() 方法。</li>
 </ul>
 <p><strong>结论：</strong>Button 的 onClick() 将事件消费掉了，因此事件不会再继续向下传递。</p>
-<h2 id="4-3-小结"><a href="#4-3-小结" class="headerlink" title="4.3 小结"></a>4.3 小结</h2><center><img src="https://upload-images.jianshu.io/upload_images/3517194-751a10fb6d6dcd5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ViewGroup 事件分发处理流程.png"></center>
-
-<p><br></p>
+<h2 id="4-3-小结"><a href="#4-3-小结" class="headerlink" title="4.3 小结"></a>4.3 小结</h2><p>看下 ViewGroup 对点击事件的处理流程图：</p>
+<p><img src="/medias/Codes/事件分发_02.png" alt="--&gt; ViewGroup 点击事件处理流程 &lt;--"></p>
 <h1 id="5-Touch-事件分发-–-View"><a href="#5-Touch-事件分发-–-View" class="headerlink" title="5. Touch 事件分发 – View"></a>5. Touch 事件分发 – View</h1><p><strong><font color="#ff0000">这边我们先做个说明：</font></strong></p>
 <p>其实，只要你触摸了任何控件，就一定会调用该控件的 <code>dispatchTouchEvent</code> 方法！</p>
 <p><strong><font color="#ff00ff">严格一点来说：</font></strong>当你点击了某个控件，首先会去调用该控件所在<code>布局</code>的 <code>dispatchTouchEvent</code> 方法，然后在<code>布局</code>的 <code>dispatchTouchEvent</code> 方法中<code>找到被点击的相应控件</code>，再去调用该<code>控件</code>的 <code>dispatchTouchEvent</code>方法。</p>
