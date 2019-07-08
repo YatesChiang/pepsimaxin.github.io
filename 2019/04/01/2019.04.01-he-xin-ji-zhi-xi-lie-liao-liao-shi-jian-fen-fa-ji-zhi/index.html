@@ -386,14 +386,14 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5k
+                        4.9k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        23 分钟
+                        22 分钟
                     </div>
                     
                 
@@ -444,19 +444,10 @@ frameworks/base/">
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<hr>
-<h1 id="2-基础认知"><a href="#2-基础认知" class="headerlink" title="2. 基础认知"></a>2. 基础认知</h1><p>Android <strong> “View”</strong>  虽然不是四大组件，但其并不比四大组件的地位低。而 View 的核心知识点<strong><font color="#FF0000"> “事件分发机制” </font></strong>则是不少刚入门童鞋的拦路虎（<strong>1、项目中处处遇到事件分发机制；2、面试管最喜欢提及的问题</strong>）。</p>
-<p>在实际项目的开发过程中，ScrollView 嵌套 RecyclerView（或者 ListView）的滑动冲突这种老大难问题的理论基础就是“事件分发机制”。</p>
-<p><strong>首先，我们了解一下“事件分发机制”中的基础知识点！</strong></p>
-<h2 id="2-1-事件分发的对象"><a href="#2-1-事件分发的对象" class="headerlink" title="2.1 事件分发的对象"></a>2.1 事件分发的对象</h2><p>事件分发的对象：<strong><font color="#0000FF">点击事件（Touch事件）</font></strong></p>
-<p><strong>1. 定义</strong></p>
-<p>当用户触摸屏幕时（View 或 ViewGroup 派生的控件），将产生点击事件（Touch事件）</p>
-<blockquote>
-<p>Touch 事件的相关细节（发生触摸的位置、时间等）被封装成 MotionEvent 对象。</p>
-</blockquote>
-<p><strong>2. 事件类型</strong></p>
-<table>
+<h1 id="2-基础认知"><a href="#2-基础认知" class="headerlink" title="2. 基础认知"></a>2. 基础认知</h1><p>Android <strong> “View”</strong>  虽然不是四大组件，但其并不比四大组件的地位低。而 View 的核心知识点<strong><font color="#FF0000"> “事件分发机制” </font></strong>则是不少刚入门童鞋的拦路虎（<strong>1、项目中处处遇到事件分发机制 - - 必须掌握；2、面试管最喜欢提及的问题 - - 必须了解</strong>）。</p>
+<p><strong><font color="#ff0000">首先，我们了解一下 “事件分发机制” 中的基础知识点！</font></strong></p>
+<h4 id="2-1-事件分发的-“对象”-点击事件（Touch-事件）"><a href="#2-1-事件分发的-“对象”-点击事件（Touch-事件）" class="headerlink" title="2.1 事件分发的 “对象” - - 点击事件（Touch 事件）"></a>2.1 事件分发的 “对象” - - <strong><font color="#0000FF">点击事件（Touch 事件）</font></strong></h4><h4 id="（1）定义"><a href="#（1）定义" class="headerlink" title="（1）定义"></a>（1）定义</h4><p>当用户触摸屏幕时（View 或 ViewGroup 派生的控件），将产生点击事件（Touch事件），Touch 事件的相关细节（发生触摸的位置、时间等）被封装成了 <code>MotionEvent</code> 对象。</p>
+<h4 id="（2）事件类型"><a href="#（2）事件类型" class="headerlink" title="（2）事件类型"></a>（2）事件类型</h4><table>
 <thead>
 <tr>
 <th>事件类型</th>
@@ -482,57 +473,35 @@ frameworks/base/">
 </tr>
 </tbody>
 </table>
-<p><br></p>
-<p><strong>3. 事件序列</strong></p>
-<p>所谓事件序列就是指：从手指接触屏幕至手指离开屏幕，这个过程产生的一系列事件。</p>
-<p>一般情况下，<font color="#FF0000">事件列都是以 DOWN 事件开始、UP 事件结束，中间有无数的 MOVE 事件</font>。</p>
-<p>如下图：</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-3bd69415acb30024.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="事件列.png"></center>
-
-<p>即当一个点击事件（MotionEvent ）产生后，系统需把这个事件传递给一个具体的 View 去处理。</p>
-<h2 id="2-2-事件分发的本质"><a href="#2-2-事件分发的本质" class="headerlink" title="2.2 事件分发的本质"></a>2.2 事件分发的本质</h2><p><strong><font color="#FF0000" size="4">本质：</font></strong> 将点击事件（MotionEvent）传递到某个具体的 View 并处理的整个过程。 </p>
-<blockquote>
+<h4 id="（3）事件序列"><a href="#（3）事件序列" class="headerlink" title="（3）事件序列"></a>（3）事件序列</h4><p>所谓事件序列就是指：从手指接触屏幕至手指离开屏幕，这个过程产生的一系列事件。一般情况下，<strong><font color="#0000ff">事件列都是以 DOWN 事件开始、UP 事件结束，中间有无数的 MOVE 事件</font>。</strong></p>
+<h4 id="2-2-事件分发的本质-将点击事件传递到某个具体的-View-并处理的整个过程"><a href="#2-2-事件分发的本质-将点击事件传递到某个具体的-View-并处理的整个过程" class="headerlink" title="2.2 事件分发的本质 - - 将点击事件传递到某个具体的 View 并处理的整个过程"></a>2.2 事件分发的本质 - - <strong><font color="#0000FF">将点击事件传递到某个具体的 View 并处理的整个过程</font></strong></h4><blockquote>
 <p>即：事件传递的过程 = 分发过程</p>
 </blockquote>
-<h2 id="2-3-事件分发的对象"><a href="#2-3-事件分发的对象" class="headerlink" title="2.3 事件分发的对象"></a>2.3 事件分发的对象</h2><p><strong><font color="#FF0000" size="4">对象：</font></strong> Activity、ViewGroup、View </p>
-<blockquote>
-<p>Android 的 UI 界面由 Activity、ViewGroup、View 及其派生类组成。</p>
-</blockquote>
-<p>如下图：</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-b8a64e07cc1ff705.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000" alt="UI 界面.png"></center>
-
-<h2 id="2-4-事件分发的顺序"><a href="#2-4-事件分发的顺序" class="headerlink" title="2.4 事件分发的顺序"></a>2.4 事件分发的顺序</h2><p><strong><font color="#FF0000" size="4">顺序：</font></strong> Activity -&gt; ViewGroup -&gt; View </p>
-<blockquote>
-<p>即：1个点击事件发生后，事件先传到 Activity、再传到 ViewGroup、最终再传到 View。</p>
-</blockquote>
-<p>事件分发的顺序流程图如下：</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-f9c8101c57333075.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="传递.png"></center>
-
-<h2 id="2-5-事件分发的方法"><a href="#2-5-事件分发的方法" class="headerlink" title="2.5 事件分发的方法"></a>2.5 事件分发的方法</h2><p><strong><font color="#FF0000" size="4">三个重要方法：</font></strong> dispatchTouchEvent() 、onInterceptTouchEvent() 和 onTouchEvent()。</p>
+<h4 id="2-3-事件分发的对象-–-Activity、ViewGroup、View"><a href="#2-3-事件分发的对象-–-Activity、ViewGroup、View" class="headerlink" title="2.3 事件分发的对象 – Activity、ViewGroup、View"></a>2.3 事件分发的对象 – <strong><font color="#0000FF">Activity、ViewGroup、View</font></strong></h4><h4 id="2-4-事件分发的顺序-–-Activity-gt-ViewGroup-gt-View"><a href="#2-4-事件分发的顺序-–-Activity-gt-ViewGroup-gt-View" class="headerlink" title="2.4 事件分发的顺序 – Activity -&gt; ViewGroup -&gt; View"></a>2.4 事件分发的顺序 – <strong><font color="#0000FF">Activity -&gt; ViewGroup -&gt; View</font></strong></h4><h4 id="2-5-事件分发的方法"><a href="#2-5-事件分发的方法" class="headerlink" title="2.5 事件分发的方法"></a>2.5 事件分发的方法</h4><p><strong><font color="#FF0000" size="4">三个重要方法：</font></strong> <code>dispatchTouchEvent()</code> 、<code>onInterceptTouchEvent()</code> 和 <code>onTouchEvent()</code>。</p>
 <blockquote>
 <p><strong><font color="#0000FF">dispatchTouchEvent（事件分发）：</font></strong>当监听到有触发事件时，首先由 Activity 进行捕获，然后事件就进入事件分发的流程。Activity 本身没有事件拦截，从而将事件传递给最外层的 View 的 dispatchTouchEvent(MotionEvent ev)，该方法将对事件进行分发。</p>
 </blockquote>
-<p><strong>返回值：</strong>表示是否消费了当前事件。可能是 View 本身的 onTouchEvent() 消费，也可能是子 View 的 dispatchTouchEvent() 中消费。返回 true 表示事件被消费，本次的事件终止。返回 false 表示 View 以及子 View 均没有消费事件，将调用父 View 的 onTouchEvent()。</p>
+<p><strong>返回值：</strong>表示<code>是否消费了当前事件</code>。可能是 View 本身的 onTouchEvent() 消费，也可能是子 View 的 dispatchTouchEvent() 中消费。返回 true 表示事件被消费，本次的事件终止。返回 false 表示 View 以及子 View 均没有消费事件，将调用父 View 的 onTouchEvent()。</p>
 <blockquote>
 <p><strong><font color="#0000FF">onInterceptTouchEvent（事件拦截）：</font></strong>当一个 ViewGroup 在接到 MotionEvent 事件序列时候，首先会调用此方法判断是否需要拦截。特别注意，这是 ViewGroup 特有的方法，View 并没有拦截方法。</p>
 </blockquote>
-<p><strong>返回值：</strong>是否拦截事件传递，返回 true 表示拦截了事件，那么事件将不再向下分发而是调用 View 本身的 onTouchEvent()。返回 false 表示不做拦截，事件将向下分发到子 View 的 dispatchTouchEvent()。</p>
+<p><strong>返回值：</strong><code>是否拦截事件传递</code>，返回 true 表示拦截了事件，那么事件将不再向下分发而是调用 View 本身的 onTouchEvent()。返回 false 表示不做拦截，事件将向下分发到子 View 的 dispatchTouchEvent()。</p>
 <blockquote>
 <p><strong><font color="#0000FF">onTouchEvent（事件响应）：</font></strong>真正对 MotionEvent 进行处理或者说消费的方法，在 dispatchTouchEvent() 中进行调用。</p>
 </blockquote>
-<p><strong>返回值：</strong>返回 true 表示事件被消费，本次的事件终止。返回 false 表示事件没有被消费，将调用父 View 的 onTouchEvent 方法，直到返回 true 为止。</p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-13579e321d5f0f4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="事件分发的方法.png"></center>
-
-<p><br></p>
-<p>我们可以做个总结：</p>
-<p>Activity 的点击事件事实上是调用它内部的 ViewGroup 的点击事件，可以直接当成 ViewGroup 处理。</p>
-<p>ViewGroup 的相关事件方法有三个：<code>onInterceptTouchEvent</code>、<code>dispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
-<p>View 的相关事件方法只有两个：<code>dispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
+<p><strong>返回值：</strong>返回 true 表示<code>事件被消费，本次的事件终止</code>。返回 false 表示<code>事件没有被消费</code>，将调用父 View 的 onTouchEvent 方法，直到返回 true 为止。</p>
+<p><strong>我们可以做个总结：</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;Activity 的点击事件事实上是调用它内部的 ViewGroup 的点击事件，可以直接当成 ViewGroup 处理。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;ViewGroup 的相关事件方法有三个：<code>onInterceptTouchEvent</code>、<code>dispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✎&nbsp;&nbsp;View 的相关事件方法只有两个：<code>dispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
 <hr>
 <p>要想充分理解 Android 事件分发机制，本质上是要理解以下三个部分：</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;✯ <strong><font color="#0000FF">Activity - Touch 事件分发</font></strong>&nbsp;&nbsp;&nbsp;&nbsp; ✯ <strong><font color="#0000FF">ViewGroup - Touch 事件分发</font></strong> &nbsp;&nbsp;&nbsp;&nbsp; ✯ <strong><font color="#0000FF">View - Touch 事件分发</font></strong> </p>
-<h1 id="3-Touch-事件分发-–-Activity"><a href="#3-Touch-事件分发-–-Activity" class="headerlink" title="3. Touch 事件分发 – Activity"></a>3. Touch 事件分发 – Activity</h1><p>当一个点击事件发生时，事件最先传到 Activity 的 dispatchTouchEvent() ，进行事件分发。</p>
-<h2 id="3-1-dispatchTouchEvent"><a href="#3-1-dispatchTouchEvent" class="headerlink" title="3.1 dispatchTouchEvent"></a>3.1 dispatchTouchEvent</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent ev<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<hr>
+<h1 id="3-Touch-事件分发-–-Activity"><a href="#3-Touch-事件分发-–-Activity" class="headerlink" title="3. Touch 事件分发 – Activity"></a>3. Touch 事件分发 – Activity</h1><p>当一个点击事件发生时，事件最先传到 Activity 的 dispatchTouchEvent()。</p>
+<h2 id="3-1-dispatchTouchEvent"><a href="#3-1-dispatchTouchEvent" class="headerlink" title="3.1 dispatchTouchEvent"></a>3.1 dispatchTouchEvent</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Activity</span> <span class="token keyword">extends</span> <span class="token class-name">ContextThemeWrapper</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent ev<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 一般事件列开始都是 DOWN 事件，即按下事件，所以此处基本是 true</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>ev<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token function">onUserInteraction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                          <span class="token comment" spellcheck="true">// 1</span>
@@ -542,6 +511,8 @@ frameworks/base/">
         <span class="token punctuation">}</span>        
         <span class="token keyword">return</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>ev<span class="token punctuation">)</span><span class="token punctuation">;</span>                          <span class="token comment" spellcheck="true">// 3</span>
     <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
 </code></pre>
 <p>Activity 的 dispatchTouchEvent 方法很简单，主要涉及三个方法：<code>onUserInteraction</code>、<code>superDispatchTouchEvent</code>、<code>onTouchEvent</code>。</p>
 <h3 id="3-1-1-onUserInteraction"><a href="#3-1-1-onUserInteraction" class="headerlink" title="3.1.1 onUserInteraction"></a>3.1.1 onUserInteraction</h3><pre class=" language-java"><code class="language-java">   <span class="token comment" spellcheck="true">/**
@@ -560,7 +531,7 @@ frameworks/base/">
         <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>Window 类的 superDispatchTouchEvent() 是一个抽象方法，由子类 PhoneWindow 类实现。</p>
+<p>Window 类的 <code>superDispatchTouchEvent()</code> 是一个抽象方法，由子类 <code>PhoneWindow</code> 类实现。</p>
 <h4 id="3-1-2-1-PhoneWindow"><a href="#3-1-2-1-PhoneWindow" class="headerlink" title="3.1.2.1 PhoneWindow"></a>3.1.2.1 PhoneWindow</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PhoneWindow</span> <span class="token keyword">extends</span> <span class="token class-name">Window</span> <span class="token keyword">implements</span> <span class="token class-name">MenuBuilder<span class="token punctuation">.</span>Callback</span> <span class="token punctuation">{</span>
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -574,7 +545,7 @@ frameworks/base/">
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<p>我们发现，Activity 的 superDispatchTouchEvent 方法最终会走到 DecorView 的 superDispatchTouchEvent 方法。</p>
+<p>我们发现，<code>Activity</code> 的 <code>superDispatchTouchEvent</code> 方法最终会走到 <code>DecorView</code> 的 <code>superDispatchTouchEvent</code> 方法。</p>
 <h4 id="3-1-2-2-DecorView"><a href="#3-1-2-2-DecorView" class="headerlink" title="3.1.2.2 DecorView"></a>3.1.2.2 DecorView</h4><pre class=" language-java"><code class="language-java">  <span class="token comment" spellcheck="true">/**
     * public class DecorView extends FrameLayout，
     *       -- DecorView 继承自 FrameLayout，是所有界面的父类。         
@@ -588,7 +559,7 @@ frameworks/base/">
         <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>所以不难发现，Activity 的 dispatchTouchEvent 方法最终会走到 ViewGroup 的 dispatchTouchEvent 方法。</p>
+<p>所以不难发现，<code>Activity</code> 的 <code>dispatchTouchEvent</code> 方法最终会走到 <code>ViewGroup</code> 的 <code>dispatchTouchEvent</code> 方法。</p>
 <h3 id="3-1-3-onTouchEvent"><a href="#3-1-3-onTouchEvent" class="headerlink" title="3.1.3 onTouchEvent"></a>3.1.3 onTouchEvent</h3><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">// 一般返回 true，除非 Touch 事件在 Window 边界外，所以这边我们不再继续跟踪。</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>mWindow<span class="token punctuation">.</span><span class="token function">shouldCloseOnTouch</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -599,47 +570,38 @@ frameworks/base/">
         <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<h2 id="3-2-小结"><a href="#3-2-小结" class="headerlink" title="3.2 小结"></a>3.2 小结</h2><center><img src="https://upload-images.jianshu.io/upload_images/3517194-09f4ddd079792c82.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Activity 事件分发处理流程.png"></center>
-
-<p><br></p>
-<p>至此，我们分析了 Activity 对点击事件的分发机制处理流程，我们不难发现，Activity 的事件走到了 ViewGroup 进行处理，那么接下来就是分析 ViewGroup 对点击事件的分发机制了。</p>
-<p><br></p>
-<h1 id="4-Touch-事件分发-–-ViewGroup"><a href="#4-Touch-事件分发-–-ViewGroup" class="headerlink" title="4. Touch 事件分发 – ViewGroup"></a>4. Touch 事件分发 – ViewGroup</h1><p>上面我们说过，Activity 的 dispatchTouchEvent 方法最终会走到 ViewGroup 的 dispatchTouchEvent 方法。</p>
+<h2 id="3-2-小结"><a href="#3-2-小结" class="headerlink" title="3.2 小结"></a>3.2 小结</h2><p>看下 Activity 对点击事件的处理流程图：</p>
+<p><img src="/medias/Codes/事件分发_01.png" alt="--&gt; Activity 点击事件处理流程 &lt;--"></p>
+<p>至此，分析完 Activity 对点击事件的分发机制处理流程，我们不难发现，Activity 的事件走到了 ViewGroup 进行处理，那么接下来就是分析 ViewGroup 对点击事件的分发机制了。</p>
+<h1 id="4-Touch-事件分发-–-ViewGroup"><a href="#4-Touch-事件分发-–-ViewGroup" class="headerlink" title="4. Touch 事件分发 – ViewGroup"></a>4. Touch 事件分发 – ViewGroup</h1><p>上面我们说过，<code>Activity</code> 的 <code>dispatchTouchEvent</code> 方法最终会走到了 <code>ViewGroup</code> 的 <code>dispatchTouchEvent</code> 方法。</p>
 <h2 id="4-1-dispatchTouchEvent"><a href="#4-1-dispatchTouchEvent" class="headerlink" title="4.1 dispatchTouchEvent"></a>4.1 dispatchTouchEvent</h2><p>ViewGroup 对点击事件的分发流程就复杂很多了，我们来细细研究：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// First touch target in the linked list of touch targets.</span>
 <span class="token keyword">private</span> TouchTarget mFirstTouchTarget<span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent ev<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
-    <span class="token comment" spellcheck="true">// 这个变量用于记录事件是否被处理完</span>
-    <span class="token keyword">boolean</span> handled <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">boolean</span> handled <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>                      <span class="token comment" spellcheck="true">// 这个变量用于记录事件是否被处理完</span>
 
-    <span class="token comment" spellcheck="true">// 过滤掉一些不合法的事件</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">onFilterTouchEventForSecurity</span><span class="token punctuation">(</span>ev<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">onFilterTouchEventForSecurity</span><span class="token punctuation">(</span>ev<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>      <span class="token comment" spellcheck="true">// 过滤掉一些不合法的事件</span>
         <span class="token keyword">final</span> <span class="token keyword">int</span> action <span class="token operator">=</span> ev<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> <span class="token keyword">int</span> actionMasked <span class="token operator">=</span> action <span class="token operator">&amp;</span> MotionEvent<span class="token punctuation">.</span>ACTION_MASK<span class="token punctuation">;</span>
 
         <span class="token comment" spellcheck="true">// 判断是不是 Down 事件，如果是的话，就要做初始化操作</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-           <span class="token comment" spellcheck="true">// 如果是 Down 事件，就要清空掉之前的状态，</span>
-            <span class="token function">cancelAndClearTouchTargets</span><span class="token punctuation">(</span>ev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">cancelAndClearTouchTargets</span><span class="token punctuation">(</span>ev<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">// 如果是 Down 事件，就要清空掉之前的状态</span>
             <span class="token function">resetTouchState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
-        <span class="token comment" spellcheck="true">// 是否拦截事件</span>
-        <span class="token keyword">final</span> <span class="token keyword">boolean</span> intercepted<span class="token punctuation">;</span>
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> intercepted<span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">// 是否拦截事件</span>
 
         <span class="token comment" spellcheck="true">// 如果当前是 Down 事件，或者已经有处理 Touch 事件的目标了</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_DOWN <span class="token operator">||</span> mFirstTouchTarget <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token comment" spellcheck="true">/**
-              * disallowIntercept：是否禁用事件拦截的功能，默认为 false，
-              * 我们也可以通过调用 requestDisallowInterceptTouchEvent 方法
-              * 对这个值进行修改。
+              * disallowIntercept：是否禁用事件拦截的功能，默认为 false，我们也可以通过调用
+              * requestDisallowInterceptTouchEvent() 方法对这个值进行修改。
               */</span>
-            <span class="token keyword">final</span> <span class="token keyword">boolean</span> disallowIntercept <span class="token operator">=</span> 
-                                     <span class="token punctuation">(</span>mGroupFlags <span class="token operator">&amp;</span> FLAG_DISALLOW_INTERCEPT<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>                          
+            <span class="token keyword">final</span> <span class="token keyword">boolean</span> disallowIntercept <span class="token operator">=</span> <span class="token punctuation">(</span>mGroupFlags <span class="token operator">&amp;</span> FLAG_DISALLOW_INTERCEPT<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>                          
             <span class="token comment" spellcheck="true">// disallowIntercept 默认为 false 所以会走以下流程</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>disallowIntercept<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token comment" spellcheck="true">// 每次事件分发时，都需调用 onInterceptTouchEvent() 询问是否拦截事件</span>
@@ -661,8 +623,7 @@ frameworks/base/">
         <span class="token punctuation">}</span>
 
         <span class="token comment" spellcheck="true">// Check for cancelation，标志着取消事件.</span>
-        <span class="token keyword">final</span> <span class="token keyword">boolean</span> canceled <span class="token operator">=</span> <span class="token function">resetCancelNextUpFlag</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
-                   <span class="token operator">||</span> actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_CANCEL<span class="token punctuation">;</span>
+        <span class="token keyword">final</span> <span class="token keyword">boolean</span> canceled <span class="token operator">=</span> <span class="token function">resetCancelNextUpFlag</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token operator">||</span> actionMasked <span class="token operator">==</span> MotionEvent<span class="token punctuation">.</span>ACTION_CANCEL<span class="token punctuation">;</span>
 
         <span class="token comment" spellcheck="true">// 如果需要（不取消，也没有被拦截），那么在触摸 Down 事件的时候更新触摸目标列表</span>
         <span class="token comment" spellcheck="true">// split：代表当前的 ViewGroup 是不是支持分割 MotionEvent 到不同的 View 当中</span>
