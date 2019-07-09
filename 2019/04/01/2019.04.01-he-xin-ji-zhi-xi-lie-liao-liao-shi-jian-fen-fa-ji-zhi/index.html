@@ -386,14 +386,14 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.1k
+                        5.3k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        23 分钟
+                        24 分钟
                     </div>
                     
                 
@@ -977,8 +977,9 @@ frameworks/base/">
 <span class="token number">09</span><span class="token operator">-</span><span class="token number">26</span> <span class="token number">18</span><span class="token operator">:</span><span class="token number">16</span><span class="token operator">:</span><span class="token number">29.858</span> <span class="token number">23847</span> <span class="token number">23847</span> D TAG <span class="token operator">:</span> run <span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> action<span class="token operator">:</span><span class="token number">1</span>    <span class="token comment" spellcheck="true">// ACTION_UP</span>
 </code></pre>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、我们发现 onTouch() 是优先于 onClick() 执行的；<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;2、onTouch() 方法是有返回值的，如果返回 true，事件被消费，那么 onClick() 将不再执行；</p>
-<h3 id="3-3-2-dispatchTouchEvent"><a href="#3-3-2-dispatchTouchEvent" class="headerlink" title="3.3.2 dispatchTouchEvent"></a>3.3.2 dispatchTouchEvent</h3><p>案例看了，但是为什么会出现上面的结果，我们还是需要从源码角度去深入分析，我们接着往下看。</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h3 id="3-3-2-dispatchTouchEvent"><a href="#3-3-2-dispatchTouchEvent" class="headerlink" title="3.3.2 dispatchTouchEvent"></a>3.3.2 dispatchTouchEvent</h3><p>案例看了，但是为什么会出现上面的结果，还是需要从源码角度去深入分析。首先，我们需要知道的是：只要你触摸到了任何一个控件，就一定会调用该控件的 <code>dispatchTouchEvent</code> 方法。所以，当我们点击按钮的时候，就会去调用 <code>Button</code> 类里的 <code>dispatchTouchEvent</code>方法，可是你会发现 Button 类里并没有这个方法，那么就到它的父类 <code>TextView</code> 里去找一找，但是 TextView 里也没有这个方法，继续往上找，最终我们在 <code>View</code> 里找到了这个方法，那么接下来我们就要查看 <code>View.dispatchTouchEvent</code> 源码了。</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// 调用 View.dispatchTouchEvent() 方法</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
         <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
@@ -1000,7 +1001,7 @@ frameworks/base/">
                            <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnTouchListener<span class="token punctuation">.</span><span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
-            ★ ★ ★ ★ ★ ★ ★ ★ 分别分析以上几个条件 ★ ★ ★ ★ ★ ★ ★ ★ 
+            ★ ★ ★ ★ ★ ★ ★ ★ 重点方法 ★ ★ ★ ★ ★ ★ ★ ★ 
 
             <span class="token comment" spellcheck="true">// 如果上面没有返回 true，那么执行 onTouchEvent()</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>result <span class="token operator">&amp;&amp;</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token comment" spellcheck="true">// 下面再分析</span>
@@ -1012,16 +1013,17 @@ frameworks/base/">
         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
+<p>我们来分析一下重点方法中提到的几个关键条件：</p>
 <blockquote>
 <p><strong><font color="0000FF">条件 1：li != null &amp; li.mOnTouchListener != null</font></strong></p>
 </blockquote>
-<p>mOnTouchListener 这个变量是在哪里赋值的呢？</p>
+<p><strong>mOnTouchListener</strong> 这个变量是在哪里赋值的呢？</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
       * 条件 1：mListenerInfo.mOnTouchListener != null
       * 说明：mOnTouchListener 变量在 View.setOnTouchListener() 方法里赋值
       */</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setOnTouchListener</span><span class="token punctuation">(</span>OnTouchListener l<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 只要我们给控件注册了 Touch 事件，mOnTouchListener 就一定被赋值（不为空）</span>
+        <span class="token comment" spellcheck="true">// 所以，只要我们给控件注册了 Touch 事件，mOnTouchListener 就一定被赋值（不为空）</span>
         <span class="token function">getListenerInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>mOnTouchListener <span class="token operator">=</span> l<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
@@ -1036,10 +1038,10 @@ frameworks/base/">
       */</span>
 </code></pre>
 <blockquote>
-<p><strong><font color="0000FF">条件 3：mListenerInfo.mOnTouchListener.onTouch(this, event)</font></strong></p>
+<p><strong><font color="0000FF">条件 3：li.mOnTouchListener.onTouch(this, event)</font></strong></p>
 </blockquote>
-<p>mListenerInfo.mOnTouchListener.onTouch(this, event)，其实也就是去回调控件注册 touch 事件时的 onTouch 方法。</p>
-<p>也就是说如果我们在 onTouch 方法里返回 true，就会让这三个条件全部成立，从而整个方法直接返回 true。如果我们在 onTouch 方法里返回 false，就会再去执行 onTouchEvent(event) 方法。</p>
+<p><strong>mListenerInfo.mOnTouchListener.onTouch(this, event)</strong>，其实也就是去回调控件注册 touch 事件时的 onTouch 方法。</p>
+<p>也就是说如果我们在 onTouch 方法里返回 true，就会让这三个条件全部成立，从而整个方法直接返回 true。如果我们在 onTouch 方法里返回 false，就会再去执行 <code>onTouchEvent(event)</code> 方法。</p>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
       * 条件 3：mOnTouchListener.onTouch(this, event)
       * 说明：回调控件注册 Touch 事件时的 onTouch()
@@ -1047,11 +1049,13 @@ frameworks/base/">
     button<span class="token punctuation">.</span><span class="token function">setOnTouchListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OnTouchListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
         <span class="token annotation punctuation">@Override</span>  
         <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouch</span><span class="token punctuation">(</span>View v<span class="token punctuation">,</span> MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
-            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>  
+            <span class="token comment" spellcheck="true">// return true;</span>
+            <span class="token comment" spellcheck="true">// return false;</span>
         <span class="token punctuation">}</span>  
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<h2 id="3-3-3-onTouchEvent"><a href="#3-3-3-onTouchEvent" class="headerlink" title="3.3.3 onTouchEvent"></a>3.3.3 onTouchEvent</h2><pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h2 id="3-3-3-onTouchEvent"><a href="#3-3-3-onTouchEvent" class="headerlink" title="3.3.3 onTouchEvent"></a>3.3.3 onTouchEvent</h2><p>接下来，我们看看 onTouch() 返回 false 后，onTouchEvent() 所干的事情，代码部分省略，我们只关注重点代码。</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouchEvent</span><span class="token punctuation">(</span>MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">final</span> <span class="token keyword">float</span> x <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getX</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> <span class="token keyword">float</span> y <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getY</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> <span class="token keyword">int</span> viewFlags <span class="token operator">=</span> mViewFlags<span class="token punctuation">;</span>
@@ -1117,25 +1121,22 @@ frameworks/base/">
         <span class="token keyword">final</span> <span class="token keyword">boolean</span> result<span class="token punctuation">;</span>
         <span class="token keyword">final</span> ListenerInfo li <span class="token operator">=</span> mListenerInfo<span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">/*
-         * 只要我们通过 setOnClickListener() 为控件 View 注册 1 个点击事件，
-         * 那么就会给 li.mOnClickListener 变量赋值（即不为空），
-         * 则会往下回调 onClick()，performClick() 返回 true。
+         * 只要我们通过 setOnClickListener() 为控件 View 注册 1 个点击事件，那么就会给 li.mOnClickListener 
+         * 变量赋值（即不为空），则会往下回调 onClick()。
          */</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>li <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> li<span class="token punctuation">.</span>mOnClickListener <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token function">playSoundEffect</span><span class="token punctuation">(</span>SoundEffectConstants<span class="token punctuation">.</span>CLICK<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            li<span class="token punctuation">.</span>mOnClickListener<span class="token punctuation">.</span><span class="token function">onClick</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            li<span class="token punctuation">.</span>mOnClickListener<span class="token punctuation">.</span><span class="token function">onClick</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 执行 onClick()</span>
             result <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
             result <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-
-        <span class="token function">sendAccessibilityEvent</span><span class="token punctuation">(</span>AccessibilityEvent<span class="token punctuation">.</span>TYPE_VIEW_CLICKED<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token function">notifyEnterOrExitForAutoFillIfNeeded</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 
         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
+<p>通过源码的分析，这下我们就能够了解为什么会出现上面 Demo 的结果了。</p>
 <h2 id="3-3-5-小结"><a href="#3-3-5-小结" class="headerlink" title="3.3.5 小结"></a>3.3.5 小结</h2><p>看下 View 对点击事件的处理流程图：</p>
 <p><img src="/medias/Codes/事件分发_03.png" alt="--&gt; View 点击事件处理流程 &lt;--"></p>
 <h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由【“事件分发” —&gt; “事件拦截” —&gt; “事件响应”】这三步来进行逻辑控制的。</p>
