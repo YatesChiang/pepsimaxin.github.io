@@ -386,14 +386,14 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.7k
+                        5.9k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        25 分钟
+                        26 分钟
                     </div>
                     
                 
@@ -666,7 +666,7 @@ frameworks/base/">
 <li>只有点击空白区域时，才会执行 ViewGroup_Layout 的 onClick() 方法。</li>
 </ul>
 <p><strong>结论：</strong>Button 的 onClick() 将事件消费掉了，因此事件不会再继续向下传递。</p>
-<p>那么这里提出一个疑问，这样的结果是不是说明 Touch 事件是<strong><font color="#ff0000">先传递到 View，再传递到 ViewGroup 的么</font></strong>？我们通过源码来看看。</p>
+<p>那么这里提出一个疑问，这样的结果是不是说明 Touch 事件是<strong><font color="#ff0000">先传递到 View，再传递到 ViewGroup 的么</font></strong>？但从前面的分析，我们知道是从 <strong>Activity 传递到 ViewGroup 进行处理</strong>，这不是矛盾么？别急，我们通过源码来看看怎么回事。</p>
 <h2 id="4-2-dispatchTouchEvent"><a href="#4-2-dispatchTouchEvent" class="headerlink" title="4.2 dispatchTouchEvent"></a>4.2 dispatchTouchEvent</h2><p>ViewGroup 对点击事件的分发流程就复杂很多了，我们来细细研究：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// First touch target in the linked list of touch targets.</span>
 <span class="token keyword">private</span> TouchTarget mFirstTouchTarget<span class="token punctuation">;</span>
@@ -791,6 +791,7 @@ frameworks/base/">
                             newTouchTarget <span class="token operator">=</span> <span class="token function">addTouchTarget</span><span class="token punctuation">(</span>child<span class="token punctuation">,</span> idBitsToAssign<span class="token punctuation">)</span><span class="token punctuation">;</span>
                             alreadyDispatchedToNewTouchTarget <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
                             <span class="token comment" spellcheck="true">// 如果子 View 处理了事件，则 break，ViewGroup 不再处理事件（事件被拦截）</span>
+                            <span class="token comment" spellcheck="true">// 例子说的 Button.onClick() 处理了之后，ViewGroup.onClick() 不会再执行</span>
                             <span class="token keyword">break</span><span class="token punctuation">;</span>     
                         <span class="token punctuation">}</span>
 
@@ -828,6 +829,7 @@ frameworks/base/">
         <span class="token keyword">if</span> <span class="token punctuation">(</span>newPointerIdBits <span class="token operator">==</span> oldPointerIdBits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>child <span class="token operator">==</span> null <span class="token operator">||</span> child<span class="token punctuation">.</span><span class="token function">hasIdentityMatrix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token keyword">if</span> <span class="token punctuation">(</span>child <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// 调用父类的 dispatchTouchEvent 方法，也就是 ViewGroup.dispatchTouchEvent()</span>
                     handled <span class="token operator">=</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">dispatchTouchEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
                     <span class="token keyword">final</span> <span class="token keyword">float</span> offsetX <span class="token operator">=</span> mScrollX <span class="token operator">-</span> child<span class="token punctuation">.</span>mLeft<span class="token punctuation">;</span>
@@ -863,6 +865,9 @@ frameworks/base/">
     <span class="token punctuation">}</span>
 </code></pre>
 <p>你有没有发现？当存在子 View 的时候，会调用 <code>View.dispatchTouchEvent</code> 方法，如果没有则会向上调用 <code>super.dispatchTouchEvent</code> 方法。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发是先传递到 ViewGroup，再由 ViewGroup 传递到 View 的。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;2、在 ViewGroup 中可以通过 onInterceptTouchEvent 方法对事件传递进行拦截，onInterceptTouchEvent 方法返回 true 代表不允许事件继续向子 View 传递，返回 false 代表不对事件进行拦截，默认返回 false。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;3、子 View 中如果将传递的事件消费掉，ViewGroup 中将无法接收到任何事件。</p>
 <h2 id="4-3-小结"><a href="#4-3-小结" class="headerlink" title="4.3 小结"></a>4.3 小结</h2><p>看下 ViewGroup 对点击事件的处理流程图：</p>
 <p><img src="/medias/Codes/事件分发_02.png" alt="--&gt; ViewGroup 点击事件处理流程 &lt;--"></p>
 <h1 id="5-Touch-事件分发-–-View"><a href="#5-Touch-事件分发-–-View" class="headerlink" title="5. Touch 事件分发 – View"></a>5. Touch 事件分发 – View</h1><p><strong><font color="#ff0000">这边我们先做个说明：</font></strong></p>
