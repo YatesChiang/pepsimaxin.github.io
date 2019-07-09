@@ -386,14 +386,14 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.3k
+                        5.7k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        24 分钟
+                        25 分钟
                     </div>
                     
                 
@@ -1137,6 +1137,22 @@ frameworks/base/">
     <span class="token punctuation">}</span>
 </code></pre>
 <p>根据以上源码的分析，从原理上解释了我们前面 Demo 的运行结果。</p>
+<p>这边我们来看个很有意思的现象：<strong><font color="#ff0000">如果我们把 Button 换成 ImageView，然后给它注册一个 Touch 事件，结果会怎样？</font></strong></p>
+<pre class=" language-java"><code class="language-java">imageView<span class="token punctuation">.</span><span class="token function">setOnTouchListener</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OnTouchListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+    <span class="token annotation punctuation">@Override</span>  
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">onTouch</span><span class="token punctuation">(</span>View v<span class="token punctuation">,</span> MotionEvent event<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token string">"TAG"</span><span class="token punctuation">,</span> <span class="token string">"run onTouch(), action:"</span> <span class="token operator">+</span> event<span class="token punctuation">.</span><span class="token function">getAction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+</code></pre>
+<p>运行一下程序，点击ImageView，你会发现结果如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 通过 OnTouchListener() 复写 onTouch()，从而手动设置返回 true</span>
+<span class="token number">09</span><span class="token operator">-</span><span class="token number">26</span> <span class="token number">18</span><span class="token operator">:</span><span class="token number">16</span><span class="token operator">:</span><span class="token number">29.758</span> <span class="token number">23847</span> <span class="token number">23847</span> D TAG <span class="token operator">:</span> run <span class="token function">onTouch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> action<span class="token operator">:</span><span class="token number">0</span>    <span class="token comment" spellcheck="true">// ACTION_DOWN</span>
+</code></pre>
+<p>在 <code>ACTION_DOWN</code> 执行完后，后面的一系列 <code>action</code>都不会得到执行了！怎么会出现这个结果？</p>
+<p>因为 <code>ImageView</code> 和按钮不同，它是<strong><font color="#ff0000">默认不可点击的</font></strong>，因此在 <code>onTouchEvent</code> 的源码中进行 <code>if 判断</code> 的时候是进不去的，所以直接返回了 <code>false</code>，也就导致后面其它的 <code>action</code> 都无法执行了。</p>
+<p><strong>关于事件分发有个重要的知识点：</strong>就是 <code>Touch 事件的层级传递</code>。我们都知道如果给一个控件注册了 touch 事件，每次点击它的时候都会触发一系列的 ACTION_DOWN，ACTION_MOVE，ACTION_UP 等事件。这里需要注意，如果你在执行 ACTION_DOWN 的时候返回了 false，后面一系列其它的 action 就不会再得到执行了。简单的说，就是当 dispatchTouchEvent 在进行事件分发的时候，只有前一个 action 返回 true，才会触发后一个 action。</p>
 <h2 id="3-3-5-小结"><a href="#3-3-5-小结" class="headerlink" title="3.3.5 小结"></a>3.3.5 小结</h2><p>看下 View 对点击事件的处理流程图：</p>
 <p><img src="/medias/Codes/事件分发_03.png" alt="--&gt; View 点击事件处理流程 &lt;--"></p>
 <h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由【“事件分发” —&gt; “事件拦截” —&gt; “事件响应”】这三步来进行逻辑控制的。</p>
