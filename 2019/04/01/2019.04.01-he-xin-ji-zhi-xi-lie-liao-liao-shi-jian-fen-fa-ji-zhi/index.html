@@ -386,7 +386,7 @@ frameworks/base/">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        5.3k
+                        5.4k
                     </div>
                     
 
@@ -1136,7 +1136,7 @@ frameworks/base/">
         <span class="token keyword">return</span> result<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 </code></pre>
-<p>通过源码的分析，这下我们就能够了解为什么会出现上面 Demo 的结果了。</p>
+<p>通过源码的分析，这下我们就能够了解为什么会出现上面 Demo 的结果了。首先在 <code>dispatchTouchEvent</code> 中最先执行的就是 <code>onTouch</code> 方法，因此 <code>onTouch</code> 肯定是要优先于 <code>onClick</code> 执行的，而如果在 <code>onTouch</code> 方法里返回了 <code>true</code>，就会让 <code>dispatchTouchEvent</code> 方法直接返回 <code>true</code>，不会再继续往下执行。而打印结果也证实了如果 <code>onTouch</code> 返回 <code>true</code>，<code>onClick</code> 就不会再执行了。</p>
 <h2 id="3-3-5-小结"><a href="#3-3-5-小结" class="headerlink" title="3.3.5 小结"></a>3.3.5 小结</h2><p>看下 View 对点击事件的处理流程图：</p>
 <p><img src="/medias/Codes/事件分发_03.png" alt="--&gt; View 点击事件处理流程 &lt;--"></p>
 <h1 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✒&nbsp;1、Android 事件分发机制主要由【“事件分发” —&gt; “事件拦截” —&gt; “事件响应”】这三步来进行逻辑控制的。</p>
