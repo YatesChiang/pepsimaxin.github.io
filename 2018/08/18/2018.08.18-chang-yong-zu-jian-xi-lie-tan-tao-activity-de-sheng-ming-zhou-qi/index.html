@@ -5,15 +5,8 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="探讨 Activity 的生命周期, Thinking in Android">
-    <meta name="description" content="1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：
-
-运行状态
-
-当一个活动位于返回栈的栈顶时，这时活动就处于运行状态。系统最不愿意回收的就是处于运行状态的活动，因为这会带来非常差的用户体验。
-
-暂停状态
-
-当一个活动不再处于栈顶">
+    <meta name="description" content="1、活动状态每个活动在其生命周期中最多可能会有 4 种状态：运行状态、暂停状态、停止状态、销毁状态。
+1.1 运行状态当一个活动位于返回栈的栈顶时，这时活动就处于“运行状态”。系统最不愿意回收的就是处于运行状态的活动，因为这会带来非常差的用">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -345,6 +338,10 @@
                                 <span class="chip bg-color">Activity</span>
                             </a>
                         
+                            <a href="/tags/生命周期/" target="_blank">
+                                <span class="chip bg-color">生命周期</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -396,63 +393,26 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="1、活动状态"><a href="#1、活动状态" class="headerlink" title="1、活动状态"></a>1、活动状态</h3><p>每个活动在其生命周期中最多可能会有 <strong><font color="#FF0000">4</font></strong> 种状态：</p>
-<blockquote>
-<p>运行状态</p>
-</blockquote>
-<p>当一个活动位于返回栈的栈顶时，这时活动就处于运行状态。系统最不愿意回收的就是处于运行状态的活动，因为这会带来非常差的用户体验。</p>
-<blockquote>
-<p>暂停状态</p>
-</blockquote>
-<p>当一个活动不再处于栈顶位置，但仍然可见时，这时活动就进入了暂停状态。你可能会觉得既然活动已经不在栈顶了，还怎么会可见呢？</p>
-<p>这是因为并不是每一个活动都会占满整个屏幕，比如对话框形式的活动只会占用屏幕中间的部分区域。处于暂停状态的活动仍然是完全存活着的，系统也不愿意去回收这种活动（因为它还是可见的，回收可见的东西都会在用户体验方面有不好的影响，）只有在内存极低的情况下，系统才会去考虑回收这种活动。</p>
-<blockquote>
-<p>3、停止状态</p>
-</blockquote>
-<p>当一个活动不再处于栈顶位置，并且完全不可见的状态，就进入了停止状态。系统仍然会为这种活动保持相应的状态和成员变量，但是这并不是完全可靠的，当其他地方需要内存时，处于停止状态的活动有可能会被系统回收。</p>
-<blockquote>
-<p>4、销毁状态</p>
-</blockquote>
-<p>当一个活动从返回栈中移除后就变成了销毁状态。系统会最倾向于回收处于这种状态的活动，从而保证手机的内存充足。</p>
-<hr>
-<h3 id="2、回调方法"><a href="#2、回调方法" class="headerlink" title="2、回调方法"></a>2、回调方法</h3><p>Activity 类中定义了 <strong><font color="#FF0000">7</font></strong> 个回调方法，覆盖了 Activity 生命周期的每一个环节：</p>
-<blockquote>
-<p>onCreate()</p>
-</blockquote>
-<p>这个方法你已经看到过很多次了，每个活动中我们都重写了这个方法，它会在活动第一次被创建的时候调用。你应该在这个方法中完成活动的初始化操作，比如加载布局、绑定事件等。</p>
-<blockquote>
-<p>onStart()</p>
-</blockquote>
-<p>这个方法在活动由不可见变为可见的时候调用。</p>
-<blockquote>
-<p>onResume()</p>
-</blockquote>
-<p>这个方法在活动准备好和用户进行交互的时候调用。此时的活动一定位于返回栈的栈顶，并且处于运行状态。</p>
-<blockquote>
-<p>onPause()</p>
-</blockquote>
-<p>这个方法在系统准备去启动或者恢复另一个活动的时候调用。我们通常会在这个方法中将一些消耗 CPU 的资源释放掉，以及保存一些关键数据，但这个方法的执行速度一定要快，不然会影响到新的栈顶活动的使用。</p>
-<blockquote>
-<p>onStop()</p>
-</blockquote>
-<p>这个方法在活动完全不可见的时候调用。它和 onPause() 方法的主要区别在于，如果启动的新活动是一个对话框式的活动，那么 onPause() 方法会得到执行，而 onStop() 方法并不会执行。</p>
-<blockquote>
-<p>onDestroy()</p>
-</blockquote>
-<p>这个方法在活动被销毁之后调用，之后活动的状态将变为销毁状态。</p>
-<blockquote>
-<p>onRestart()</p>
-</blockquote>
-<p>这个方法在活动由停止状态变为运行状态之前调用，也就是活动被重新启动了。</p>
-<hr>
-<h3 id="3、生存期"><a href="#3、生存期" class="headerlink" title="3、生存期"></a>3、生存期</h3><p>以上 <strong><font color="#FF0000">7</font></strong> 个方法中除了 onRestart() 方法，其他都是两两对应的，从而可以将活动分为 <strong><font color="#FF0000">3</font></strong> 种生存期。</p>
-<p><strong><font color="#FF0000">完整生存期</font></strong>：活动在 onCreate() 方法和 onDestroy() 方法之间所经历的，就是完整生存期。一般情况下，一个活动会在 onCreate() 方法中完成各种初始化操作，而在 onDestroy() 方法种完成释放内存的操作。</p>
-<p><strong><font color="#FF0000">可见生存期()</font></strong>：活动在 onStart() 方法和 onStop() 方法之间所经历的，就是可见生存期。在可见生存期内，活动对于用户总是可见的，即便有可能无法和用户进行交互。我们可以通过这两个方法，合理地管理那些对用户可见的资源。比如在 onStart() 方法中对资源进行加载，而在 onStop() 方法中对资源进行释放，从而保证处于停止状态的活动不会占用过多内存。</p>
-<p><strong><font color="#FF0000">前台生存期</font></strong>：活动在 onResume() 方法和 onPause() 方法之间所经历的，就是前台生存期。在前台生存期内，活动总是处于运行状态的，此时的活动是可以和用户进行交互的，我们平时看到和接触最多的就是这个状态下的活动。</p>
-<p>我们看下官方给出的 Activity 生命周期的示意图：<br><br></p>
-<center><img src="https://upload-images.jianshu.io/upload_images/3517194-a82dadc7f3f3b829.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/720" alt="Activity.png"></center>
-
-<hr>
+                <h1 id="1、活动状态"><a href="#1、活动状态" class="headerlink" title="1、活动状态"></a>1、活动状态</h1><p>每个活动在其生命周期中最多可能会有 <strong><font color="#FF0000">4</font></strong> 种状态：<strong>运行状态、暂停状态、停止状态、销毁状态</strong>。</p>
+<h2 id="1-1-运行状态"><a href="#1-1-运行状态" class="headerlink" title="1.1 运行状态"></a>1.1 运行状态</h2><p>当一个活动位于返回栈的<code>栈顶</code>时，这时活动就处于<strong>“运行状态”</strong>。<strong><font color="#ff0000">系统最不愿意回收的就是处于运行状态的活动，因为这会带来非常差的用户体验</font></strong>。</p>
+<h2 id="1-2-暂停状态"><a href="#1-2-暂停状态" class="headerlink" title="1.2 暂停状态"></a>1.2 暂停状态</h2><p>当一个活动<code>不再处于栈顶位置</code>，但<code>仍然可见</code>时，这时活动就进入了<strong>“暂停状态”</strong>。你可能会觉得既然活动已经不在栈顶了，还怎么会可见呢？</p>
+<p>这是因为并不是每一个活动都会占满整个屏幕，比如对话框形式的活动只会占用屏幕中间的部分区域。<strong><font color="#ff0000">处于暂停状态的活动仍然是完全存活着的，系统也不愿意去回收这种活动</font></strong>，只有在内存极低的情况下，系统才会去考虑回收这种活动。</p>
+<h2 id="1-3-停止状态"><a href="#1-3-停止状态" class="headerlink" title="1.3 停止状态"></a>1.3 停止状态</h2><p>当一个活动<code>不再处于栈顶位置</code>，并且<code>完全不可见</code>的状态，就进入了<strong>“停止状态”</strong>。系统仍然会为这种活动保持相应的状态和成员变量，但是这并不是完全可靠的，<strong><font color="#ff0000">当其他地方需要内存时，处于停止状态的活动有可能会被系统回收</font></strong>。</p>
+<h2 id="1-4-销毁状态"><a href="#1-4-销毁状态" class="headerlink" title="1.4 销毁状态"></a>1.4 销毁状态</h2><p>当一个活动从返回栈中<code>移除</code>后就变成了<strong>“销毁状态”</strong>。<strong><font color="#ff0000">系统会最倾向于回收处于这种状态的活动</font></strong>，从而保证手机的内存充足。</p>
+<h1 id="2、回调方法"><a href="#2、回调方法" class="headerlink" title="2、回调方法"></a>2、回调方法</h1><p>Activity 类中定义了 <strong><font color="#FF0000">7</font></strong> 个回调方法，覆盖了 Activity 生命周期的每一个环节：</p>
+<h4 id="2-1-onCreate"><a href="#2-1-onCreate" class="headerlink" title="2.1 onCreate()"></a><font color="#FF8C00">2.1 onCreate()</font></h4><p>这个方法你已经看到过很多次了，每个活动中我们都重写了这个方法，它会在活动<code>第一次被创建</code>的时候调用。你应该在这个方法中完成活动的初始化操作，比如加载布局、绑定事件等。</p>
+<h4 id="2-2-onStart"><a href="#2-2-onStart" class="headerlink" title="2.2 onStart()"></a><font color="#FF8C00">2.2 onStart()</font></h4><p>这个方法在活动由<code>不可见变</code>为<code>可见</code>的时候调用。</p>
+<h4 id="2-3-onResume"><a href="#2-3-onResume" class="headerlink" title="2.3 onResume()"></a><font color="#FF8C00">2.3 onResume()</font></h4><p>这个方法在<code>活动准备好和用户进行交互的时候</code>调用。此时的活动一定位于返回栈的栈顶，并且处于运行状态。</p>
+<h4 id="2-4-onPause"><a href="#2-4-onPause" class="headerlink" title="2.4 onPause()"></a><font color="#FF8C00">2.4 onPause()</font></h4><p>这个方法在<code>系统准备去启动或者恢复另一个活动的时候</code>调用。我们通常会在这个方法中将一些消耗 CPU 的资源释放掉，以及保存一些关键数据，但这个方法的执行速度一定要快，不然会影响到新的栈顶活动的使用。</p>
+<h4 id="2-5-onStop"><a href="#2-5-onStop" class="headerlink" title="2.5 onStop()"></a><font color="#FF8C00">2.5 onStop()</font></h4><p>这个方法在<code>活动完全不可见的时候</code>调用。它和 onPause() 方法的主要区别在于，如果启动的新活动是一个对话框式的活动，那么 onPause() 方法会得到执行，而 onStop() 方法并不会执行。</p>
+<h4 id="2-6-onDestroy"><a href="#2-6-onDestroy" class="headerlink" title="2.6 onDestroy()"></a><font color="#FF8C00">2.6 onDestroy()</font></h4><p>这个方法在<code>活动被销毁之后</code>调用，之后活动的状态将变为”销毁状态”。</p>
+<h4 id="2-7-onRestart"><a href="#2-7-onRestart" class="headerlink" title="2.7 onRestart()"></a><font color="#FF8C00">2.7 onRestart()</font></h4><p>这个方法在<code>活动由停止状态变为运行状态之前</code>调用，也就是活动被重新启动了。</p>
+<h1 id="3、生存期"><a href="#3、生存期" class="headerlink" title="3、生存期"></a>3、生存期</h1><p>以上 <strong><font color="#FF0000">7</font></strong> 个方法中除了 onRestart() 方法，其他都是两两对应的，从而可以将活动分为 <strong><font color="#FF0000">3</font></strong> 种生存期。</p>
+<p>✎&nbsp;&nbsp;<strong><font color="#FF0000">完整生存期</font></strong>：活动在 onCreate() 方法和 onDestroy() 方法之间所经历的，就是完整生存期。一般情况下，一个活动会在 onCreate() 方法中完成各种初始化操作，而在 onDestroy() 方法种完成释放内存的操作。</p>
+<p>✎&nbsp;&nbsp;<strong><font color="#FF0000">可见生存期()</font></strong>：活动在 onStart() 方法和 onStop() 方法之间所经历的，就是可见生存期。在可见生存期内，活动对于用户总是可见的，即便有可能无法和用户进行交互。我们可以通过这两个方法，合理地管理那些对用户可见的资源。比如在 onStart() 方法中对资源进行加载，而在 onStop() 方法中对资源进行释放，从而保证处于停止状态的活动不会占用过多内存。</p>
+<p>✎&nbsp;&nbsp;<strong><font color="#FF0000">前台生存期</font></strong>：活动在 onResume() 方法和 onPause() 方法之间所经历的，就是前台生存期。在前台生存期内，活动总是处于运行状态的，此时的活动是可以和用户进行交互的，我们平时看到和接触最多的就是这个状态下的活动。</p>
+<p>我们看下 Activity 生命周期的示意图：</p>
+<p><img src="/medias/Codes/Activity生命周期_01.png" alt="--&gt; Activity 生命周期 &lt;--"></p>
 <h3 id="4、实战演练"><a href="#4、实战演练" class="headerlink" title="4、实战演练"></a>4、实战演练</h3><h4 id="4-1-Code"><a href="#4-1-Code" class="headerlink" title="4.1 Code"></a>4.1 Code</h4><p>我们先定义一个：NormalActivity</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="utf-8"?></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>android.support.constraint.ConstraintLayout</span> <span class="token attr-name"><span class="token namespace">xmlns:</span>android</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://schemas.android.com/apk/res/android<span class="token punctuation">"</span></span>
