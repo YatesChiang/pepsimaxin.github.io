@@ -464,7 +464,7 @@
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>activity</span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>activity</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>.NormalActivity<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>activity</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>.DialogActivity<span class="token punctuation">"</span></span>
-            <span class="token attr-name"><span class="token namespace">android:</span>theme</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>@style/Theme.AppCompat.Dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>    // Look here
+            <span class="token attr-name"><span class="token namespace">android:</span>theme</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>@style/Theme.AppCompat.Dialog<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>    // 对话框主题
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>activity</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>application</span><span class="token punctuation">></span></span>
 
@@ -597,7 +597,7 @@
 <h4 id="5-1-场景"><a href="#5-1-场景" class="headerlink" title="5.1 场景"></a>5.1 场景</h4><p>比如我们看以下的场景：</p>
 <p>应用中有一个活动 A ，用户在活动 A 的基础上启动了活动 B ，活动 A 就进入了停止的状态，这个时候由于系统内存不足，将活动 A 回收掉了，然后用户按下 Back 键返回活动 A ，会出现什么情况呢？</p>
 <p>其实还是会正常显示活动 A 的，但是此时并不会执行 onRestart() 方法了，而是会执行活动 A 的 onCreate() 方法，因为活动 A 在这种情况下会被重新创建一次。</p>
-<p>可能这并不会影响正常的功能，但是存在一个特殊情况：如果活动 A 中存在临时数据和状态（比如 A 中有一个文本输入框，我们输入了一些文字，然后启动了 B 活动，如果 A 被 kill了，在重新回到 A 后，A 活动重新创建，那么数据都丢失了），此时会严重影响用户体验，该怎么办？</p>
+<p>可能这并不会影响正常的功能，但是存在一个特殊情况：如果活动 A 中存在临时数据和状态（比如 A 中有一个文本输入框，我们输入了一些文字，然后启动了 B 活动，如果 A 被 kill了，在重新回到 A 后，A 活动重新创建，那么数据都丢失了），此时会严重影响用户体验，此时该怎么办？</p>
 <h4 id="5-2-策略"><a href="#5-2-策略" class="headerlink" title="5.2 策略"></a>5.2 策略</h4><p>其实官方文档给出了解决方案，Activity 中提供了一个 onSaveInstanceState() 回调方法，这个方法可以保证在活动被回收之前一定会被调用，因此我们可以通过这个方法来解决活动被回收时临时数据得不到保存的问题。</p>
 <p>onSaveInstanceState() 方法会携带一个 Bundle 类型的参数，Bundle 提供了一系列的方法用于保存数据，比如可以使用 putString() 方法保存字符串，使用 putInt() 方法保存整型数据，依次类推。</p>
 <p>每个保存方法需要传入两个参数，第一个参数是键，用于后面从 Bundle 中取值，第二个参数是真正要保存的内容。</p>
