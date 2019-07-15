@@ -5,7 +5,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="博客日志, Thinking in Android">
-    <meta name="description" content="《Thinking in Android》 - - “新增”
+    <meta name="description" content="《Thinking in Android》 - - “新增文章”
 
 
 
@@ -15,12 +15,15 @@
 
 
 
-2019.05.24
- 《深入钻研 Android 核心机制 之 “自动背光”》 
+2019.06.26
+ 《Activity 启动流程（原理）》 
 
 
-2019.05.06
- 《深入钻研 Android 核心机制">
+2019.06.12
+ 《谈谈 ANR 之 Service 超时》 
+
+
+">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -92,11 +95,11 @@
     </li>
     
     <li class="hide-on-med-and-down">
-        <a href="/categories/四大组件/" class="waves-effect waves-light">
+        <a href="/categories/常用组件/" class="waves-effect waves-light">
             
             <i class="fa fa-cube"></i>
             
-            <span>组件</span>
+            <span>四大组件</span>
         </a>
     </li>
     
@@ -105,7 +108,7 @@
             
             <i class="fa fa-spinner"></i>
             
-            <span>开机</span>
+            <span>系统启动</span>
         </a>
     </li>
     
@@ -114,7 +117,7 @@
             
             <i class="fa fa-superpowers"></i>
             
-            <span>框架</span>
+            <span>框架服务</span>
         </a>
     </li>
     
@@ -123,7 +126,7 @@
             
             <i class="fa fa-link"></i>
             
-            <span>机制</span>
+            <span>核心机制</span>
         </a>
     </li>
     
@@ -132,7 +135,7 @@
             
             <i class="fa fa-yelp"></i>
             
-            <span>优化</span>
+            <span>性能优化</span>
         </a>
     </li>
     
@@ -141,43 +144,16 @@
             
             <i class="fa fa-envira"></i>
             
-            <span>模式</span>
+            <span>设计模式</span>
         </a>
     </li>
     
     <li class="hide-on-med-and-down">
-        <a href="/categories/算法专栏/" class="waves-effect waves-light">
-            
-            <i class="fa fa-modx"></i>
-            
-            <span>算法</span>
-        </a>
-    </li>
-    
-    <li class="hide-on-med-and-down">
-        <a href="/categories/技术储备/" class="waves-effect waves-light">
-            
-            <i class="fa fa-linode"></i>
-            
-            <span>拓展</span>
-        </a>
-    </li>
-    
-    <li class="hide-on-med-and-down">
-        <a href="/about" class="waves-effect waves-light">
+        <a href="/friends" class="waves-effect waves-light">
             
             <i class="fa fa-user-circle-o"></i>
             
             <span>作者</span>
-        </a>
-    </li>
-    
-    <li class="hide-on-med-and-down">
-        <a href="/categories/技术细节/" class="waves-effect waves-light">
-            
-            <i class="fa fa-file-text"></i>
-            
-            <span>FAQ</span>
         </a>
     </li>
     
@@ -234,11 +210,11 @@
         </li>
         
         <li>
-            <a href="/categories/四大组件/" class="waves-effect waves-light">
+            <a href="/categories/常用组件/" class="waves-effect waves-light">
                 
                 <i class="fa fa-fw fa-cube"></i>
                 
-                组件
+                四大组件
             </a>
         </li>
         
@@ -247,7 +223,7 @@
                 
                 <i class="fa fa-fw fa-spinner"></i>
                 
-                开机
+                系统启动
             </a>
         </li>
         
@@ -256,7 +232,7 @@
                 
                 <i class="fa fa-fw fa-superpowers"></i>
                 
-                框架
+                框架服务
             </a>
         </li>
         
@@ -265,7 +241,7 @@
                 
                 <i class="fa fa-fw fa-link"></i>
                 
-                机制
+                核心机制
             </a>
         </li>
         
@@ -274,7 +250,7 @@
                 
                 <i class="fa fa-fw fa-yelp"></i>
                 
-                优化
+                性能优化
             </a>
         </li>
         
@@ -283,43 +259,16 @@
                 
                 <i class="fa fa-fw fa-envira"></i>
                 
-                模式
+                设计模式
             </a>
         </li>
         
         <li>
-            <a href="/categories/算法专栏/" class="waves-effect waves-light">
-                
-                <i class="fa fa-fw fa-modx"></i>
-                
-                算法
-            </a>
-        </li>
-        
-        <li>
-            <a href="/categories/技术储备/" class="waves-effect waves-light">
-                
-                <i class="fa fa-fw fa-linode"></i>
-                
-                拓展
-            </a>
-        </li>
-        
-        <li>
-            <a href="/about" class="waves-effect waves-light">
+            <a href="/friends" class="waves-effect waves-light">
                 
                 <i class="fa fa-fw fa-user-circle-o"></i>
                 
                 作者
-            </a>
-        </li>
-        
-        <li>
-            <a href="/categories/技术细节/" class="waves-effect waves-light">
-                
-                <i class="fa fa-fw fa-file-text"></i>
-                
-                FAQ
             </a>
         </li>
         
@@ -405,14 +354,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>&nbsp;文章字数 :&nbsp;
-                        660
+                        819
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>&nbsp;阅读时长 :&nbsp;
-                        2 分钟
+                        3 分钟
                     </div>
                     
                 
@@ -429,7 +378,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="《Thinking-in-Android》-“新增”"><a href="#《Thinking-in-Android》-“新增”" class="headerlink" title="《Thinking in Android》 - - “新增”"></a><center>《Thinking in Android》 - - “新增”</center></h4><p><br></p>
+                <h4 id="《Thinking-in-Android》-“新增文章”"><a href="#《Thinking-in-Android》-“新增文章”" class="headerlink" title="《Thinking in Android》 - - “新增文章”"></a><center>《Thinking in Android》 - - “新增文章”</center></h4><p><br></p>
 <table>
 <thead>
 <tr>
@@ -439,59 +388,71 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">2019.05.24</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心机制 之 “自动背光”》 </font></td>
+<td style="text-align:center">2019.06.26</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《Activity 启动流程（原理）》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.05.06</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心机制 之 “事件分发”》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2019.04.24</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《应用 ANR 分析实录》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2019.04.18</td>
+<td style="text-align:center">2019.06.12</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈 ANR 之 Service 超时》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.04.15</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《Android 日常开发问题总结》 </font></td>
+<td style="text-align:center">2019.06.06</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《“内存泄漏” 的前世今生》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.31</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《关于 “自动背光” 的原理》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.20</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《“进程被杀”的前因后果》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.01</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《聊聊 LowMemoryKiller 机制》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2019.04.20</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《关于 Handler 机制（原理）》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2019.04.12</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《关于 Handler 机制（用法）》 </font></td>
 </tr>
 <tr>
 <td style="text-align:center">2019.04.01</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《面试系列 之 “事件分发”》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《聊聊 “事件分发” 机制》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.03.01</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈 “时间复杂度”》 </font></td>
+<td style="text-align:center">2019.03.18</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《Android 核心技术 之 JNI》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.02.06</td>
+<td style="text-align:center">2019.03.10</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（8）- APK 安装（下）》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.02.01</td>
+<td style="text-align:center">2019.02.20</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（7）- APK 安装（中）》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.01.26</td>
+<td style="text-align:center">2019.02.10</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（6）- APK 安装（上）》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.01.22</td>
+<td style="text-align:center">2019.02.02</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（5）- PackageParser》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.01.16</td>
+<td style="text-align:center">2019.01.25</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（4）- PackageInstaller》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.01.12</td>
+<td style="text-align:center">2019.01.16</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（3）- PackageManager》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2019.01.05</td>
+<td style="text-align:center">2019.01.08</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（2）- 构造函数》 </font></td>
 </tr>
 <tr>
@@ -499,85 +460,69 @@
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（1）- 启动流程》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2018.12.26</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 启动阶段 之 Launcher 启动和加载》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2018.12.18</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 启动阶段 之 systemserver》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2018.12.10</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 启动阶段 之 zygote》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2018.12.01</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 启动阶段 之 init》 </font></td>
-</tr>
-<tr>
 <td style="text-align:center">2018.11.20</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心技术 之 Binder（基础篇）》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 Launcher》 </font></td>
 </tr>
 <tr>
 <td style="text-align:center">2018.11.10</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心技术 之 JNI》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 systemserver》 </font></td>
 </tr>
 <tr>
 <td style="text-align:center">2018.11.01</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心技术 之 LowMemoryKiller》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 zygote》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2018.09.13</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心机制 之 Handler（原理篇）》 </font></td>
+<td style="text-align:center">2018.10.20</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 init》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2018.10.08</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《Android 设计模式 之 单例》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2018.09.20</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《AsyncTask 详解（用法）》 </font></td>
 </tr>
 <tr>
 <td style="text-align:center">2018.09.10</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心机制 之 Handler（用法篇）》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《线程中的 “同步” 和 “死锁”》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2018.09.03</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《带你领略 Android 内存泄漏的前世今生》 </font></td>
+<td style="text-align:center">2018.09.01</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《“动态广播” 和 “静态广播”》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2018.08.20</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 核心原理 之 进程被杀》 </font></td>
+<td style="text-align:center">2018.08.26</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Activity 的启动模式》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2018.08.10</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 设计模式 之 单例模式》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2018.08.08</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《AsyncTask 详解（用法篇）》 </font></td>
+<td style="text-align:center">2018.08.18</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Activity 的生命周期》 </font></td>
 </tr>
 <tr>
 <td style="text-align:center">2018.08.06</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《浅析多线程中的 “同步” 和 “死锁”》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2018.07.28</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 “动态广播” 和 “静态广播” 的用法和区别》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Fragment 的生命周期》 </font></td>
 </tr>
 <tr>
 <td style="text-align:center">2018.07.25</td>
 <td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Service 的使用方法》 </font></td>
 </tr>
 <tr>
-<td style="text-align:center">2018.07.22</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Fragment 的生命周期》 </font></td>
-</tr>
-<tr>
-<td style="text-align:center">2018.07.20</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Activity 的生命周期》 </font></td>
-</tr>
-<tr>
 <td style="text-align:center">2018.07.18</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Activity 的启动模式》 </font></td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《谈谈 “时间复杂度”》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2018.07.10</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《面试系列 之 “事件分发”》 </font></td>
+</tr>
+<tr>
+<td style="text-align:center">2018.07.01</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《Android 日常开发问题总结》 </font></td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<h4 id="《Thinking-in-Android》-“修订”"><a href="#《Thinking-in-Android》-“修订”" class="headerlink" title="《Thinking in Android》 - - “修订”"></a><center>《Thinking in Android》 - - “修订”</center></h4><p><br></p>
+<h4 id="《Thinking-in-Android》-“修订日志”"><a href="#《Thinking-in-Android》-“修订日志”" class="headerlink" title="《Thinking in Android》 - - “修订日志”"></a><center>《Thinking in Android》 - - “修订日志”</center></h4><p><br></p>
 <table>
 <thead>
 <tr>
@@ -588,19 +533,89 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">2019.05.27</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入钻研 Android 设计模式 之 单例模式》 </font></td>
-<td style="text-align:center">细节优化</td>
+<td style="text-align:center">2019.07.11</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Activity 的生命周期》 </font></td>
+<td style="text-align:center">新增周期图</td>
 </tr>
 <tr>
-<td style="text-align:center">2019.04.01</td>
-<td style="text-align:center"><font color="#87CEEB" size="3"> 《“事件分发机制” - 面试题集》 </font></td>
-<td style="text-align:center">新增面试题</td>
+<td style="text-align:center">2019.07.09</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《聊聊 “事件分发” 机制》 </font></td>
+<td style="text-align:center">新增流程图，重新梳理代码逻辑</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.07.01</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《关于 Handler 机制（用法）》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.06.30</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《“内存泄漏” 的前世今生》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.06.27</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《探讨 Activity 的启动模式》 </font></td>
+<td style="text-align:center">新增示意图</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.19</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（8）- APK 安装（下）》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.16</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（7）- APK 安装（中）》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.14</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（6）- APK 安装（上）》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.12</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（5）- PackageParser》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.10</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（4）- PackageInstaller》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.07</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（3）- PackageManager》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.04</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（2）- 构造函数》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.05.02</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《PackageManagerService 钻研（1）- 启动流程》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.03.29</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 systemserver》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.03.26</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 zygote》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
+</tr>
+<tr>
+<td style="text-align:center">2019.03.23</td>
+<td style="text-align:center"><font color="#87CEEB" size="3"> 《深入探讨 Android 启动阶段 之 init》 </font></td>
+<td style="text-align:center">重新梳理源码</td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<h4 id="《Thinking-in-Android》-“优化”"><a href="#《Thinking-in-Android》-“优化”" class="headerlink" title="《Thinking in Android》 - - “优化”"></a><center>《Thinking in Android》 - - “优化”</center></h4><p><br></p>
+<h4 id="《Thinking-in-Android》-“优化记录”"><a href="#《Thinking-in-Android》-“优化记录”" class="headerlink" title="《Thinking in Android》 - - “优化记录”"></a><center>《Thinking in Android》 - - “优化记录”</center></h4><p><br></p>
 <table>
 <thead>
 <tr>
@@ -785,37 +800,40 @@ Android </div>
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/">
+                <a href="/2019/06/26/2019.06.26-chang-yong-zu-jian-xi-lie-activity-qi-dong-liu-cheng-yuan-li/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/自动背光.jpg" class="responsive-img" alt="深入钻研 Android 核心机制 之 自动背光">
+                        <img src="/medias/featureimages/常用组件.jpg" class="responsive-img" alt="Activity 启动流程（原理）">
                         
-                        <span class="card-title">深入钻研 Android 核心机制 之 自动背光</span>
+                        <span class="card-title">Activity 启动流程（原理）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary block-with-text">
-一、开篇1.1 核心源码
+                    <div class="summary block-with-text">一、开篇1.1 核心源码
 
 
-关键类
-路径
+Source
+Path
 
 
 
 
-BrightnessController.java
-frameworks/base/packages/SystemUI/src/com/android/systemui/settings</div>
+Activity.java
+framework/base/core/java/android/app/Activity.java
+
+
+Launcher.java
+packages</div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-05-24
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-26
                             </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/核心机制/" class="post-category" target="_blank">
-                                    核心机制
+                            <a href="/categories/常用组件/" class="post-category" target="_blank">
+                                    常用组件
                                 </a>
                             
                             
@@ -825,16 +843,12 @@ frameworks/base/packages/SystemUI/src/com/android/systemui/settings</div>
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Android-9-0/" target="_blank">
-                        <span class="chip bg-color">Android 9.0</span>
+                    <a href="/tags/Activity/" target="_blank">
+                        <span class="chip bg-color">Activity</span>
                     </a>
                     
-                    <a href="/tags/自动背光/" target="_blank">
-                        <span class="chip bg-color">自动背光</span>
-                    </a>
-                    
-                    <a href="/tags/亮度调节/" target="_blank">
-                        <span class="chip bg-color">亮度调节</span>
+                    <a href="/tags/ActivityManagerService/" target="_blank">
+                        <span class="chip bg-color">ActivityManagerService</span>
                     </a>
                     
                 </div>

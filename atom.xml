@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://superandroid.pro/"/>
-  <updated>2019-05-28T09:35:38.645Z</updated>
+  <updated>2019-07-11T07:09:43.756Z</updated>
   <id>https://superandroid.pro/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/"/>
     <id>https://superandroid.pro/2019/12/31/00.thinking-in-android-01.bo-ke-suo-yin/</id>
     <published>2019-12-31T01:08:00.000Z</published>
-    <updated>2019-05-28T09:35:38.645Z</updated>
+    <updated>2019-07-11T07:09:43.756Z</updated>
     
     <summary type="html">
     
@@ -53,7 +53,7 @@
     <link href="https://superandroid.pro/2019/12/30/00.thinking-in-android-02.zi-yuan-shou-cang/"/>
     <id>https://superandroid.pro/2019/12/30/00.thinking-in-android-02.zi-yuan-shou-cang/</id>
     <published>2019-12-30T01:08:00.000Z</published>
-    <updated>2019-05-22T11:36:54.373Z</updated>
+    <updated>2019-06-27T10:07:29.634Z</updated>
     
     <summary type="html">
     
@@ -85,7 +85,7 @@
     <link href="https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/"/>
     <id>https://superandroid.pro/2019/12/29/00.thinking-in-android-03.xiu-gai-ri-zhi/</id>
     <published>2019-12-29T01:08:00.000Z</published>
-    <updated>2019-05-27T07:52:32.514Z</updated>
+    <updated>2019-07-11T03:06:30.713Z</updated>
     
     <summary type="html">
     
@@ -93,7 +93,7 @@
       
         
         
-          &lt;h4 id=&quot;《Thinking-in-Android》-“新增”&quot;&gt;&lt;a href=&quot;#《Thinking-in-Android》-“新增”&quot; class=&quot;headerlink&quot; title=&quot;《Thinking in Android》 - -
+          &lt;h4 id=&quot;《Thinking-in-Android》-“新增文章”&quot;&gt;&lt;a href=&quot;#《Thinking-in-Android》-“新增文章”&quot; class=&quot;headerlink&quot; title=&quot;《Thinking in Android》 - -
         
       
     
@@ -111,11 +111,97 @@
   </entry>
   
   <entry>
-    <title>深入钻研 Android 核心机制 之 自动背光</title>
-    <link href="https://superandroid.pro/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/"/>
-    <id>https://superandroid.pro/2019/05/24/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-zi-dong-bei-guang/</id>
-    <published>2019-05-24T01:08:00.000Z</published>
-    <updated>2019-05-27T06:47:02.293Z</updated>
+    <title>Activity 启动流程（原理）</title>
+    <link href="https://superandroid.pro/2019/06/26/2019.06.26-chang-yong-zu-jian-xi-lie-activity-qi-dong-liu-cheng-yuan-li/"/>
+    <id>https://superandroid.pro/2019/06/26/2019.06.26-chang-yong-zu-jian-xi-lie-activity-qi-dong-liu-cheng-yuan-li/</id>
+    <published>2019-06-26T01:08:00.000Z</published>
+    <updated>2019-06-27T08:23:20.228Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;一、开篇&quot;&gt;&lt;a href=&quot;#一、开篇&quot; class=&quot;headerlink&quot; title=&quot;一、开篇&quot;&gt;&lt;/a&gt;一、开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-核心源码&quot;&gt;&lt;a href=&quot;#1-1-核心源码&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="常用组件" scheme="https://superandroid.pro/categories/%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6/"/>
+    
+    
+      <category term="Activity" scheme="https://superandroid.pro/tags/Activity/"/>
+    
+      <category term="ActivityManagerService" scheme="https://superandroid.pro/tags/ActivityManagerService/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>谈谈 ANR 之 Service 超时</title>
+    <link href="https://superandroid.pro/2019/06/12/2019.06.12-xing-neng-you-hua-xi-lie-tan-tan-anr-zhi-service-chao-shi/"/>
+    <id>https://superandroid.pro/2019/06/12/2019.06.12-xing-neng-you-hua-xi-lie-tan-tan-anr-zhi-service-chao-shi/</id>
+    <published>2019-06-12T01:08:00.000Z</published>
+    <updated>2019-07-12T07:59:34.404Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-核心源码&quot;&gt;&lt;a href=&quot;#1-核心源码&quot; class=&quot;headerlink&quot; title=&quot;1. 核心源码&quot;&gt;&lt;/a&gt;1.
+        
+      
+    
+    </summary>
+    
+      <category term="性能优化" scheme="https://superandroid.pro/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+    
+      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+      <category term="ANR" scheme="https://superandroid.pro/tags/ANR/"/>
+    
+      <category term="Service" scheme="https://superandroid.pro/tags/Service/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>“内存泄漏” 的前世今生</title>
+    <link href="https://superandroid.pro/2019/06/06/2019.06.06-xing-neng-you-hua-xi-lie-nei-cun-xie-lou-de-qian-shi-jin-sheng/"/>
+    <id>https://superandroid.pro/2019/06/06/2019.06.06-xing-neng-you-hua-xi-lie-nei-cun-xie-lou-de-qian-shi-jin-sheng/</id>
+    <published>2019-06-06T01:08:00.000Z</published>
+    <updated>2019-06-28T03:04:57.732Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-基础了解&quot;&gt;&lt;a href=&quot;#1-基础了解&quot; class=&quot;headerlink&quot; title=&quot;1. 基础了解&quot;&gt;&lt;/a&gt;1. 基础了解&lt;/h1&gt;&lt;h2 id=&quot;1-1-什么是内存泄漏？&quot;&gt;&lt;a href=&quot;#1-1-什么是内存泄漏？&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="性能优化" scheme="https://superandroid.pro/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+    
+      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+      <category term="内存泄漏" scheme="https://superandroid.pro/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于 &quot;自动背光&quot; 的原理</title>
+    <link href="https://superandroid.pro/2019/05/31/2019.05.31-he-xin-ji-zhi-xi-lie-guan-yu-zi-dong-bei-guang-de-yuan-li/"/>
+    <id>https://superandroid.pro/2019/05/31/2019.05.31-he-xin-ji-zhi-xi-lie-guan-yu-zi-dong-bei-guang-de-yuan-li/</id>
+    <published>2019-05-31T01:08:00.000Z</published>
+    <updated>2019-06-27T02:25:01.224Z</updated>
     
     <summary type="html">
     
@@ -142,11 +228,115 @@
   </entry>
   
   <entry>
-    <title>深入钻研 Android 核心机制 之 &quot;事件分发&quot;</title>
-    <link href="https://superandroid.pro/2019/05/06/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/"/>
-    <id>https://superandroid.pro/2019/05/06/04.he-xin-ji-zhi-xi-lie-shen-ru-zuan-yan-android-he-xin-ji-zhi-zhi-shi-jian-fen-fa/</id>
-    <published>2019-05-06T01:08:00.000Z</published>
-    <updated>2019-05-27T06:46:07.367Z</updated>
+    <title>“进程被杀”的前因后果</title>
+    <link href="https://superandroid.pro/2019/05/20/2019.05.20-he-xin-ji-zhi-xi-lie-jin-cheng-bei-sha-de-qian-yin-hou-guo/"/>
+    <id>https://superandroid.pro/2019/05/20/2019.05.20-he-xin-ji-zhi-xi-lie-jin-cheng-bei-sha-de-qian-yin-hou-guo/</id>
+    <published>2019-05-20T01:08:00.000Z</published>
+    <updated>2019-07-12T01:21:04.382Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;一、开篇&quot;&gt;&lt;a href=&quot;#一、开篇&quot; class=&quot;headerlink&quot; title=&quot;一、开篇&quot;&gt;&lt;/a&gt;一、开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-核心源码&quot;&gt;&lt;a href=&quot;#1-1-核心源码&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="核心机制" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/"/>
+    
+    
+      <category term="Process" scheme="https://superandroid.pro/tags/Process/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>聊聊 LowMemoryKiller 机制</title>
+    <link href="https://superandroid.pro/2019/05/01/2019.05.01-he-xin-ji-zhi-xi-lie-liao-liao-lowmemorykiller-ji-zhi/"/>
+    <id>https://superandroid.pro/2019/05/01/2019.05.01-he-xin-ji-zhi-xi-lie-liao-liao-lowmemorykiller-ji-zhi/</id>
+    <published>2019-05-01T01:08:00.000Z</published>
+    <updated>2019-06-27T02:36:18.236Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;一、核心源码&quot;&gt;&lt;a href=&quot;#一、核心源码&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="核心机制" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/"/>
+    
+    
+      <category term="LowMemoryKiller" scheme="https://superandroid.pro/tags/LowMemoryKiller/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于 Handler 机制（原理）</title>
+    <link href="https://superandroid.pro/2019/04/20/2019.04.20-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yuan-li/"/>
+    <id>https://superandroid.pro/2019/04/20/2019.04.20-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yuan-li/</id>
+    <published>2019-04-20T01:08:00.000Z</published>
+    <updated>2019-07-03T08:34:05.409Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-开篇&quot;&gt;&lt;a href=&quot;#1-开篇&quot; class=&quot;headerlink&quot; title=&quot;1. 开篇&quot;&gt;&lt;/a&gt;1. 开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-核心源码&quot;&gt;&lt;a href=&quot;#1-1-核心源码&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="核心机制" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/"/>
+    
+    
+      <category term="Handler" scheme="https://superandroid.pro/tags/Handler/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于 Handler 机制（用法）</title>
+    <link href="https://superandroid.pro/2019/04/12/2019.04.12-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yong-fa/"/>
+    <id>https://superandroid.pro/2019/04/12/2019.04.12-he-xin-ji-zhi-xi-lie-guan-yu-handler-ji-zhi-yong-fa/</id>
+    <published>2019-04-12T01:08:00.000Z</published>
+    <updated>2019-07-01T06:52:00.458Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-开篇&quot;&gt;&lt;a href=&quot;#1-开篇&quot; class=&quot;headerlink&quot; title=&quot;1. 开篇&quot;&gt;&lt;/a&gt;1. 开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-引出问题&quot;&gt;&lt;a href=&quot;#1-1-引出问题&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="核心机制" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/"/>
+    
+    
+      <category term="Handler" scheme="https://superandroid.pro/tags/Handler/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>聊聊 “事件分发” 机制</title>
+    <link href="https://superandroid.pro/2019/04/01/2019.04.01-he-xin-ji-zhi-xi-lie-liao-liao-shi-jian-fen-fa-ji-zhi/"/>
+    <id>https://superandroid.pro/2019/04/01/2019.04.01-he-xin-ji-zhi-xi-lie-liao-liao-shi-jian-fen-fa-ji-zhi/</id>
+    <published>2019-04-01T01:08:00.000Z</published>
+    <updated>2019-07-09T10:23:11.898Z</updated>
     
     <summary type="html">
     
@@ -172,11 +362,11 @@
   </entry>
   
   <entry>
-    <title>应用 ANR 分析实录</title>
-    <link href="https://superandroid.pro/2019/04/24/07.xing-neng-you-hua-xi-lie-ying-yong-anr-fen-xi-shi-lu/"/>
-    <id>https://superandroid.pro/2019/04/24/07.xing-neng-you-hua-xi-lie-ying-yong-anr-fen-xi-shi-lu/</id>
-    <published>2019-04-24T01:08:00.000Z</published>
-    <updated>2019-05-22T12:43:17.412Z</updated>
+    <title>Android 核心技术 之 JNI</title>
+    <link href="https://superandroid.pro/2019/03/18/2019.03.18-he-xin-ji-zhi-xi-lie-android-he-xin-ji-zhu-zhi-jni/"/>
+    <id>https://superandroid.pro/2019/03/18/2019.03.18-he-xin-ji-zhi-xi-lie-android-he-xin-ji-zhu-zhi-jni/</id>
+    <published>2019-03-18T01:08:00.000Z</published>
+    <updated>2019-06-27T01:46:22.183Z</updated>
     
     <summary type="html">
     
@@ -184,151 +374,27 @@
       
         
         
-          &lt;p&gt;分析 ANR 问题，有三大利器：&lt;strong&gt;&lt;font color=&quot;#ff0000&quot;&gt;Logcat&lt;/font&gt;&lt;/strong&gt;，&lt;strong&gt;&lt;font color=&quot;#ff0000&quot;&gt;traces&lt;/font&gt;&lt;/strong&gt; 和
+          &lt;h1 id=&quot;1-开篇&quot;&gt;&lt;a href=&quot;#1-开篇&quot; class=&quot;headerlink&quot; title=&quot;1. 开篇&quot;&gt;&lt;/a&gt;1. 开篇&lt;/h1&gt;&lt;h2 id=&quot;1-1-核心源码&quot;&gt;&lt;a href=&quot;#1-1-核心源码&quot; class=&quot;headerlink&quot;
         
       
     
     </summary>
     
-      <category term="性能优化" scheme="https://superandroid.pro/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="核心技术" scheme="https://superandroid.pro/categories/%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="性能优化" scheme="https://superandroid.pro/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="JNI" scheme="https://superandroid.pro/tags/JNI/"/>
     
-      <category term="ANR" scheme="https://superandroid.pro/tags/ANR/"/>
-    
-      <category term="无响应" scheme="https://superandroid.pro/tags/%E6%97%A0%E5%93%8D%E5%BA%94/"/>
-    
-      <category term="应用" scheme="https://superandroid.pro/tags/%E5%BA%94%E7%94%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>谈谈 ANR 之 Service 超时</title>
-    <link href="https://superandroid.pro/2019/04/18/07.xing-neng-you-hua-xi-lie-tan-tan-ying-yong-anr-zhi-service-chao-shi/"/>
-    <id>https://superandroid.pro/2019/04/18/07.xing-neng-you-hua-xi-lie-tan-tan-ying-yong-anr-zhi-service-chao-shi/</id>
-    <published>2019-04-18T01:08:00.000Z</published>
-    <updated>2019-05-24T07:26:27.485Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h1 id=&quot;1-核心源码&quot;&gt;&lt;a href=&quot;#1-核心源码&quot; class=&quot;headerlink&quot; title=&quot;1. 核心源码&quot;&gt;&lt;/a&gt;1.
-        
-      
-    
-    </summary>
-    
-      <category term="性能优化" scheme="https://superandroid.pro/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-    
-    
-      <category term="ANR" scheme="https://superandroid.pro/tags/ANR/"/>
-    
-      <category term="Service" scheme="https://superandroid.pro/tags/Service/"/>
-    
-      <category term="Android 9.0" scheme="https://superandroid.pro/tags/Android-9-0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android 日常开发问题总结</title>
-    <link href="https://superandroid.pro/2019/04/15/10.jing-yan-zong-jie-xi-lie-android-ri-chang-kai-fa-wen-ti-zong-jie/"/>
-    <id>https://superandroid.pro/2019/04/15/10.jing-yan-zong-jie-xi-lie-android-ri-chang-kai-fa-wen-ti-zong-jie/</id>
-    <published>2019-04-15T01:08:00.000Z</published>
-    <updated>2019-05-29T08:02:34.625Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h3 id=&quot;1-访客模式-PC-端不显示盘符&quot;&gt;&lt;a href=&quot;#1-访客模式-PC-端不显示盘符&quot; class=&quot;headerlink&quot; title=&quot;1. 访客模式 PC 端不显示盘符&quot;&gt;&lt;/a&gt;&lt;center&gt;1. 访客模式 PC
-        
-      
-    
-    </summary>
-    
-      <category term="技术细节" scheme="https://superandroid.pro/categories/%E6%8A%80%E6%9C%AF%E7%BB%86%E8%8A%82/"/>
-    
-    
-      <category term="经验总结" scheme="https://superandroid.pro/tags/%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/"/>
-    
-      <category term="整机开发" scheme="https://superandroid.pro/tags/%E6%95%B4%E6%9C%BA%E5%BC%80%E5%8F%91/"/>
-    
-      <category term="Bug/需求" scheme="https://superandroid.pro/tags/Bug-%E9%9C%80%E6%B1%82/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>面试系列 之 &quot;事件分发&quot;</title>
-    <link href="https://superandroid.pro/2019/04/01/01.mian-shi-ti-ji-xi-lie-he-xin-ji-zhi-zhi-shi-jian-fen-fa/"/>
-    <id>https://superandroid.pro/2019/04/01/01.mian-shi-ti-ji-xi-lie-he-xin-ji-zhi-zhi-shi-jian-fen-fa/</id>
-    <published>2019-04-01T01:08:00.000Z</published>
-    <updated>2019-05-22T11:31:05.218Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h3 id=&quot;1-为什么会有事件分发机制？&quot;&gt;&lt;a href=&quot;#1-为什么会有事件分发机制？&quot; class=&quot;headerlink&quot; title=&quot;1. 为什么会有事件分发机制？&quot;&gt;&lt;/a&gt;&lt;center&gt;1.
-        
-      
-    
-    </summary>
-    
-      <category term="面试题集" scheme="https://superandroid.pro/categories/%E9%9D%A2%E8%AF%95%E9%A2%98%E9%9B%86/"/>
-    
-    
-      <category term="面试题集" scheme="https://superandroid.pro/tags/%E9%9D%A2%E8%AF%95%E9%A2%98%E9%9B%86/"/>
-    
-      <category term="事件分发" scheme="https://superandroid.pro/tags/%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91/"/>
-    
-      <category term="经验总结" scheme="https://superandroid.pro/tags/%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>谈谈 “时间复杂度”</title>
-    <link href="https://superandroid.pro/2019/03/01/11.suan-fa-zhuan-lan-xi-lie-tan-tan-shi-jian-fu-za-du/"/>
-    <id>https://superandroid.pro/2019/03/01/11.suan-fa-zhuan-lan-xi-lie-tan-tan-shi-jian-fu-za-du/</id>
-    <published>2019-03-01T01:08:00.000Z</published>
-    <updated>2019-05-05T01:42:42.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;1、算法效率&quot;&gt;&lt;a href=&quot;#1、算法效率&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="算法专栏" scheme="https://superandroid.pro/categories/%E7%AE%97%E6%B3%95%E4%B8%93%E6%A0%8F/"/>
-    
-    
-      <category term="算法" scheme="https://superandroid.pro/tags/%E7%AE%97%E6%B3%95/"/>
-    
-      <category term="数据结构" scheme="https://superandroid.pro/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-      <category term="时间复杂度" scheme="https://superandroid.pro/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/"/>
+      <category term="核心技术" scheme="https://superandroid.pro/tags/%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
   <entry>
     <title>PackageManagerService 钻研（8）- APK 安装（下）</title>
-    <link href="https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"/>
-    <id>https://superandroid.pro/2019/02/06/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/</id>
-    <published>2019-02-06T01:08:00.000Z</published>
-    <updated>2019-05-27T08:32:35.764Z</updated>
+    <link href="https://superandroid.pro/2019/03/10/2019.03.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/"/>
+    <id>https://superandroid.pro/2019/03/10/2019.03.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-8-apk-an-zhuang-xia/</id>
+    <published>2019-03-10T01:08:00.000Z</published>
+    <updated>2019-06-26T09:58:13.000Z</updated>
     
     <summary type="html">
     
@@ -354,10 +420,10 @@
   
   <entry>
     <title>PackageManagerService 钻研（7）- APK 安装（中）</title>
-    <link href="https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"/>
-    <id>https://superandroid.pro/2019/02/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/</id>
-    <published>2019-02-01T01:08:00.000Z</published>
-    <updated>2019-05-27T08:33:15.767Z</updated>
+    <link href="https://superandroid.pro/2019/02/20/2019.02.20-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/"/>
+    <id>https://superandroid.pro/2019/02/20/2019.02.20-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-7-apk-an-zhuang-zhong/</id>
+    <published>2019-02-20T01:08:00.000Z</published>
+    <updated>2019-06-26T09:59:27.416Z</updated>
     
     <summary type="html">
     
@@ -383,10 +449,10 @@
   
   <entry>
     <title>PackageManagerService 钻研（6）- APK 安装（上）</title>
-    <link href="https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"/>
-    <id>https://superandroid.pro/2019/01/26/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/</id>
-    <published>2019-01-26T01:08:00.000Z</published>
-    <updated>2019-05-27T08:33:11.047Z</updated>
+    <link href="https://superandroid.pro/2019/02/10/2019.02.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/"/>
+    <id>https://superandroid.pro/2019/02/10/2019.02.10-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-6-apk-an-zhuang-shang/</id>
+    <published>2019-02-10T01:08:00.000Z</published>
+    <updated>2019-06-26T09:59:59.584Z</updated>
     
     <summary type="html">
     
@@ -412,10 +478,10 @@
   
   <entry>
     <title>PackageManagerService 钻研（5）- PackageParser</title>
-    <link href="https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"/>
-    <id>https://superandroid.pro/2019/01/22/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/</id>
-    <published>2019-01-22T01:08:00.000Z</published>
-    <updated>2019-05-27T08:33:06.604Z</updated>
+    <link href="https://superandroid.pro/2019/02/02/2019.02.02-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/"/>
+    <id>https://superandroid.pro/2019/02/02/2019.02.02-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-5-packageparser/</id>
+    <published>2019-02-02T01:08:00.000Z</published>
+    <updated>2019-06-26T10:02:24.912Z</updated>
     
     <summary type="html">
     
@@ -441,10 +507,10 @@
   
   <entry>
     <title>PackageManagerService 钻研（4）- PackageInstaller</title>
-    <link href="https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/"/>
-    <id>https://superandroid.pro/2019/01/16/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/</id>
-    <published>2019-01-16T01:08:00.000Z</published>
-    <updated>2019-05-27T08:33:01.596Z</updated>
+    <link href="https://superandroid.pro/2019/01/25/2019.01.25-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/"/>
+    <id>https://superandroid.pro/2019/01/25/2019.01.25-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-4-packageinstaller/</id>
+    <published>2019-01-25T01:08:00.000Z</published>
+    <updated>2019-06-26T10:01:38.056Z</updated>
     
     <summary type="html">
     
@@ -470,10 +536,10 @@
   
   <entry>
     <title>PackageManagerService 钻研（3）- PackageManager</title>
-    <link href="https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/"/>
-    <id>https://superandroid.pro/2019/01/12/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/</id>
-    <published>2019-01-12T01:08:00.000Z</published>
-    <updated>2019-05-27T08:32:56.312Z</updated>
+    <link href="https://superandroid.pro/2019/01/16/2019.01.16-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/"/>
+    <id>https://superandroid.pro/2019/01/16/2019.01.16-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-3-packagemanager/</id>
+    <published>2019-01-16T01:08:00.000Z</published>
+    <updated>2019-06-26T10:01:14.172Z</updated>
     
     <summary type="html">
     
@@ -499,10 +565,10 @@
   
   <entry>
     <title>PackageManagerService 钻研（2）- 构造函数</title>
-    <link href="https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/"/>
-    <id>https://superandroid.pro/2019/01/05/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/</id>
-    <published>2019-01-05T01:08:00.000Z</published>
-    <updated>2019-05-27T08:32:47.422Z</updated>
+    <link href="https://superandroid.pro/2019/01/08/2019.01.08-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/"/>
+    <id>https://superandroid.pro/2019/01/08/2019.01.08-kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-2-gou-zao-han-shu/</id>
+    <published>2019-01-08T01:08:00.000Z</published>
+    <updated>2019-06-26T10:00:48.761Z</updated>
     
     <summary type="html">
     
@@ -522,92 +588,7 @@
     
       <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
     
-      <category term="PMS 构造函数" scheme="https://superandroid.pro/tags/PMS-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PackageManagerService 钻研（1）- 启动流程</title>
-    <link href="https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-1-qi-dong-liu-cheng/"/>
-    <id>https://superandroid.pro/2019/01/01/02.kuang-jia-he-xin-fu-wu-android-kuang-jia-fu-wu-pian-packagemanagerservice-zuan-yan-1-qi-dong-liu-cheng/</id>
-    <published>2019-01-01T01:08:00.000Z</published>
-    <updated>2019-05-28T07:55:14.528Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;center&gt;✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏ ✏&lt;/center&gt;&lt;br&gt;&lt;strong&gt;&lt;center&gt;&lt;font color=&quot;#3A5FCD&quot;
-        
-      
-    
-    </summary>
-    
-      <category term="框架服务" scheme="https://superandroid.pro/categories/%E6%A1%86%E6%9E%B6%E6%9C%8D%E5%8A%A1/"/>
-    
-    
-      <category term="PackageManagerService" scheme="https://superandroid.pro/tags/PackageManagerService/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入钻研 Android 启动阶段 之 Launcher 启动和加载</title>
-    <link href="https://superandroid.pro/2018/12/26/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-launcher/"/>
-    <id>https://superandroid.pro/2018/12/26/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-launcher/</id>
-    <published>2018-12-26T01:08:00.000Z</published>
-    <updated>2019-05-05T01:42:43.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;center&gt;🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀
-        
-      
-    
-    </summary>
-    
-      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
-    
-    
-      <category term="Launcher" scheme="https://superandroid.pro/tags/Launcher/"/>
-    
-      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入钻研 Android 启动阶段 之 systemserver</title>
-    <link href="https://superandroid.pro/2018/12/18/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-systemserver/"/>
-    <id>https://superandroid.pro/2018/12/18/01.xi-tong-qi-dong-jie-duan-android-xi-tong-qi-dong-pian-shen-ru-zuan-yan-android-qi-dong-jie-duan-zhi-systemserver/</id>
-    <published>2018-12-18T01:08:00.000Z</published>
-    <updated>2019-05-05T01:42:43.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;center&gt;🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀 🍀
-        
-      
-    
-    </summary>
-    
-      <category term="系统启动" scheme="https://superandroid.pro/categories/%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8/"/>
-    
-    
-      <category term="启动阶段" scheme="https://superandroid.pro/tags/%E5%90%AF%E5%8A%A8%E9%98%B6%E6%AE%B5/"/>
-    
-      <category term="SystemServer" scheme="https://superandroid.pro/tags/SystemServer/"/>
+      <category term="构造函数" scheme="https://superandroid.pro/tags/%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/"/>
     
   </entry>
   
